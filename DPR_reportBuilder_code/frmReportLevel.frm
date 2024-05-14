@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frmReportLevel 
    Caption         =   "DPR Report Builder"
-   ClientHeight    =   6204
-   ClientLeft      =   72
-   ClientTop       =   456
-   ClientWidth     =   9096
+   ClientHeight    =   5028
+   ClientLeft      =   48
+   ClientTop       =   360
+   ClientWidth     =   7320
    OleObjectBlob   =   "frmReportLevel.frx":0000
    ShowModal       =   0   'False
    StartUpPosition =   1  'CenterOwner
@@ -49,72 +49,10 @@ Private Sub cmdOK_Click()
     sSht = "Detailed Backup Report"
     sRprt = "DETAILED BACKUP"
     sGTLvl1 = cboBLvl1.List(cboBLvl1.ListIndex, 1)
-    iLvl = numLevel.Value
-    Select Case iLvl
-        Case 1
-            If Me.cboBLvl1.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboBLvl1.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl1Item = "META Level 1"
-                sLvl1Name = "META Level 1"
-                sLvl2Code = "FB_L2_Code"
-                sLvl2Item = "META Level 2"
-                sLvl2Name = "META Level 2"
-                sLvl3Code = "FB_L3_Code"
-                sLvl3Item = "META Level 3"
-                sLvl3Name = "META Level 3"
-                iLvl = 3
-                Call ReportTrack
-                Call xmlLevel3FB
-            Else
-                Call ReportTrack
-                Call xmlLevel1
-            End If
-        Case 2
-            If Me.cboBLvl2.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboBLvl2.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl2Item = "META Level 1"
-                sLvl2Name = "META Level 1"
-                sLvl3Code = "FB_L2_Code"
-                sLvl3Item = "META Level 2"
-                sLvl3Name = "META Level 2"
-                sLvl4Code = "FB_L3_Code"
-                sLvl4Item = "META Level 3"
-                sLvl4Name = "META Level 3"
-                iLvl = 4
-                Call ReportTrack
-                Call xmlLevel4FB
-            Else
-                Call ReportTrack
-                Call xmlLevel2
-            End If
-        Case 3
-            If Me.cboBLvl3.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboBLvl3.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl3Item = "META Level 1"
-                sLvl3Name = "META Level 1"
-                sLvl4Code = "FB_L2_Code"
-                sLvl4Item = "META Level 2"
-                sLvl4Name = "META Level 2"
-                sLvl5Code = "FB_L3_Code"
-                sLvl5Item = "META Level 3"
-                sLvl5Name = "META Level 3"
-                iLvl = 5
-                Call ReportTrack
-                Call xmlLevel5FB
-            Else
-                Call ReportTrack
-                Call xmlLevel3
-            End If
-           
-        Case 4
-            Call ReportTrack
-            Call xmlLevel4
-        Case 5
-            Call ReportTrack
-            Call xmlLevel5
-    End Select
-'Build pivot report
-  
+    iLvl = numLevel.Value 'numValue is the depth of grouping
+    ReportTrack
+    'Build pivot report
+    'MN TODO
     Call SummaryDetail
     Call ExecSummary
     Call clearStrings
@@ -139,9 +77,9 @@ Private Sub cboBLvl1_Click()
     With cboBLvl1
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
                 Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath1 = .List(.ListIndex, 0)
+            'sXpath1 = .List(.ListIndex, 0)
             sLvl1Name = .List(.ListIndex, 1)
-            sLvl1xNd = .List(.ListIndex, 2)
+            'sLvl1xNd = .List(.ListIndex, 2)
             sLvl1Item = .List(.ListIndex, 3)
             sLvl1Code = .List(.ListIndex, 4)
             numLevel.Value = 1
@@ -156,14 +94,14 @@ Private Sub cboBLvl1_Click()
             Else
                 ckbBLvl1.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbBLvl1.Enabled = False
             Else
                 ckbBLvl1.Enabled = True
             End If
-            sXpath1 = .List(.ListIndex, 0)
+            'sXpath1 = .List(.ListIndex, 0)
             sLvl1Name = .List(.ListIndex, 1)
-            sLvl1xNd = .List(.ListIndex, 2)
+            'sLvl1xNd = .List(.ListIndex, 2)
             sLvl1Item = .List(.ListIndex, 3)
             sLvl1Code = .List(.ListIndex, 4)
             numLevel.Value = 1
@@ -191,9 +129,9 @@ Private Sub cboBLvl2_Click()
     With cboBLvl2
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
                 Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath2 = .List(.ListIndex, 0)
+            'sXpath2 = .List(.ListIndex, 0)
             sLvl2Name = .List(.ListIndex, 1)
-            sLvl2xNd = .List(.ListIndex, 2)
+            'sLvl2xNd = .List(.ListIndex, 2)
             sLvl2Item = .List(.ListIndex, 3)
             sLvl2Code = .List(.ListIndex, 4)
             numLevel.Value = 2
@@ -208,14 +146,14 @@ Private Sub cboBLvl2_Click()
             Else
                 ckbBLvl2.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbBLvl2.Enabled = False
             Else
                 ckbBLvl2.Enabled = True
             End If
-            sXpath2 = .List(.ListIndex, 0)
+            'sXpath2 = .List(.ListIndex, 0)
             sLvl2Name = .List(.ListIndex, 1)
-            sLvl2xNd = .List(.ListIndex, 2)
+            'sLvl2xNd = .List(.ListIndex, 2)
             sLvl2Item = .List(.ListIndex, 3)
             sLvl2Code = .List(.ListIndex, 4)
             numLevel.Value = 2
@@ -241,9 +179,9 @@ Private Sub cboBLvl3_Click()
     With cboBLvl3
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
                 Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath3 = .List(.ListIndex, 0)
+            'sXpath3 = .List(.ListIndex, 0)
             sLvl3Name = .List(.ListIndex, 1)
-            sLvl3xNd = .List(.ListIndex, 2)
+            'sLvl3xNd = .List(.ListIndex, 2)
             sLvl3Item = .List(.ListIndex, 3)
             sLvl3Code = .List(.ListIndex, 4)
             numLevel.Value = 3
@@ -258,14 +196,14 @@ Private Sub cboBLvl3_Click()
             Else
                 ckbBLvl3.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbBLvl3.Enabled = False
             Else
                 ckbBLvl3.Enabled = True
             End If
-            sXpath3 = .List(.ListIndex, 0)
+            'sXpath3 = .List(.ListIndex, 0)
             sLvl3Name = .List(.ListIndex, 1)
-            sLvl3xNd = .List(.ListIndex, 2)
+            'sLvl3xNd = .List(.ListIndex, 2)
             sLvl3Item = .List(.ListIndex, 3)
             sLvl3Code = .List(.ListIndex, 4)
             numLevel.Value = 3
@@ -301,14 +239,14 @@ Private Sub cboBLvl4_Click()
             Else
                 ckbBLvl4.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbBLvl4.Enabled = False
             Else
                 ckbBLvl4.Enabled = True
             End If
-            sXpath4 = .List(.ListIndex, 0)
+            'sXpath4 = .List(.ListIndex, 0)
             sLvl4Name = .List(.ListIndex, 1)
-            sLvl4xNd = .List(.ListIndex, 2)
+            'sLvl4xNd = .List(.ListIndex, 2)
             sLvl4Item = .List(.ListIndex, 3)
             sLvl4Code = .List(.ListIndex, 4)
             numLevel.Value = 4
@@ -338,14 +276,14 @@ Private Sub cboBLvl5_Change()
             Else
                 ckbBLvl5.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbBLvl5.Enabled = False
             Else
                 ckbBLvl5.Enabled = True
             End If
-            sXpath5 = .List(.ListIndex, 0)
+            'sXpath5 = .List(.ListIndex, 0)
             sLvl5Name = .List(.ListIndex, 1)
-            sLvl5xNd = .List(.ListIndex, 2)
+            'sLvl5xNd = .List(.ListIndex, 2)
             sLvl5Item = .List(.ListIndex, 3)
             sLvl5Code = .List(.ListIndex, 4)
             numLevel.Value = 5
@@ -398,83 +336,45 @@ End Sub
 '*****Multipage1 Page 2*****
 '***************************
 Private Sub cmdOK1_Click()
-'sCurrency = Range("rngCurrency").Text
+    If thisReportBuilder.debugMode Then
+        Stop
+        On Error GoTo 0
+    Else
+        On Error GoTo e1
+    End If
+    
+'   sCurrency = Range("rngCurrency").Text
     sSht = "Level Report - " & getPtCount
     sRprt = sRprtName
     sGTLvl1 = cboLvl1.List(cboLvl1.ListIndex, 1)
     iLvl = numLevel.Value
-    Select Case iLvl
-        Case 1
-            If Me.cboLvl1.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboLvl1.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl1Item = "META Level 1"
-                sLvl1Name = "META Level 1"
-                sLvl2Code = "FB_L2_Code"
-                sLvl2Item = "META Level 2"
-                sLvl2Name = "META Level 2"
-                sLvl3Code = "FB_L3_Code"
-                sLvl3Item = "META Level 3"
-                sLvl3Name = "META Level 3"
-                iLvl = 3
-                Call ReportTrack
-                Call xmlLevel3FB
-            Else
-                Call ReportTrack
-                Call xmlLevel1
-            End If
-        Case 2
-            If Me.cboLvl2.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboLvl2.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl2Item = "META Level 1"
-                sLvl2Name = "META Level 1"
-                sLvl3Code = "FB_L2_Code"
-                sLvl3Item = "META Level 2"
-                sLvl3Name = "META Level 2"
-                sLvl4Code = "FB_L3_Code"
-                sLvl4Item = "META Level 3"
-                sLvl4Name = "META Level 3"
-                iLvl = 4
-                Call ReportTrack
-                Call xmlLevel4FB
-            Else
-                Call ReportTrack
-                Call xmlLevel2
-            End If
-        Case 3
-            If Me.cboLvl3.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboLvl3.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl3Item = "META Level 1"
-                sLvl3Name = "META Level 1"
-                sLvl4Code = "FB_L2_Code"
-                sLvl4Item = "META Level 2"
-                sLvl4Name = "META Level 2"
-                sLvl5Code = "FB_L3_Code"
-                sLvl5Item = "META Level 3"
-                sLvl5Name = "META Level 3"
-                iLvl = 5
-                Call ReportTrack
-                Call xmlLevel5FB
-            Else
-                Call ReportTrack
-                Call xmlLevel3
-            End If
-        Case 4
-            Call ReportTrack
-            Call xmlLevel4
-        Case 5
-            Call ReportTrack
-            Call xmlLevel5
-    End Select
-
-    Call clearStrings
+    ReportTrack
+    Create_PivotTable_ODBC_MO
+    clearStrings
     bCkb1 = False
     bCkb2 = False
     bCkb3 = False
     bCkb4 = False
     bCkb5 = False
     bCkbAll = False
-    Unload Me
+    
+    Dim post As New UserEvents
+    post.slackPost "Report Successfully Created!" 'TODO, add meta data like project, estimate, sorts
     MsgBox "Report Complete", vbOKOnly, "DPR Report Builder"
+    thisReportBuilder.success = True
+    Unload Me
+    
+Exit Sub
+e1:
+    logError "Failed to create your report" & vbLf & vbLf & TRY_UPDATING_MSG
+    
+    With Application
+        .ScreenUpdating = False
+        .EnableEvents = False
+    End With
+    
+    Unload Me
+    
 End Sub
 
 Private Sub cboLvl1_Change()
@@ -487,9 +387,9 @@ Private Sub cboLvl1_Click()
     With cboLvl1
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
                 Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath1 = .List(.ListIndex, 0)
+            'sXpath1 = .List(.ListIndex, 0)
             sLvl1Name = .List(.ListIndex, 1)
-            sLvl1xNd = .List(.ListIndex, 2)
+            'sLvl1xNd = .List(.ListIndex, 2)
             sLvl1Item = .List(.ListIndex, 3)
             sLvl1Code = .List(.ListIndex, 4)
             numLevel.Value = 1
@@ -504,14 +404,14 @@ Private Sub cboLvl1_Click()
             Else
                 ckbLvl1.Value = False
             End If
-            If InStr(cboLvl1.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboLvl1.List(.ListIndex, 4), "code") = 0 Then
                 ckbLvl1.Enabled = False
             Else
                 ckbLvl1.Enabled = True
             End If
-            sXpath1 = .List(.ListIndex, 0)
+            'sXpath1 = .List(.ListIndex, 0)
             sLvl1Name = .List(.ListIndex, 1)
-            sLvl1xNd = .List(.ListIndex, 2)
+            'sLvl1xNd = .List(.ListIndex, 2)
             sLvl1Item = .List(.ListIndex, 3)
             sLvl1Code = .List(.ListIndex, 4)
             numLevel.Value = 1
@@ -539,9 +439,9 @@ Private Sub cboLvl2_Click()
     With cboLvl2
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
                 Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath2 = .List(.ListIndex, 0)
+            'sXpath2 = .List(.ListIndex, 0)
             sLvl2Name = .List(.ListIndex, 1)
-            sLvl2xNd = .List(.ListIndex, 2)
+            'sLvl2xNd = .List(.ListIndex, 2)
             sLvl2Item = .List(.ListIndex, 3)
             sLvl2Code = .List(.ListIndex, 4)
             numLevel.Value = 2
@@ -556,14 +456,14 @@ Private Sub cboLvl2_Click()
             Else
                 ckbLvl2.Value = False
             End If
-            If InStr(cboLvl2.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboLvl2.List(.ListIndex, 4), "code") = 0 Then
                 ckbLvl2.Enabled = False
             Else
                 ckbLvl2.Enabled = True
             End If
-            sXpath2 = .List(.ListIndex, 0)
+            'sXpath2 = .List(.ListIndex, 0)
             sLvl2Name = .List(.ListIndex, 1)
-            sLvl2xNd = .List(.ListIndex, 2)
+            'sLvl2xNd = .List(.ListIndex, 2)
             sLvl2Item = .List(.ListIndex, 3)
             sLvl2Code = .List(.ListIndex, 4)
             numLevel.Value = 2
@@ -589,9 +489,9 @@ Private Sub cboLvl3_Click()
     With cboLvl3
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
                 Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath3 = .List(.ListIndex, 0)
+            'sXpath3 = .List(.ListIndex, 0)
             sLvl3Name = .List(.ListIndex, 1)
-            sLvl3xNd = .List(.ListIndex, 2)
+            'sLvl3xNd = .List(.ListIndex, 2)
             sLvl3Item = .List(.ListIndex, 3)
             sLvl3Code = .List(.ListIndex, 4)
             numLevel.Value = 3
@@ -606,14 +506,14 @@ Private Sub cboLvl3_Click()
             Else
                 ckbLvl3.Value = False
             End If
-            If InStr(cboLvl3.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboLvl3.List(.ListIndex, 4), "code") = 0 Then
                 ckbLvl3.Enabled = False
             Else
                 ckbLvl3.Enabled = True
             End If
-            sXpath3 = .List(.ListIndex, 0)
+            'sXpath3 = .List(.ListIndex, 0)
             sLvl3Name = .List(.ListIndex, 1)
-            sLvl3xNd = .List(.ListIndex, 2)
+            'sLvl3xNd = .List(.ListIndex, 2)
             sLvl3Item = .List(.ListIndex, 3)
             sLvl3Code = .List(.ListIndex, 4)
             numLevel.Value = 3
@@ -649,14 +549,14 @@ Private Sub cboLvl4_Click()
             Else
                 ckbLvl4.Value = False
             End If
-            If InStr(cboLvl4.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboLvl4.List(.ListIndex, 4), "code") = 0 Then
                 ckbLvl4.Enabled = False
             Else
                 ckbLvl4.Enabled = True
             End If
-            sXpath4 = .List(.ListIndex, 0)
+            'sXpath4 = .List(.ListIndex, 0)
             sLvl4Name = .List(.ListIndex, 1)
-            sLvl4xNd = .List(.ListIndex, 2)
+            'sLvl4xNd = .List(.ListIndex, 2)
             sLvl4Item = .List(.ListIndex, 3)
             sLvl4Code = .List(.ListIndex, 4)
             numLevel.Value = 4
@@ -686,14 +586,14 @@ Private Sub cboLvl5_Change()
             Else
                 ckbLvl5.Value = False
             End If
-            If InStr(cboLvl5.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboLvl5.List(.ListIndex, 4), "code") = 0 Then
                 ckbLvl5.Enabled = False
             Else
                 ckbLvl5.Enabled = True
             End If
-            sXpath5 = .List(.ListIndex, 0)
+            'sXpath5 = .List(.ListIndex, 0)
             sLvl5Name = .List(.ListIndex, 1)
-            sLvl5xNd = .List(.ListIndex, 2)
+            'sLvl5xNd = .List(.ListIndex, 2)
             sLvl5Item = .List(.ListIndex, 3)
             sLvl5Code = .List(.ListIndex, 4)
             numLevel.Value = 5
@@ -862,9 +762,9 @@ Private Sub cboCLvl1_Click()
     With cboCLvl1
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
             Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath1 = .List(.ListIndex, 0)
+            'sXpath1 = .List(.ListIndex, 0)
             sLvl1Name = .List(.ListIndex, 1)
-            sLvl1xNd = .List(.ListIndex, 2)
+            'sLvl1xNd = .List(.ListIndex, 2)
             sLvl1Item = .List(.ListIndex, 3)
             sLvl1Code = .List(.ListIndex, 4)
             numLevel.Value = 1
@@ -879,14 +779,14 @@ Private Sub cboCLvl1_Click()
             Else
                 ckbCLvl1.Value = False
             End If
-            If InStr(cboCLvl1.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboCLvl1.List(.ListIndex, 4), "code") = 0 Then
                 ckbCLvl1.Enabled = False
             Else
                 ckbCLvl1.Enabled = True
             End If
-            sXpath1 = .List(.ListIndex, 0)
+            'sXpath1 = .List(.ListIndex, 0)
             sLvl1Name = .List(.ListIndex, 1)
-            sLvl1xNd = .List(.ListIndex, 2)
+            'sLvl1xNd = .List(.ListIndex, 2)
             sLvl1Item = .List(.ListIndex, 3)
             sLvl1Code = .List(.ListIndex, 4)
             numLevel.Value = 1
@@ -914,9 +814,9 @@ Private Sub cboCLvl2_Click()
     With cboCLvl2
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
             Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath2 = .List(.ListIndex, 0)
+            'sXpath2 = .List(.ListIndex, 0)
             sLvl2Name = .List(.ListIndex, 1)
-            sLvl2xNd = .List(.ListIndex, 2)
+            'sLvl2xNd = .List(.ListIndex, 2)
             sLvl2Item = .List(.ListIndex, 3)
             sLvl2Code = .List(.ListIndex, 4)
             numLevel.Value = 2
@@ -931,14 +831,14 @@ Private Sub cboCLvl2_Click()
             Else
                 ckbCLvl2.Value = False
             End If
-            If InStr(cboCLvl2.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboCLvl2.List(.ListIndex, 4), "code") = 0 Then
                 ckbCLvl2.Enabled = False
             Else
                 ckbCLvl2.Enabled = True
             End If
-            sXpath2 = .List(.ListIndex, 0)
+            'sXpath2 = .List(.ListIndex, 0)
             sLvl2Name = .List(.ListIndex, 1)
-            sLvl2xNd = .List(.ListIndex, 2)
+            'sLvl2xNd = .List(.ListIndex, 2)
             sLvl2Item = .List(.ListIndex, 3)
             sLvl2Code = .List(.ListIndex, 4)
             numLevel.Value = 2
@@ -964,9 +864,9 @@ Private Sub cboCLvl3_Click()
     With cboCLvl3
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
             Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath3 = .List(.ListIndex, 0)
+            'sXpath3 = .List(.ListIndex, 0)
             sLvl3Name = .List(.ListIndex, 1)
-            sLvl3xNd = .List(.ListIndex, 2)
+            'sLvl3xNd = .List(.ListIndex, 2)
             sLvl3Item = .List(.ListIndex, 3)
             sLvl3Code = .List(.ListIndex, 4)
             numLevel.Value = 3
@@ -981,14 +881,14 @@ Private Sub cboCLvl3_Click()
             Else
                 ckbCLvl3.Value = False
             End If
-            If InStr(cboCLvl3.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboCLvl3.List(.ListIndex, 4), "code") = 0 Then
                 ckbCLvl3.Enabled = False
             Else
                 ckbCLvl3.Enabled = True
             End If
-            sXpath3 = .List(.ListIndex, 0)
+            'sXpath3 = .List(.ListIndex, 0)
             sLvl3Name = .List(.ListIndex, 1)
-            sLvl3xNd = .List(.ListIndex, 2)
+            'sLvl3xNd = .List(.ListIndex, 2)
             sLvl3Item = .List(.ListIndex, 3)
             sLvl3Code = .List(.ListIndex, 4)
             numLevel.Value = 3
@@ -1024,14 +924,14 @@ Private Sub cboCLvl4_Click()
             Else
                 ckbCLvl4.Value = False
             End If
-            If InStr(cboCLvl4.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboCLvl4.List(.ListIndex, 4), "code") = 0 Then
                 ckbCLvl4.Enabled = False
             Else
                 ckbCLvl4.Enabled = True
             End If
-            sXpath4 = .List(.ListIndex, 0)
+            'sXpath4 = .List(.ListIndex, 0)
             sLvl4Name = .List(.ListIndex, 1)
-            sLvl4xNd = .List(.ListIndex, 2)
+            'sLvl4xNd = .List(.ListIndex, 2)
             sLvl4Item = .List(.ListIndex, 3)
             sLvl4Code = .List(.ListIndex, 4)
             numLevel.Value = 4
@@ -1061,14 +961,14 @@ Private Sub cboCLvl5_Change()
             Else
                 ckbCLvl5.Value = False
             End If
-            If InStr(cboCLvl5.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboCLvl5.List(.ListIndex, 4), "code") = 0 Then
                 ckbCLvl5.Enabled = False
             Else
                 ckbCLvl5.Enabled = True
             End If
-            sXpath5 = .List(.ListIndex, 0)
+            'sXpath5 = .List(.ListIndex, 0)
             sLvl5Name = .List(.ListIndex, 1)
-            sLvl5xNd = .List(.ListIndex, 2)
+            'sLvl5xNd = .List(.ListIndex, 2)
             sLvl5Item = .List(.ListIndex, 3)
             sLvl5Code = .List(.ListIndex, 4)
             numLevel.Value = 5
@@ -1228,15 +1128,15 @@ Private Sub cboLvl0_Click()
             Else
                 ckbLvl0.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbLvl0.Enabled = False
             Else
                 ckbLvl0.Enabled = True
             End If
-            sXpath0 = .List(.ListIndex, 0)
+            'sXpath0 = .List(.ListIndex, 0)
             sLvl0Name = .List(.ListIndex, 1)
-            sLvl0xNd = .List(.ListIndex, 2)
-            sLvl0Item = .List(.ListIndex, 3)
+            'sLvl0xNd = .List(.ListIndex, 2)
+            'sLvl0Item = .List(.ListIndex, 3)
             sLvl0Code = .List(.ListIndex, 4)
             ckbXLvl1.Enabled = True
             ckbXLvl1.Value = False
@@ -1261,9 +1161,9 @@ Private Sub cboXLvl1_Click()
     With cboXLvl1
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
             Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath1 = .List(.ListIndex, 0)
+            'sXpath1 = .List(.ListIndex, 0)
             sLvl1Name = .List(.ListIndex, 1)
-            sLvl1xNd = .List(.ListIndex, 2)
+            'sLvl1xNd = .List(.ListIndex, 2)
             sLvl1Item = .List(.ListIndex, 3)
             sLvl1Code = .List(.ListIndex, 4)
             numXLevel.Value = 1
@@ -1278,14 +1178,14 @@ Private Sub cboXLvl1_Click()
             Else
                 ckbXLvl1.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbXLvl1.Enabled = False
             Else
                 ckbXLvl1.Enabled = True
             End If
-            sXpath1 = .List(.ListIndex, 0)
+            'sXpath1 = .List(.ListIndex, 0)
             sLvl1Name = .List(.ListIndex, 1)
-            sLvl1xNd = .List(.ListIndex, 2)
+            'sLvl1xNd = .List(.ListIndex, 2)
             sLvl1Item = .List(.ListIndex, 3)
             sLvl1Code = .List(.ListIndex, 4)
             numXLevel.Value = 1
@@ -1313,9 +1213,9 @@ Private Sub cboXLvl2_Click()
     With cboXLvl2
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
             Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath2 = .List(.ListIndex, 0)
+            'sXpath2 = .List(.ListIndex, 0)
             sLvl2Name = .List(.ListIndex, 1)
-            sLvl2xNd = .List(.ListIndex, 2)
+            'sLvl2xNd = .List(.ListIndex, 2)
             sLvl2Item = .List(.ListIndex, 3)
             sLvl2Code = .List(.ListIndex, 4)
             numXLevel.Value = 2
@@ -1330,14 +1230,14 @@ Private Sub cboXLvl2_Click()
             Else
                 ckbXLvl2.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbXLvl2.Enabled = False
             Else
                 ckbXLvl2.Enabled = True
             End If
-            sXpath2 = .List(.ListIndex, 0)
+            'sXpath2 = .List(.ListIndex, 0)
             sLvl2Name = .List(.ListIndex, 1)
-            sLvl2xNd = .List(.ListIndex, 2)
+            'sLvl2xNd = .List(.ListIndex, 2)
             sLvl2Item = .List(.ListIndex, 3)
             sLvl2Code = .List(.ListIndex, 4)
             numXLevel.Value = 2
@@ -1363,9 +1263,9 @@ Private Sub cboXLvl3_Click()
     With cboXLvl3
         If .Value = "WBS14 - Meta WBS2.1 (PRECON)" _
             Or .Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-            sXpath3 = .List(.ListIndex, 0)
+            'sXpath3 = .List(.ListIndex, 0)
             sLvl3Name = .List(.ListIndex, 1)
-            sLvl3xNd = .List(.ListIndex, 2)
+            'sLvl3xNd = .List(.ListIndex, 2)
             sLvl3Item = .List(.ListIndex, 3)
             sLvl3Code = .List(.ListIndex, 4)
             numXLevel.Value = 3
@@ -1380,14 +1280,14 @@ Private Sub cboXLvl3_Click()
             Else
                 ckbXLvl3.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbXLvl3.Enabled = False
             Else
                 ckbXLvl3.Enabled = True
             End If
-            sXpath3 = .List(.ListIndex, 0)
+            'sXpath3 = .List(.ListIndex, 0)
             sLvl3Name = .List(.ListIndex, 1)
-            sLvl3xNd = .List(.ListIndex, 2)
+            'sLvl3xNd = .List(.ListIndex, 2)
             sLvl3Item = .List(.ListIndex, 3)
             sLvl3Code = .List(.ListIndex, 4)
             numXLevel.Value = 3
@@ -1423,14 +1323,14 @@ Private Sub cboXLvl4_Click()
             Else
                 ckbXLvl4.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbXLvl4.Enabled = False
             Else
                 ckbXLvl4.Enabled = True
             End If
-            sXpath4 = .List(.ListIndex, 0)
+            'sXpath4 = .List(.ListIndex, 0)
             sLvl4Name = .List(.ListIndex, 1)
-            sLvl4xNd = .List(.ListIndex, 2)
+            'sLvl4xNd = .List(.ListIndex, 2)
             sLvl4Item = .List(.ListIndex, 3)
             sLvl4Code = .List(.ListIndex, 4)
             numXLevel.Value = 4
@@ -1460,14 +1360,14 @@ Private Sub cboXLvl5_Change()
             Else
                 ckbXLvl5.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(.List(.ListIndex, 4), "code") = 0 Then
                 ckbXLvl5.Enabled = False
             Else
                 ckbXLvl5.Enabled = True
             End If
-            sXpath5 = .List(.ListIndex, 0)
+            'sXpath5 = .List(.ListIndex, 0)
             sLvl5Name = .List(.ListIndex, 1)
-            sLvl5xNd = .List(.ListIndex, 2)
+            'sLvl5xNd = .List(.ListIndex, 2)
             sLvl5Item = .List(.ListIndex, 3)
             sLvl5Code = .List(.ListIndex, 4)
             numXLevel.Value = 5
@@ -1580,14 +1480,14 @@ Private Sub cboVLvl1_Click()
             Else
                 ckbVLvl1.Value = False
             End If
-            If InStr(cboVLvl1.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboVLvl1.List(.ListIndex, 4), "code") = 0 Then
                 ckbVLvl1.Enabled = False
             Else
                 ckbVLvl1.Enabled = True
             End If
-            sXpath1 = .List(.ListIndex, 0)
+            'sXpath1 = .List(.ListIndex, 0)
             sLvl1Name = .List(.ListIndex, 1)
-            sLvl1xNd = .List(.ListIndex, 2)
+            'sLvl1xNd = .List(.ListIndex, 2)
             sLvl1Item = .List(.ListIndex, 3)
             sLvl1Code = .List(.ListIndex, 4)
             numLevel.Value = 1
@@ -1619,14 +1519,14 @@ Private Sub cboVLvl2_Click()
             Else
                 ckbVLvl2.Value = False
             End If
-            If InStr(cboVLvl2.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboVLvl2.List(.ListIndex, 4), "code") = 0 Then
                 ckbVLvl2.Enabled = False
             Else
                 ckbVLvl2.Enabled = True
             End If
-            sXpath2 = .List(.ListIndex, 0)
+            'sXpath2 = .List(.ListIndex, 0)
             sLvl2Name = .List(.ListIndex, 1)
-            sLvl2xNd = .List(.ListIndex, 2)
+            'sLvl2xNd = .List(.ListIndex, 2)
             sLvl2Item = .List(.ListIndex, 3)
             sLvl2Code = .List(.ListIndex, 4)
             numLevel.Value = 2
@@ -1656,14 +1556,14 @@ Private Sub cboVLvl3_Click()
             Else
                 ckbVLvl3.Value = False
             End If
-            If InStr(cboVLvl3.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboVLvl3.List(.ListIndex, 4), "code") = 0 Then
                 ckbVLvl3.Enabled = False
             Else
                 ckbVLvl3.Enabled = True
             End If
-            sXpath3 = .List(.ListIndex, 0)
+            'sXpath3 = .List(.ListIndex, 0)
             sLvl3Name = .List(.ListIndex, 1)
-            sLvl3xNd = .List(.ListIndex, 2)
+            'sLvl3xNd = .List(.ListIndex, 2)
             sLvl3Item = .List(.ListIndex, 3)
             sLvl3Code = .List(.ListIndex, 4)
             numLevel.Value = 3
@@ -1693,14 +1593,14 @@ Private Sub cboVLvl4_Click()
             Else
                 ckbVLvl4.Value = False
             End If
-            If InStr(cboVLvl4.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboVLvl4.List(.ListIndex, 4), "code") = 0 Then
                 ckbVLvl4.Enabled = False
             Else
                 ckbVLvl4.Enabled = True
             End If
-            sXpath4 = .List(.ListIndex, 0)
+            'sXpath4 = .List(.ListIndex, 0)
             sLvl4Name = .List(.ListIndex, 1)
-            sLvl4xNd = .List(.ListIndex, 2)
+            'sLvl4xNd = .List(.ListIndex, 2)
             sLvl4Item = .List(.ListIndex, 3)
             sLvl4Code = .List(.ListIndex, 4)
             numLevel.Value = 4
@@ -1724,14 +1624,14 @@ Private Sub cboVLvl5_Change()
             Else
                 ckbVLvl5.Value = False
             End If
-            If InStr(cboVLvl5.List(.ListIndex, 4), "Code") = 0 Then
+            If InStr(cboVLvl5.List(.ListIndex, 4), "code") = 0 Then
                 ckbVLvl5.Enabled = False
             Else
                 ckbVLvl5.Enabled = True
             End If
-            sXpath5 = .List(.ListIndex, 0)
+            'sXpath5 = .List(.ListIndex, 0)
             sLvl5Name = .List(.ListIndex, 1)
-            sLvl5xNd = .List(.ListIndex, 2)
+            'sLvl5xNd = .List(.ListIndex, 2)
             sLvl5Item = .List(.ListIndex, 3)
             sLvl5Code = .List(.ListIndex, 4)
             numLevel.Value = 5
@@ -1785,6 +1685,12 @@ Private Sub txtVarXML_Change()
     End If
 End Sub
 
+Private Sub UserForm_Deactivate()
+
+    If Not thisReportBuilder.success Then closeMe
+        
+End Sub
+
 Private Sub UserForm_Initialize()
     Me.StartUpPosition = 0
     Me.Top = Application.Top + 115
@@ -1792,53 +1698,37 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub UserForm_Activate()
-    If Range("rngIsTemp").Value = False And Range("RprtID").Value = 0 Then
-        With MultiPage1
-            .Pages(0).Enabled = True
-            .Pages(1).Enabled = False
-            .Pages(2).Enabled = False
-            .Pages(3).Enabled = False
-            .Pages(4).Enabled = False
-        End With
-        LoadCBO "cboBLvl1", "Page1"
-     Else
-        With MultiPage1
-            .Pages(0).visible = False
-            .Pages(1).Enabled = True
-            .Pages(2).Enabled = True
-            .Pages(3).Enabled = True
-            .Pages(4).Enabled = True
-        End With
-        LoadCBO "cboLvl1", "Page2"
-        LoadCBO "cboCLvl1", "Page3"
-        LoadCBO "cboLvl0", "Page4"
-        If Range("rngVarEstID").Value <> "" Then
-            txtVarXML.Value = Range("rngVarEstID").Value
-        End If
-    End If
+    With MultiPage1
+        .Pages(0).Enabled = False
+        .Pages(1).Enabled = True
+        .Pages(2).Enabled = False
+        .Pages(3).Enabled = False
+        .Pages(4).Enabled = False
+    End With
+    LoadCBO "cboLvl1", "Page2"
 End Sub
 
 Public Function LoadCBO(cntrl As String, pg As String)
-    Set ows = Sheet0
-    Set lObj = ows.ListObjects("tblWBSMaster")
-    X = 1
+    
+    Dim sortFieldDict As Dictionary
+    Dim i As Integer
+    i = 1
     With Controls(cntrl)
         .Clear
         .AddItem ""
-        For i = 1 To lObj.DataBodyRange.Rows.count
-            If lObj.DataBodyRange.Cells(i, 8) = True Then
-                If CheckValue(pg, lObj.DataBodyRange.Cells(i, 2)) = False Then
+        For Each sortFieldDict In thisReportBuilder.sortFieldColl
+                If CheckValue(pg, sortFieldDict("name")) = False Then
                     .AddItem
-                    .List(X, 0) = lObj.DataBodyRange.Cells(i, 5) 'sXpath1
-                    .List(X, 1) = lObj.DataBodyRange.Cells(i, 2) 'sLvl1Name
-                    .List(X, 2) = lObj.DataBodyRange.Cells(i, 4) 'sLvl1xNd
-                    .List(X, 3) = lObj.DataBodyRange.Cells(i, 6) 'sLvl1Item
-                    .List(X, 4) = lObj.DataBodyRange.Cells(i, 3) 'sLvl1Code
-                    X = X + 1
+                    '.List(i, 0) = lObj.DataBodyRange.Cells(i, 5) 'sXpath1 'not needed
+                    .List(i, 1) = sortFieldDict("name")
+                    '.List(i, 2) = lObj.DataBodyRange.Cells(i, 4) 'sLvl1xNd 'not needed
+                    .List(i, 3) = sortFieldDict("name") 'use name for item
+                    .List(i, 4) = sortFieldDict("code")
+                    i = i + 1
                 End If
-            End If
         Next
     End With
+    
 End Function
 
 Public Function CheckValue(page As String, Value As String) As Boolean

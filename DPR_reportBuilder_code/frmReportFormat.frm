@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frmReportFormat 
    Caption         =   "DPR Report Builder"
-   ClientHeight    =   6000
-   ClientLeft      =   72
-   ClientTop       =   468
-   ClientWidth     =   6588
+   ClientHeight    =   4800
+   ClientLeft      =   48
+   ClientTop       =   384
+   ClientWidth     =   5268
    OleObjectBlob   =   "frmReportFormat.frx":0000
    ShowModal       =   0   'False
    StartUpPosition =   1  'CenterOwner

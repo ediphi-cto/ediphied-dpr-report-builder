@@ -4,7 +4,7 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
     Application.ScreenUpdating = False
     bPvt = True
     Set ptCache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlExternal, Version:=xlPivotTableVersion15)
-    Set ptCache.RecordSet = rsNew
+    Set ptCache.Recordset = rsNew
     ActiveWorkbook.Sheets.Add(Before:=Sheet4).Name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
@@ -415,7 +415,7 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
     Call ResetSheetScroll
     bPvt = False
     On Error GoTo 0
-    Set ptCache.RecordSet = Nothing
+    Set ptCache.Recordset = Nothing
     Set ptCache = Nothing
     Set pt = Nothing
     Set rsNew = Nothing
@@ -985,7 +985,7 @@ Dim sLeft As Single
     
 
     Sheets("EstData").Shapes("grpHeadingVar").Copy
-    Application.GoTo Sheets(sSht).Range("B1")
+    Application.Goto Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeadingVar")
     Set cl = Range(Cells(1, 2), Cells(6, iCol))

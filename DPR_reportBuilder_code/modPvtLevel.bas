@@ -1,10 +1,14 @@
 Attribute VB_Name = "modPvtLevel"
 Option Explicit
+
 Public Sub Create_PivotTable_ODBC_MO()
-    Application.ScreenUpdating = False
+    With Application
+        .ScreenUpdating = False
+        .EnableEvents = False
+    End With
     bPvt = True
-    Set ptCache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlExternal, Version:=xlPivotTableVersion15)
-    Set ptCache.RecordSet = rsNew
+    Set ptCache = ActiveWorkbook.PivotCaches.Create( _
+        SourceType:=xlDatabase, SourceData:="tblEdiphiPivotData", Version:=xlPivotTableVersion15)
     ActiveWorkbook.Sheets.Add(Before:=Sheet4).Name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
@@ -34,6 +38,7 @@ Public Sub Create_PivotTable_ODBC_MO()
                 .Position = X
             End With
             With pt.PivotFields(sLvl1Code)
+                'MN TODO: this assumes a fixed column width, but we have use groups of varying count
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
@@ -56,6 +61,7 @@ Public Sub Create_PivotTable_ODBC_MO()
                 .Position = X
             End With
             With pt.PivotFields(sLvl2Code)
+                'MN:  len of Array(False...) needs to be dynamically set bc of use group columns
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
@@ -251,8 +257,8 @@ Public Sub Create_PivotTable_ODBC_MO()
         .ColumnWidth = 11
         .HorizontalAlignment = xlRight
     End With
-    pt.PivotFields("TakeoffQty").PivotItems("(blank)").Caption = "-"
-    pt.PivotSelect "TakeoffQty['(blank)']", xlDataAndLabel, True
+    'pt.PivotFields("TakeoffQty").PivotItems("(blank)").Caption = "-"
+    'pt.PivotSelect "TakeoffQty['(blank)']", xlDataAndLabel, True
     pt.PivotSelect "TakeoffQty", xlDataAndLabel, True
     
     pt.PivotSelect "'TakeoffUnit'[All]", xlLabelOnly + xlFirstRow, True
@@ -268,8 +274,8 @@ Public Sub Create_PivotTable_ODBC_MO()
         .ColumnWidth = 16
         .HorizontalAlignment = xlRight
     End With
-    pt.PivotFields("UnitPrice").PivotItems("(blank)").Caption = "-"
-    pt.PivotSelect "UnitPrice['(blank)']", xlDataAndLabel, True
+    'pt.PivotFields("UnitPrice").PivotItems("(blank)").Caption = "-"
+    'pt.PivotSelect "UnitPrice['(blank)']", xlDataAndLabel, True
     pt.PivotSelect "UnitPrice", xlDataAndLabel, True
     On Error GoTo 0
 'Gross Total
@@ -303,10 +309,16 @@ Public Sub Create_PivotTable_ODBC_MO()
     Call PageSetup
     Call ResetSheetScroll
     bPvt = False
-    Set ptCache.RecordSet = Nothing
+    Set ptCache.Recordset = Nothing
     Set ptCache = Nothing
     Set pt = Nothing
     Set rsNew = Nothing
+    
+    With Application
+        .ScreenUpdating = False
+        .EnableEvents = False
+    End With
+    
     On Error GoTo 0
 End Sub
 
@@ -649,7 +661,7 @@ Dim sLeft As Single
     ows.Columns(iCol).ColumnWidth = 20
     
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.GoTo Sheets(sSht).Range("B1")
+    Application.Goto Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(6, iCol))

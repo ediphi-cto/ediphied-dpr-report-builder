@@ -2,7 +2,7 @@ Attribute VB_Name = "modPvtCntrlEst"
 Public Sub Create_PivotTable_ODBC_CntrlEst()
     bPvt = True
     Set ptCache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlExternal, Version:=xlPivotTableVersion15)
-    Set ptCache.RecordSet = rsNew
+    Set ptCache.Recordset = rsNew
     ActiveWorkbook.Sheets.Add(Before:=Sheet4).Name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
@@ -352,7 +352,7 @@ Public Sub Create_PivotTable_ODBC_CntrlEst()
     bPvt = False
     On Error GoTo 0
     If bCode = True Then MsgBox "Highlighted rows indicate uncategorized items", vbInformation, "Category Codes"
-    Set ptCache.RecordSet = Nothing
+    Set ptCache.Recordset = Nothing
     Set ptCache = Nothing
     Set pt = Nothing
     Set rsNew = Nothing
@@ -710,7 +710,7 @@ Dim sLeft As Single
     ows.Columns(iCol).ColumnWidth = 20
     
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.GoTo Sheets(sSht).Range("B1")
+    Application.Goto Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(6, iCol))

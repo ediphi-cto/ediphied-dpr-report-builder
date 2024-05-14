@@ -185,9 +185,9 @@ Sub xmlLevel2() 'Build 2 level array
     End If
 End Sub
 
-Sub xmlLevel3() 'Build 3 level array
+Sub xmlLevel3() 'Build 3 level array  'MN: These are only used to create rsnew, we create this our own way
 
-    Set owb = ActiveWorkbook
+    Set owb = ActiveWorkbook 'thisworkbook
     wbName = owb.Name
     XDoc.async = False
     XDoc.validateOnParse = False
@@ -590,12 +590,12 @@ Sub xmlLevel5() 'Build 5 level array
     End If
 End Sub
 
-Private Function ADOCopyArrayIntoRecordset(argArray As Variant) As ADODB.RecordSet 'Create data recordset for pivot cache
-Dim rsADO As ADODB.RecordSet
+Private Function ADOCopyArrayIntoRecordset(argArray As Variant) As ADODB.Recordset 'Create data recordset for pivot cache
+Dim rsADO As ADODB.Recordset
 Dim lngR As Long
 Dim lngC As Long
 
-    Set rsADO = New ADODB.RecordSet
+    Set rsADO = New ADODB.Recordset
     For i = 1 To iLvl
         Select Case i
             Case 1

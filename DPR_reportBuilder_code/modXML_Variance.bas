@@ -584,19 +584,21 @@ Sub xml_VAR_Level5() 'Build 5 level variance
     End If
 End Sub
 
-Private Function ADOCopyArrayIntoRecordset_VAR(argArray As Variant) As ADODB.RecordSet 'Create data recordset for pivot cache
+Private Function ADOCopyArrayIntoRecordset_VAR(argArray As Variant) As ADODB.Recordset
+'Create data recordset for pivot cache
+'MN: Replace this with our generation of "rsnew" to feed into a pivotcache
 Dim cnnConn As ADODB.Connection
-Dim rsADO As ADODB.RecordSet
+Dim rsADO As ADODB.Recordset
 Dim cmdCommand As ADODB.Command
 Dim lngR As Long
 Dim lngC As Long
 
-    Set rsADO = New ADODB.RecordSet
+    Set rsADO = New ADODB.Recordset
     For i = 1 To iLvl
         Select Case i
             Case 1
                 sLvl1Code = sLvl1Code & i
-                rsADO.Fields.Append sLvl1Code, adVariant
+                rsADO.Fields.Append sLvl1Code, adVariant '
                 rsADO.Fields.Append sLvl1Item, adVariant
             Case 2
                 sLvl2Code = sLvl2Code & i

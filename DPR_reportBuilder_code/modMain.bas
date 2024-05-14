@@ -32,7 +32,7 @@ Public Const sDbUser As String = "PrCUserApp"
 Public Const sDbPass As String = "Q5a#6%HHnbr"
 
 Public Const sFilter = "CSV File, *.csv"
-Public rsNew As New ADODB.RecordSet
+Public rsNew As New ADODB.Recordset
 Public objCon As Object
 Public objRst As Object
 Public objFrm As Object
@@ -526,7 +526,7 @@ Dim pc As PivotCache
     For Each ows In ActiveWorkbook.Worksheets
         For Each pt In ows.PivotTables
             With ows.PivotTables(1).PivotCache
-                Set .RecordSet = rsNew
+                Set .Recordset = rsNew
                     .Refresh
                 End With
             pt.PivotCache.MissingItemsLimit = xlMissingItemsNone

@@ -652,12 +652,12 @@ Sub xmlXTabLevel5() 'Build 5 level array for XTab report
     Set rsNew = ADOCopyArrayIntoRecordsetXtab(argArray:=dataArray)
 End Sub
 
-Private Function ADOCopyArrayIntoRecordsetXtab(argArray As Variant) As ADODB.RecordSet 'Create data recordset for pivot cache
-Dim rsADO As ADODB.RecordSet
+Private Function ADOCopyArrayIntoRecordsetXtab(argArray As Variant) As ADODB.Recordset 'Create data recordset for pivot cache
+Dim rsADO As ADODB.Recordset
 Dim lngR As Long
 Dim lngC As Long
 
-    Set rsADO = New ADODB.RecordSet
+    Set rsADO = New ADODB.Recordset
     For i = 0 To iLvl
         Select Case i
             Case 0

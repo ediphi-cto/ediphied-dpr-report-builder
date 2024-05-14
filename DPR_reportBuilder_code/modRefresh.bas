@@ -223,7 +223,7 @@ Dim TotalCount As Long
                     With ows.PivotTables(1).PivotCache
 '                        sMsg = "Refreshing Pivot Cache...."
 '                        SubBar.NextAction sMsg, True
-                        Set .RecordSet = rsNew
+                        Set .Recordset = rsNew
                         .Refresh
                     End With
                     'Sort Report Levels

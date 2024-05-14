@@ -7,7 +7,7 @@ Application.ScreenUpdating = False
     sJobUM = Range("rngJobUnitName").Value
 
     Set ptCache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlExternal, Version:=xlPivotTableVersion15)
-    Set ptCache.RecordSet = rsNew
+    Set ptCache.Recordset = rsNew
     ActiveWorkbook.Sheets.Add(Before:=Sheet4).Name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
@@ -243,7 +243,7 @@ Application.ScreenUpdating = False
     sLvl4Item = ""
     sLvl5Item = ""
     bPvt = False
-    Set ptCache.RecordSet = Nothing
+    Set ptCache.Recordset = Nothing
     Set ptCache = Nothing
     Set pt = Nothing
     Set rsNew = Nothing
@@ -992,7 +992,7 @@ Dim shpName As String
     
     ows.Range("A9").EntireRow.Hidden = True
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.GoTo Sheets(sSht).Range("B1")
+    Application.Goto Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(8, iCol))

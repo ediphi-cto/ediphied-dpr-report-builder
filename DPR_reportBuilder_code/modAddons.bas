@@ -2,6 +2,7 @@ Attribute VB_Name = "modAddons"
 Option Explicit
 
 Sub Addons()
+    'MN TODO: this is where markups are added
     i = 0
     sJobUM = Range("rngJobUnitName").Value
     If ows.PivotTables.count > 0 Then
@@ -27,7 +28,7 @@ Sub Addons()
         i = iGTRow + 2
         X = iGTCol
         For r = 1 To lObj.DataBodyRange.Rows.count
-            If lObj.DataBodyRange(r, 7) = "Upper" Then
+            If UCase(lObj.DataBodyRange(r, 7)) = "UPPER" Then
                 With ows.Cells(i, 3)
                     .Value = lObj.DataBodyRange(r, 4).Value
                     .InsertIndent 2
