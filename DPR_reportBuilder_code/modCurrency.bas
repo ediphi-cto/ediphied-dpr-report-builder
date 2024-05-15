@@ -18,7 +18,7 @@ Application.ScreenUpdating = False
                 .FindFormat.NumberFormat = sOrgCur_0
                 .ReplaceFormat.NumberFormat = sNewCur_0
             End With
-            ws.Cells.Replace What:="", Replacement:="", Lookat:=xlPart, SearchOrder _
+            ws.Cells.Replace What:="", Replacement:="", LookAt:=xlPart, SearchOrder _
             :=xlByRows, MatchCase:=False, SearchFormat:=True, ReplaceFormat:=True
         End If
     Next ws
@@ -35,7 +35,7 @@ Application.ScreenUpdating = False
                 .FindFormat.NumberFormat = sOrgCur_2
                 .ReplaceFormat.NumberFormat = sNewCur_2
             End With
-            ws.Cells.Replace What:="", Replacement:="", Lookat:=xlPart, SearchOrder _
+            ws.Cells.Replace What:="", Replacement:="", LookAt:=xlPart, SearchOrder _
             :=xlByRows, MatchCase:=False, SearchFormat:=True, ReplaceFormat:=True
         End If
     Next ws

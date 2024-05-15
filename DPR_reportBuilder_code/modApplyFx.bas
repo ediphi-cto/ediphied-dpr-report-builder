@@ -23,7 +23,7 @@ Sub ConvertFxL1() 'Convert Level 1 report to range with formulas
     sGT = "=SUM("
     sST1 = "=SUM("
     'Find Total row for Level Report
-    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", Lookat:=xlPart)
+    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", LookAt:=xlPart)
     If Not rngGT Is Nothing Then
         rGT = rngGT.row
     End If
@@ -49,12 +49,12 @@ Sub ConvertFxL1() 'Convert Level 1 report to range with formulas
             'Create Report Levels Grand Total
             Cells(rGT, col).FormulaR1C1 = sGT & " )" 'Grand Total
             'Create subtotal for construction costs
-            Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", Lookat:=xlPart)
+            Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", LookAt:=xlPart)
             If Not rngMU Is Nothing Then
                 Cells(rngMU.row, col).FormulaR1C1 = "=SUM(R[-" & rngMU.row - rGT & "]C:R[-1]C)"
             End If
             'Create Report Total
-            Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", Lookat:=xlWhole)
+            Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", LookAt:=xlWhole)
             If Not rngT Is Nothing Then
                 Cells(rngT.row, col).FormulaR1C1 = "=SUM(R[-" & rngT.row - rngMU.row & "]C:R[-1]C)"
             End If
@@ -75,7 +75,7 @@ Sub ConvertFxL2() 'Convert Level 2 report to range with formulas
     sGT = "=SUM("
     sST1 = "=SUM("
     'Find Total row for Level Report
-    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", Lookat:=xlPart)
+    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", LookAt:=xlPart)
     If Not rngGT Is Nothing Then
         rGT = rngGT.row
     End If
@@ -116,12 +116,12 @@ Sub ConvertFxL2() 'Convert Level 2 report to range with formulas
             'Create Report Levels Grand Total
             Cells(rGT, col).FormulaR1C1 = sGT & " )" 'Grand Total
             'Create subtotal for construction costs
-            Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", Lookat:=xlPart)
+            Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", LookAt:=xlPart)
             If Not rngMU Is Nothing Then
                 Cells(rngMU.row, col).FormulaR1C1 = "=SUM(R[-" & rngMU.row - rGT & "]C:R[-1]C)"
             End If
             'Create Report Total
-            Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", Lookat:=xlWhole)
+            Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", LookAt:=xlWhole)
             If Not rngT Is Nothing Then
                 Cells(rngT.row, col).FormulaR1C1 = "=SUM(R[-" & rngT.row - rngMU.row & "]C:R[-1]C)"
             End If
@@ -143,7 +143,7 @@ Sub ConvertFxL3() 'Convert Level 3 report to range with formulas
     sST1 = "=SUM("
     sST2 = "=SUM("
     'Find Total row for Level Report
-    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", Lookat:=xlPart)
+    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", LookAt:=xlPart)
     If Not rngGT Is Nothing Then
         rGT = rngGT.row
     End If
@@ -199,12 +199,12 @@ Sub ConvertFxL3() 'Convert Level 3 report to range with formulas
         'Create Report Levels Grand Total
         Cells(rGT, col).FormulaR1C1 = sGT & " )" 'Grand Total
         'Create subtotal for construction costs
-        Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", Lookat:=xlPart)
+        Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", LookAt:=xlPart)
         If Not rngMU Is Nothing Then
             Cells(rngMU.row, col).FormulaR1C1 = "=SUM(R[-" & rngMU.row - rGT & "]C:R[-1]C)"
         End If
         'Create Report Total
-        Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", Lookat:=xlWhole)
+        Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", LookAt:=xlWhole)
         If Not rngT Is Nothing Then
             Cells(rngT.row, col).FormulaR1C1 = "=SUM(R[-" & rngT.row - rngMU.row & "]C:R[-1]C)"
         End If
@@ -227,7 +227,7 @@ Sub ConvertFxL4() 'Convert Level 4 report to range with formulas
     sST2 = "=SUM("
     sST3 = "=SUM("
     'Find Total row for Level Report
-    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", Lookat:=xlPart)
+    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", LookAt:=xlPart)
     If Not rngGT Is Nothing Then
         rGT = rngGT.row
     End If
@@ -298,12 +298,12 @@ Sub ConvertFxL4() 'Convert Level 4 report to range with formulas
         'Create Report Levels Grand Total
         Cells(rGT, col).FormulaR1C1 = sGT & " )" 'Grand Total
         'Create subtotal for construction costs
-        Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", Lookat:=xlPart)
+        Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", LookAt:=xlPart)
         If Not rngMU Is Nothing Then
             Cells(rngMU.row, col).FormulaR1C1 = "=SUM(R[-" & rngMU.row - rGT & "]C:R[-1]C)"
         End If
         'Create Report Total
-        Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", Lookat:=xlWhole)
+        Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", LookAt:=xlWhole)
         If Not rngT Is Nothing Then
             Cells(rngT.row, col).FormulaR1C1 = "=SUM(R[-" & rngT.row - rngMU.row & "]C:R[-1]C)"
         End If
@@ -327,7 +327,7 @@ Sub ConvertFxL5() 'Convert Level 5 report to range with formulas
     sST3 = "=SUM("
     sST4 = "=SUM("
     'Find Total row for Level Report
-    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", Lookat:=xlPart)
+    Set rngGT = ows.Range("B14:B1048576").Find(" SUBTOTAL", LookAt:=xlPart)
     If Not rngGT Is Nothing Then
         rGT = rngGT.row
     End If
@@ -417,12 +417,12 @@ Sub ConvertFxL5() 'Convert Level 5 report to range with formulas
         'Create Report Levels Grand Total
         Cells(rGT, col).FormulaR1C1 = sGT & " )" 'Grand Total
         'Create subtotal for construction costs
-        Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", Lookat:=xlPart)
+        Set rngMU = ows.Range("B" & rGT & ":B1048576").Find(" CONSTRUCTION COSTS", LookAt:=xlPart)
         If Not rngMU Is Nothing Then
             Cells(rngMU.row, col).FormulaR1C1 = "=SUM(R[-" & rngMU.row - rGT & "]C:R[-1]C)"
         End If
         'Create Report Total
-        Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", Lookat:=xlWhole)
+        Set rngT = ows.Range("B" & rGT & ":B1048576").Find("TOTAL", LookAt:=xlWhole)
         If Not rngT Is Nothing Then
             Cells(rngT.row, col).FormulaR1C1 = "=SUM(R[-" & rngT.row - rngMU.row & "]C:R[-1]C)"
         End If

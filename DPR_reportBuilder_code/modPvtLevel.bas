@@ -7,6 +7,7 @@ Public Sub Create_PivotTable_ODBC_MO()
         .EnableEvents = False
     End With
     bPvt = True
+    sSht = GetUniqueSheetName("Detailed Backup")
     Set ptCache = ActiveWorkbook.PivotCaches.Create( _
         SourceType:=xlDatabase, SourceData:="tblEdiphiPivotData", Version:=xlPivotTableVersion15)
     ActiveWorkbook.Sheets.Add(Before:=Sheet4).Name = sSht

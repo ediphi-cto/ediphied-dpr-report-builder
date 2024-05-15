@@ -115,8 +115,6 @@ Private Sub cmdPrinter_Click()
     Me.txtPrinter.Value = Application.ActivePrinter
 End Sub
 
-
-
 Private Sub optDPR_Click()
     pic = "DPRLogo.25.png"
     Call loadLogo
@@ -133,7 +131,9 @@ Private Sub optDPRHardin_Click()
 End Sub
 
 Sub loadLogo()
-Dim sImage As Shape
+'MN TODO: need to load these resources another way?
+On Error Resume Next
+    Dim sImage As Shape
     For Each ows In ActiveWorkbook.Worksheets
         If ows.Name <> "EstData" And ows.Name <> "XMLTables" Then
            ows.PageSetup.LeftFooterPicture.fileName = sPth & pic
@@ -154,14 +154,15 @@ Private Sub UserForm_Activate()
     i = 0
     With lstSheets
         .Clear
-        For Each ows In ActiveWorkbook.Worksheets
-            If ows.Name <> "EstData" And ows.Name <> "XMLTables" Then
+        Dim ws As Worksheet
+        For Each ws In ActiveWorkbook.Worksheets
+            If ws.visible Then
                 .AddItem
                 .List(i, 0) = ows.Name
                 .List(i, 1) = ows.Cells(1, 2).Value
                 i = i + 1
             End If
-        Next ows
+        Next
     End With
     bLoading = False
 End Sub

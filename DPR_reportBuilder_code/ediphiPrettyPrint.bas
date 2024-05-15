@@ -7,7 +7,7 @@ Private Const DEFAULT_LINES_TO_PRINT As Integer = 190
 Sub pp(var, Optional abbrev As Boolean = True, Optional lines_to_print As Integer = DEFAULT_LINES_TO_PRINT)
     
     Dim coll As Collection
-    Dim Dict As Dictionary
+    Dim dict As Dictionary
     Dim ans As String
     Dim line_char_limit As Integer
     
@@ -22,8 +22,8 @@ Sub pp(var, Optional abbrev As Boolean = True, Optional lines_to_print As Intege
     Else
         Select Case TypeName(var)
             Case "Dictionary"
-                Set Dict = var
-                pp_lines dict_as_str(Dict, 0, abbrev), lines_to_print
+                Set dict = var
+                pp_lines dict_as_str(dict, 0, abbrev), lines_to_print
             Case "Collection"
                 Set coll = var
                 pp_lines coll_as_str(coll, 0, abbrev), lines_to_print
@@ -83,7 +83,7 @@ Function coll_as_str(coll As Collection, Optional indent_lvl As Integer = 0, Opt
     
     Dim ans As String
     Dim var
-    Dim Dict As Dictionary
+    Dim dict As Dictionary
     Dim coll2 As Collection
     Dim abbrev_coll As Collection
     Dim coll_size As Integer
@@ -109,8 +109,8 @@ Function coll_as_str(coll As Collection, Optional indent_lvl As Integer = 0, Opt
             Else
                 Select Case TypeName(var)
                     Case "Dictionary"
-                        Set Dict = var
-                        ans = ans & dict_as_str(Dict, indent_lvl + 2, abbrev)
+                        Set dict = var
+                        ans = ans & dict_as_str(dict, indent_lvl + 2, abbrev)
                     Case "Collection"
                         Set coll2 = var
                         ans = ans & coll_as_str(coll2, indent_lvl + 2, abbrev)
@@ -127,7 +127,7 @@ Function coll_as_str(coll As Collection, Optional indent_lvl As Integer = 0, Opt
     
 End Function
 
-Function dict_as_str(Dict As Dictionary, Optional indent_lvl As Integer = 0, Optional abbrev As Boolean = True) As String
+Function dict_as_str(dict As Dictionary, Optional indent_lvl As Integer = 0, Optional abbrev As Boolean = True) As String
 
     Dim k
     Dim ans As String
@@ -136,19 +136,19 @@ Function dict_as_str(Dict As Dictionary, Optional indent_lvl As Integer = 0, Opt
     Dim i As Integer
     lvl = 0
     ans = indents(indent_lvl) & "{"
-    For Each k In Dict.Keys()
+    For Each k In dict.Keys()
             i = i + 1
             ans = ans & vbLf & indents(indent_lvl + 1) & k & ": "
-            If Right(TypeName(Dict(k)), 2) = "()" Then
+            If Right(TypeName(dict(k)), 2) = "()" Then
                 ans = ans & indents(indent_lvl) & array_stats(var)
             Else
-                Select Case TypeName(Dict(k))
+                Select Case TypeName(dict(k))
                     Case "DIctionary"
-                        ans = ans & dict_as_str(Dict(k), indent_lvl + 2, abbrev)
+                        ans = ans & dict_as_str(dict(k), indent_lvl + 2, abbrev)
                     Case "Collection"
-                        ans = ans & coll_as_str(Dict(k), indent_lvl + 2, abbrev)
+                        ans = ans & coll_as_str(dict(k), indent_lvl + 2, abbrev)
                     Case Else
-                        ans = ans & cStr_safe(Dict(k))
+                        ans = ans & cStr_safe(dict(k))
                 End Select
             End If
     Next
@@ -182,7 +182,7 @@ Function array_as_str(arr, Optional line_char_limit As Integer = 100) As String
     Dim dimensions As Integer
     Dim row_str As String
     Dim ans As String
-    Dim Val As String
+    Dim val As String
     
     dimensions = dimension_count(arr)
     ans = array_stats(arr) & vbLf
@@ -271,9 +271,9 @@ e1:
 End Function
 
 
-Function cStr_safe(Val) As String
+Function cStr_safe(val) As String
     On Error GoTo e1
-    cStr_safe = CStr(Val)
+    cStr_safe = CStr(val)
     If LCase(cStr_safe) = "null" Then cStr_safe = ""
     
 Exit Function
@@ -282,18 +282,18 @@ e1:
     
 End Function
 
-Function cDbl_safe(Val) As String
+Function cDbl_safe(val) As String
     On Error GoTo e1
-    cDbl_safe = CDbl(Val)
+    cDbl_safe = CDbl(val)
 Exit Function
 e1:
     cDbl_safe = 0
     
 End Function
 
-Function cInt_safe(Val) As String
+Function cInt_safe(val) As String
     On Error GoTo e1
-    cInt_safe = CInt(Val)
+    cInt_safe = CInt(val)
 Exit Function
 e1:
     cInt_safe = 0
@@ -341,9 +341,10 @@ Function str2array(str As String, Optional splitLen As Long = 30000) As String()
 
 End Function
 
-Function printArr(ByRef ran As Range, arr) As Range
+Function printArr(ByRef ran As Range, arr, Optional asText As Boolean) As Range
 
     Set ran = ran.Cells(1, 1).Resize(arrLength(arr, 1), arrLength(arr, 2))
+    If asText Then ran.NumberFormat = "@"
     ran.Value = arr
     Set printArr = ran
     

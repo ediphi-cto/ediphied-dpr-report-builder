@@ -12,13 +12,13 @@ Public WithEvents APP As Application
 Attribute APP.VB_VarHelpID = -1
 Private Const EDIPHI_TAG As String = "b863abbf-c25a-4a29-97a5-4acdbc9c65ab"
 
-Private Sub APP_WorkbookOpen(ByVal WB As Workbook)
+Private Sub APP_WorkbookOpen(ByVal wb As Workbook)
     
     Dim debugModeOn As Boolean
-    If WB.Worksheets(1).[a1].Value = EDIPHI_TAG Then
+    If wb.Worksheets(1).[a1].Value = EDIPHI_TAG Then
         debugModeOn = (getEnv("DEBUG") = 1)
         If debugModeOn Then Stop
-        triggerReportBuilder ediphiCSVfilename:=WB.Name
+        triggerReportBuilder ediphiCSVfilename:=wb.Name
     End If
     
 End Sub

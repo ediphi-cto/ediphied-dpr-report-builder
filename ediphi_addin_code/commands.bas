@@ -4,10 +4,10 @@ Option Explicit
 Public Sub ediphiUpdate()
     
     On Error GoTo e1
-    Dim WB As Workbook
-    Set WB = fetchReportBuilder
-    WB.Saved = True 'ensures a silent close, doesnt save, but tells Excel that it is
-    WB.Close
+    Dim wb As Workbook
+    Set wb = fetchReportBuilder
+    wb.Saved = True 'ensures a silent close, doesnt save, but tells Excel that it is
+    wb.Close
     MsgBox "Ediphi Report Builder SUCCESSFULLY UPDATED!", vbInformation
 
 Exit Sub

@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frmReportLevel 
    Caption         =   "DPR Report Builder"
-   ClientHeight    =   5028
+   ClientHeight    =   6252
    ClientLeft      =   48
    ClientTop       =   360
-   ClientWidth     =   7320
+   ClientWidth     =   9120
    OleObjectBlob   =   "frmReportLevel.frx":0000
    ShowModal       =   0   'False
    StartUpPosition =   1  'CenterOwner
@@ -14,47 +14,26 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Public reportsRequested As Collection
 '***************************
 '*****Multipage1 Page 1*****
 '***************************
 
-Private Sub cmdBrowse_Click()
-'    frmEstSearch.Show
-    Dim sDir As String
-    Dim lResult As String
-    Dim filters As String
-    Dim fileName As Variant
-    Dim ans
-    
-    lResult = CurDir()
-    sUser = Environ("UserName")
-    
-'    ans = MsgBox("You need to ensure that you are in the Citrix environment to browse your estimate files." & cbcrlf & "If you are already in Citrix, click OK to continue or click Cancel and close the report and re-open from WinEst.", vbOKCancel, "Variance Report Requirements")
-'    If ans = vbCancel Then Exit Sub
-    
-    filters = "Estimates,*.est, All,*.*"
-    sDir = CurDir
-    fileName = Application.GetOpenFilename(filters, 0, "Open Estimate File", , False)
-    If fileName = False Then Exit Sub
-
-    cmdPath = fileName
-    Call VarReport
-    If Range("rngVarEstID").Value <> "" Then
-        txtVarXML.Value = Range("rngVarEstID").Value
-    End If
-End Sub
-
 Private Sub cmdOK_Click()
+    
 '    sCurrency = Range("rngCurrency").Text
+    eventsOff
     sSht = "Detailed Backup Report"
     sRprt = "DETAILED BACKUP"
     sGTLvl1 = cboBLvl1.List(cboBLvl1.ListIndex, 1)
     iLvl = numLevel.Value 'numValue is the depth of grouping
     ReportTrack
-    'Build pivot report
-    'MN TODO
-    Call SummaryDetail
+    
+    createSummary sGTLvl1
     Call ExecSummary
+    Create_PivotTable_ODBC_MO
+    ReApplyAddons
+    
     Call clearStrings
     bCkb1 = False
     bCkb2 = False
@@ -64,7 +43,8 @@ Private Sub cmdOK_Click()
     bCkbAll = False
     Unload Me
     Range("rngIsTemp").Value = True
-    MsgBox "Report Builder Loaded Successfully", vbOKOnly, "DPR Report Builder"
+    eventsOn
+    'MsgBox "Report Builder Loaded Successfully", vbOKOnly, "DPR Report Builder"
 End Sub
 
 Private Sub cboBLvl1_Change()
@@ -336,16 +316,21 @@ End Sub
 '*****Multipage1 Page 2*****
 '***************************
 Private Sub cmdOK1_Click()
-    If thisReportBuilder.debugMode Then
-        Stop
-        On Error GoTo 0
-    Else
+    If thisReportBuilder Is Nothing Then
         On Error GoTo e1
+    Else
+        If thisReportBuilder.debugMode Then
+            Stop
+            On Error GoTo 0
+        Else
+            On Error GoTo e1
+            eventsOff
+        End If
     End If
     
 '   sCurrency = Range("rngCurrency").Text
-    sSht = "Level Report - " & getPtCount
-    sRprt = sRprtName
+    'sSht = "Level Report - " & getPtCount
+    'sRprt = sRprtName
     sGTLvl1 = cboLvl1.List(cboLvl1.ListIndex, 1)
     iLvl = numLevel.Value
     ReportTrack
@@ -359,9 +344,11 @@ Private Sub cmdOK1_Click()
     bCkbAll = False
     
     Dim post As New UserEvents
-    post.slackPost "Report Successfully Created!" 'TODO, add meta data like project, estimate, sorts
-    MsgBox "Report Complete", vbOKOnly, "DPR Report Builder"
-    thisReportBuilder.success = True
+    post.slackPost "Level Report Successfully Created" & vbLf & _
+       "Top Grouping: " & sGTLvl1 & vbLf & "Depth: " & iLvl
+
+    If Not thisReportBuilder Is Nothing Then thisReportBuilder.success = True
+    eventsOn
     Unload Me
     
 Exit Sub
@@ -668,76 +655,10 @@ Private Sub cmdOK3_Click()
     sRprt = sCRprtName
     sGTLvl1 = cboCLvl1.List(cboCLvl1.ListIndex, 1)
     iLvl = numLevel.Value
-    Select Case iLvl
-        Case 1
-            If Me.cboCLvl1.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboCLvl1.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl1Item = "META Level 1"
-                sLvl1Name = "META Level 1"
-                sLvl2Code = "FB_L2_Code"
-                sLvl2Item = "META Level 2"
-                sLvl2Name = "META Level 2"
-                sLvl3Code = "FB_L3_Code"
-                sLvl3Item = "META Level 3"
-                sLvl3Name = "META Level 3"
-                iLvl = 3
-                sFormula = "=LEFT($I13,3)=""*~*"""
-                Call ReportTrack
-                Call xmlCtrlEst3FB
-            Else
-                sFormula = "=LEFT($E13,3)=""*~*"""
-                Call ReportTrack
-                Call xmlCtrlEst1
-            End If
-        Case 2
-            If Me.cboCLvl2.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboCLvl2.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl2Item = "META Level 1"
-                sLvl2Name = "META Level 1"
-                sLvl3Code = "FB_L2_Code"
-                sLvl3Item = "META Level 2"
-                sLvl3Name = "META Level 2"
-                sLvl4Code = "FB_L3_Code"
-                sLvl4Item = "META Level 3"
-                sLvl4Name = "META Level 3"
-                iLvl = 4
-                sFormula = "=LEFT($K13,3)=""*~*"""
-                Call ReportTrack
-                Call xmlCtrlEst4FB
-            Else
-                sFormula = "=LEFT($G13,3)=""*~*"""
-                Call ReportTrack
-                Call xmlCtrlEst2
-            End If
-        Case 3
-            If Me.cboCLvl3.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboCLvl3.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl3Item = "META Level 1"
-                sLvl3Name = "META Level 1"
-                sLvl4Code = "FB_L2_Code"
-                sLvl4Item = "META Level 2"
-                sLvl4Name = "META Level 2"
-                sLvl5Code = "FB_L3_Code"
-                sLvl5Item = "META Level 3"
-                sLvl5Name = "META Level 3"
-                iLvl = 5
-                sFormula = "=LEFT($M13,3)=""*~*"""
-                Call ReportTrack
-                Call xmlCtrlEst5FB
-            Else
-                sFormula = "=LEFT($I13,3)=""*~*"""
-                Call ReportTrack
-                Call xmlCtrlEst3
-            End If
-        Case 4
-            sFormula = "=LEFT($K13,3)=""*~*"""
-            Call ReportTrack
-            Call xmlCtrlEst4
-        Case 5
-            sFormula = "=LEFT($M13,3)=""*~*"""
-            Call ReportTrack
-            Call xmlCtrlEst5
-    End Select
+    
+    'MN TODO:
+    ReportTrack
+    
 'Build pivot report
     Call Create_PivotTable_ODBC_CntrlEst
     Call clearStrings
@@ -1034,68 +955,9 @@ Private Sub cmdOK2_Click()
     sXTRow = sRowName
     sGTLvl1 = cboXLvl1.List(cboXLvl1.ListIndex, 1)
     iLvl = numXLevel.Value
-    Select Case iLvl
-        Case 1
-            If Me.cboXLvl1.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboXLvl1.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl1Item = "META Level 1"
-                sLvl1Name = "META Level 1"
-                sLvl2Code = "FB_L2_Code"
-                sLvl2Item = "META Level 2"
-                sLvl2Name = "META Level 2"
-                sLvl3Code = "FB_L3_Code"
-                sLvl3Item = "META Level 3"
-                sLvl3Name = "META Level 3"
-                iLvl = 3
-                Call ReportTrack
-                Call xmlXTabLevel3FB
-            Else
-                Call ReportTrack
-                Call xmlXTabLevel1
-            End If
-        Case 2
-            If Me.cboXLvl2.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboXLvl2.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl2Item = "META Level 1"
-                sLvl2Name = "META Level 1"
-                sLvl3Code = "FB_L2_Code"
-                sLvl3Item = "META Level 2"
-                sLvl3Name = "META Level 2"
-                sLvl4Code = "FB_L3_Code"
-                sLvl4Item = "META Level 3"
-                sLvl4Name = "META Level 3"
-                iLvl = 4
-                Call ReportTrack
-                Call xmlXTabLevel4FB
-            Else
-                Call ReportTrack
-                Call xmlXTabLevel2
-            End If
-        Case 3
-            If Me.cboXLvl1.Value = "WBS14 - Meta WBS2.1 (PRECON)" _
-                Or Me.cboXLvl1.Value = "WBS13 - Meta WBS2.1 (OPS)" Then
-                sLvl3Item = "META Level 1"
-                sLvl3Name = "META Level 1"
-                sLvl4Code = "FB_L2_Code"
-                sLvl4Item = "META Level 2"
-                sLvl4Name = "META Level 2"
-                sLvl5Code = "FB_L3_Code"
-                sLvl5Item = "META Level 3"
-                sLvl5Name = "META Level 3"
-                iLvl = 5
-                Call ReportTrack
-                Call xmlXTabLevel5FB
-            Else
-                Call ReportTrack
-                Call xmlXTabLevel3
-            End If
-        Case 4
-            Call ReportTrack
-            Call xmlXTabLevel4
-        Case 5
-            Call ReportTrack
-            Call xmlXTabLevel5
-    End Select
+    ReportTrack
+    'MN TODO:
+    
 'Build pivot report
     Create_PivotTable_ODBC_XT
     Call clearStrings
@@ -1437,24 +1299,10 @@ Private Sub cmdOK4_Click()
     iLvl = numLevel.Value
     sTotal = "GrandTotal"
     bMarkups = True
-    Select Case iLvl
-        Case 1
-            Call ReportTrack
-            Call xml_VAR_Level1
-        Case 2
-            Call ReportTrack
-            Call xml_VAR_Level2
-        Case 3
-            Call ReportTrack
-            Call xml_VAR_Level3
-        Case 4
-            Call ReportTrack
-            Call xml_VAR_Level4
-        Case 5
-            Call ReportTrack
-            Call xml_VAR_Level5
-    End Select
-
+    'MN TODO:
+    
+    ReportTrack
+    
     Call clearStrings
     bCkb1 = False
     bCkb2 = False
@@ -1685,27 +1533,41 @@ Private Sub txtVarXML_Change()
     End If
 End Sub
 
-Private Sub UserForm_Deactivate()
-
-    If Not thisReportBuilder.success Then closeMe
-        
-End Sub
-
 Private Sub UserForm_Initialize()
-    Me.StartUpPosition = 0
-    Me.Top = Application.Top + 115
-    Me.Left = Application.Left + 25
-End Sub
-
-Private Sub UserForm_Activate()
-    With MultiPage1
-        .Pages(0).Enabled = False
-        .Pages(1).Enabled = True
-        .Pages(2).Enabled = False
-        .Pages(3).Enabled = False
-        .Pages(4).Enabled = False
+        
+    Dim firstRun As Boolean
+    firstRun = Not ThisWorkbook.Worksheets("EstData").[rngIsTemp]
+    Set reportsRequested = New Collection
+    
+    With Me
+        .StartUpPosition = 0
+        .Top = Application.Top + 115
+        .Left = Application.Left + 25
     End With
+    
+    If firstRun Then
+        With MultiPage1
+            .Pages(0).Enabled = True
+            .Pages(1).Enabled = False
+            .Pages(2).Enabled = False
+            .Pages(3).Enabled = False
+            .Pages(4).Enabled = False
+        End With
+    Else
+        With MultiPage1
+            .Pages(0).Enabled = False
+            .Pages(1).Enabled = True
+            .Pages(2).Enabled = False
+            .Pages(3).Enabled = True
+            .Pages(4).Enabled = False
+        End With
+    End If
+    
+    LoadCBO "cboBLvl1", "Page1"
     LoadCBO "cboLvl1", "Page2"
+    'LoadCBO "cboCLvl1", "Page3"
+    LoadCBO "cboLvl0", "Page4"
+    
 End Sub
 
 Public Function LoadCBO(cntrl As String, pg As String)
@@ -1716,7 +1578,7 @@ Public Function LoadCBO(cntrl As String, pg As String)
     With Controls(cntrl)
         .Clear
         .AddItem ""
-        For Each sortFieldDict In thisReportBuilder.sortFieldColl
+        For Each sortFieldDict In getSortFieldColl()
                 If CheckValue(pg, sortFieldDict("name")) = False Then
                     .AddItem
                     '.List(i, 0) = lObj.DataBodyRange.Cells(i, 5) 'sXpath1 'not needed
@@ -1810,6 +1672,8 @@ Function sCRprtName() As String
     sCRprtName = sCRprtName & " Control Estimate"
 End Function
 
+Private Sub UserForm_Terminate()
 
-
-
+    'If Not thisReportBuilder.success Then closeMe
+    
+End Sub

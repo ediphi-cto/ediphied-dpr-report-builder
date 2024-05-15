@@ -5,6 +5,26 @@ Public thisReportBuilder As EdiphiReportBuilder
 Public errors As Collection
 Public Const TRY_UPDATING_MSG As String = "Try updating it by pressing ALT + F8, then typing 'ediphiUpdate', and hit Enter"
 
+Sub eventsOn()
+
+    With Application
+        .Calculation = xlCalculationAutomatic
+        .EnableEvents = True
+        .ScreenUpdating = True
+    End With
+
+End Sub
+
+Sub eventsOff()
+
+    With Application
+        .Calculation = xlCalculationManual
+        .EnableEvents = False
+        .ScreenUpdating = False
+    End With
+
+End Sub
+
 Sub tryApi()
 
     Dim api As New EdiphiAPI
@@ -15,9 +35,65 @@ Sub tryApi()
     
     pp jsonDict
     
-    
 End Sub
 
+Function GetUniqueSheetName(baseName As String) As String
+    Dim ws As Worksheet
+    Dim uniqueName As String
+    Dim suffix As Integer
+    Dim nameExists As Boolean
+    
+    ' Start with the base name
+    uniqueName = baseName
+    suffix = 1
+    
+    ' Loop to check if the name already exists
+    Do
+        nameExists = False
+        For Each ws In ThisWorkbook.Sheets
+            If ws.Name = uniqueName Then
+                ' If the name exists, generate a new name with a suffix
+                uniqueName = baseName & " " & suffix
+                suffix = suffix + 1
+                nameExists = True
+                Exit For
+            End If
+        Next ws
+    Loop While nameExists
+    
+    ' Return the unique name
+    GetUniqueSheetName = uniqueName
+End Function
+
+
+Function getSortFieldColl() As Collection
+
+    Set getSortFieldColl = New Collection
+    
+    Dim pivotDataWS As Worksheet
+    Set pivotDataWS = ThisWorkbook.Worksheets("pivot data")
+    
+    Dim tbl As ListObject
+    Set tbl = pivotDataWS.ListObjects("tblEdiphiPivotData")
+    
+    Dim headerCell As Range
+    Dim sortFieldDict As Dictionary
+    Dim sortFieldName As String, sortFieldCode As String
+    
+    For Each headerCell In tbl.HeaderRowRange.Cells
+        If InStr(headerCell.Value, "_code") > 0 Then
+            Set sortFieldDict = New Dictionary
+            sortFieldName = headerCell.Offset(0, 1).Value
+            sortFieldCode = sortFieldName & "_code"
+            With sortFieldDict
+                .Add "code", sortFieldCode
+                .Add "name", sortFieldName
+            End With
+            getSortFieldColl.Add sortFieldDict
+        End If
+    Next
+
+End Function
 
 Sub toggle_visible()
 
@@ -109,11 +185,11 @@ Sub closeMe(Optional hideErrors As Boolean)
     
 End Sub
 
-Sub setEnv(varName As String, Val)
+Sub setEnv(varName As String, val)
 
     On Error GoTo e1
     Dim str As String
-    str = CStr(Val)
+    str = CStr(val)
     Workbooks(EDIPHI_ADDIN_FILENAME).Worksheets("env").Range(varName).Value = str
 
 Exit Sub
@@ -176,49 +252,61 @@ Function validateRangeName(str As String) As String
 
 End Function
 
-Function printDictList2Range(dictColl As Collection, startCell As Range) As Range
+Function printDictList2Range(dictColl As Collection, startCell As Range, Optional noHeaders As Boolean, Optional asText As Boolean) As Range
 
     Dim arr
-    arr = dictsTo2DArray(dictColl)
-    Set printDictList2Range = printArr(startCell, arr)
+    arr = dictsTo2DArray(dictColl, noHeaders)
+    Set printDictList2Range = printArr(startCell, arr, asText)
 
 End Function
 
-Function dictsTo2DArray(dictCollection As Collection) As Variant
+Function dictsTo2DArray(dictCollection As Collection, Optional noHeaders As Boolean) As Variant
     Dim allKeys As New Dictionary
-    Dim Dict As Dictionary
-    Dim Key As Variant
+    Dim dict As Dictionary
+    Dim key As Variant
     Dim i As Integer, j As Integer
     Dim outputArray() As Variant
     
     If dictCollection.count = 0 Then Exit Function
     
     ' Gather all unique keys from each dictionary
-    For Each Dict In dictCollection
-        For Each Key In Dict.Keys
-            If Not allKeys.Exists(Key) Then
-                allKeys.Add Key, Nothing
+    For Each dict In dictCollection
+        For Each key In dict.Keys
+            If Not allKeys.Exists(key) Then
+                allKeys.Add key, Nothing
             End If
-        Next Key
-    Next Dict
+        Next key
+    Next dict
+    
+    Dim startInt As Integer, endInt As Integer
+    
+    If noHeaders Then
+        startInt = 1
+        endInt = dictCollection.count - 1
+    Else
+        startInt = 0
+        endInt = dictCollection.count
+    End If
     
     ' Redim the output array to fit all keys and dictionaries
-    ReDim outputArray(0 To dictCollection.count, 0 To allKeys.count - 1)
+    ReDim outputArray(startInt To endInt, 0 To allKeys.count - 1)
     
-    ' Set the first row to be the keys (headers)
-    i = 0
-    For Each Key In allKeys.Keys
-        outputArray(0, i) = Key
-        i = i + 1
-    Next Key
+    If Not noHeaders Then
+        ' Set the first row to be the keys (headers)
+        i = 0
+        For Each key In allKeys.Keys
+            outputArray(startInt, i) = key
+            i = i + 1
+        Next key
+    End If
     
     ' Set the subsequent rows to be the values from each dictionary
-    For i = 1 To dictCollection.count
-        Set Dict = dictCollection(i)
+    For i = 1 To endInt
+        Set dict = dictCollection(i)
         For j = 0 To allKeys.count - 1
-            Key = allKeys.Keys(j)
-            If Dict.Exists(Key) Then
-                outputArray(i, j) = Dict(Key)
+            key = allKeys.Keys(j)
+            If dict.Exists(key) Then
+                outputArray(i, j) = dict(key)
             Else
                 outputArray(i, j) = ""
             End If
@@ -249,5 +337,6 @@ Sub updateLocally()
     End With
     
     MsgBox "Report Builder Updated Locally", vbInformation
+    ThisWorkbook.Close Savechanges:=False
     
 End Sub

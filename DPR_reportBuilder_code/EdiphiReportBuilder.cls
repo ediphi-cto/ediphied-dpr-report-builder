@@ -17,6 +17,7 @@ Public sortFieldColl As Collection
 Public Cancel As Boolean
 Public debugMode As Boolean
 Public success As Boolean
+Public estimateJson As Dictionary
 
 Private Sub triggerWS_Change(ByVal Target As Range)
     
@@ -24,8 +25,6 @@ Private Sub triggerWS_Change(ByVal Target As Range)
             If Me.debugMode Then On Error GoTo 0 Else On Error Resume Next
             debugMode = (getEnv("DEBUG") = 1)
             If Me.debugMode Then
-                DoEvents
-                Stop
                 On Error GoTo 0
             Else
                 On Error GoTo e2
@@ -42,7 +41,8 @@ e2:
 End Sub
 
 Sub migrateDataFrom(csvFileName As String)
-
+    
+    If Me.debugMode Then Stop
     'first, get the column count
     Dim colCt As Integer
     Dim csvWS As Worksheet
@@ -53,7 +53,7 @@ Sub migrateDataFrom(csvFileName As String)
     colCt = csvWB.Worksheets(1).UsedRange.Columns.count
     
     'then close the csv silent
-    csvWB.Close SaveChanges:=False
+    csvWB.Close Savechanges:=False
     
     'create an array of 2's the length of the column count
     Dim i As Integer
@@ -75,8 +75,11 @@ Sub migrateDataFrom(csvFileName As String)
         .Refresh
     End With
     
-    Me.setMetaData
-    Me.transformDataForPivotTable
+    With Me
+        .fetchEstimateJson
+        .transformDataForPivotTable
+        .setMetaData
+    End With
     
 End Sub
 
@@ -84,11 +87,18 @@ Sub setMetaData()
     
     Dim metaDataWS As Worksheet
     Set metaDataWS = ThisWorkbook.Worksheets("EstData")
+    On Error Resume Next
     With metaDataWS
         .[rngEstName].Value = thisReportBuilder.EstimateName
         .[rngEstDate].Value = Format(Now(), "m/dd/yyyy")
         .[rngProjectName].Value = thisReportBuilder.ProjectName
         .[rngEstimator].Value = Application.UserName
+        .[rngJobSize].Value = Me.getStat("grossArea")
+        'MN TODO
+        .[rngProjectAddress].Value = "" 'get project from api
+        .[rngProjectCityStateZip].Value = "" 'get project from api
+        .[rngProjectClient].Value = "" 'get project from api
+        .[rngSubHeading1].Value = WorksheetFunction.Proper(Me.estimateJson("estimate")("phase"))
     End With
 
 End Sub
@@ -126,7 +136,6 @@ Sub transformDataForPivotTable()
         End If
         Set ran = ran.Offset(0, 1)
     Loop
-   neededCols.Add "ItemNote", 1000 'MN: TOD Once notes are included in csv
    
    '[2] Gather Data Rows into Collection of Dicts
    
@@ -135,6 +144,7 @@ Sub transformDataForPivotTable()
     Dim colOffset As Integer
     Dim k
     Dim grandTotal As Double
+    Dim li As Dictionary
     
     Set ran = Me.rawDataWS.[a4]
     Do Until ran.Value = 0
@@ -148,6 +158,12 @@ Sub transformDataForPivotTable()
             grandTotal = cDbl_safe(rowDict("UnitPrice")) * cDbl_safe(rowDict("TakeoffQty"))
             grandTotal = Round(grandTotal, 2)
             rowDict.Add "GrandTotal", grandTotal
+            If rowDict.Exists("ItemNote") Then
+                'pass
+            Else
+                Set li = Me.findOne(rowDict("id"), "line_items")
+                If Not li Is Nothing And li.Exists("notes") Then rowDict.Add "ItemNote", li("notes")
+            End If
             calculateUseGroupValues rowDict
             dataColl.Add rowDict
         End If
@@ -163,7 +179,8 @@ Sub transformDataForPivotTable()
     End If
     
     Dim printRan As Range
-    Set printRan = printDictList2Range(dataColl, Me.pivotDataWS.[a1])
+    Set printRan = printDictList2Range( _
+    dictColl:=dataColl, startCell:=Me.pivotDataWS.[a1], asText:=True)
    
     Dim tbl As ListObject
     Set tbl = Me.pivotDataWS.ListObjects.Add(xlSrcRange, printRan, , xlYes)
@@ -209,9 +226,19 @@ Sub parseMarkups2Table()
     Set printRan = printDictList2Range(dataColl, ThisWorkbook.Worksheets("XMLTables").[\markups])
     Dim tbl As ListObject
     Set tbl = printRan.Parent.ListObjects.Add(xlSrcRange, printRan, , xlYes)
-    tbl.Name = "tblTotals"
     
-    'MN TODO: Sort the table
+    With tbl
+        .Name = "tblTotals"
+        .Sort.SortFields.Clear
+        .Sort.SortFields.Add key:=Range("tblTotals[SortOrder]"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+        With .Sort
+            .Header = xlYes
+            .MatchCase = False
+            .Orientation = xlTopToBottom
+            .SortMethod = xlPinYin
+            .Apply
+        End With
+    End With
 
 Exit Sub
 e1:
@@ -220,29 +247,92 @@ e1:
 
 End Sub
 
-Function isChildItem(Dict As Dictionary) As Boolean
+
+Sub fetchEstimateJson()
+    If Me.debugMode Then On Error GoTo 0 Else On Error GoTo e1
     
-    isChildItem = Dict("parent") <> ""
+    Dim api As New EdiphiAPI
+    Dim rawJson As String
+    rawJson = api.getEstimateJSON(Me.EstimateID)
+    Set Me.estimateJson = ParseJson(rawJson)("sanitizedEstimate")
+    
+Exit Sub
+e1:
+    logError "failed to fetch estimate json from the api"
+
+End Sub
+
+Function findOne(thingPropVal As String, thingName As String, Optional thingProp As String = "id") As Dictionary
+    If Me.debugMode Then On Error GoTo 0 Else On Error GoTo e1
+    
+    Dim things As Collection
+    Set things = Me.estimateJson(thingName)
+    Dim thing As Dictionary
+    For Each thing In things
+        If thing(thingProp) = thingPropVal Then
+            Set findOne = thing
+            Exit Function
+        End If
+    Next
+
+Exit Function
+e1:
+    pp "ERROR === could not find {" & thingProp & ": " & thingPropVal & "} in '" & thingName & "' within estimate json"
+    'do not warn user, could be noisy
+
+End Function
+
+Function isChildItem(dict As Dictionary) As Boolean
+    
+    isChildItem = dict("parent") <> ""
     
 End Function
 
-Function isBaseBid(Dict As Dictionary) As Boolean
+Function isBaseBid(dict As Dictionary) As Boolean
+    Dim alt As Dictionary
+    Dim altId As String
+    If dict.Exists("alternate") Then
+        altId = dict("alternate")
+        If altId = "" Then
+            isBaseBid = True
+            Exit Function
+        End If
+    Else
+        isBaseBid = True
+        Exit Function
+    End If
     
-    isBaseBid = Dict("alternate") = ""
+    Set alt = findOne(dict("alternate"), "alternates")
+    If alt Is Nothing Then Exit Function
+    
+    isBaseBid = alt("accepted")
 
 End Function
 
-Sub calculateUseGroupValues(Dict As Dictionary)
+Sub calculateUseGroupValues(dict As Dictionary)
 
     Dim allocations As Dictionary
-    Set allocations = ParseJson(Dict("use_groups"))
+    Dim i As Integer, hasMultiple As Boolean
+    Set allocations = ParseJson(dict("use_groups"))
     
     Dim k
+    i = 0
     For Each k In allocations.Keys
-        Dict.Add k, Round(Dict("GrandTotal") * cDbl_safe(allocations(k)) / 100, 2)
+        i = i + 1
+        dict.Add k, Round(cDbl_safe(dict("GrandTotal")) * cDbl_safe(allocations(k)) / 100, 2)
+        dict.Add k & "_qty", cDbl_safe(dict("TakeOffQty")) * cDbl_safe(allocations(k) / 100)
+        If i = 1 Then
+            dict.Add "Use Group_code", k
+            dict.Add "Use Group", k
+        End If
     Next
     
-    Dict.Remove "use_groups"
+    If i > 1 Then
+        dict("Use Group_code") = "9999"
+        dict("Use Group") = "Multiple"
+    End If
+    
+    dict.Remove "use_groups"
 
 End Sub
 
@@ -269,6 +359,69 @@ End Property
 Property Get embeddedXML() As String
     embeddedXML = Me.rawDataWS.Range("B2").Value
 End Property
+
+Function getStat(statName As String, Optional useGroupID As String)
+    'stats
+    '     "grossArea": 306068,
+    '     "processed": "2024-05-02T05:03:00.795Z",
+    '     "updatedAt": "2024-05-02T05:03:00.794Z",
+    '     "totalUnits": 0,
+    '     "markupsTotal": 4761999.49,
+    '     "totalLineItems": 40,
+    '     "costOfTradesSubtotal": 46594157
+    
+    ' use group stats, for totals, just provide keyname like "area" for statName
+    '          "id": "ea8ee16b-6b83-46f0-b7d5-79bdc25fc0d1",
+    '          "gsf": 73889,
+    '          "nsf": 0,
+    '          "label": "Proton Therapy",
+    '          "order": 1,
+    '          "totals": {
+    '            "area": 73889,
+    '            "beds_total": 0,
+    '            "unit_count": 0,
+    '            "baths_total": 0,
+    '            "unit_area_total": 0,
+    '            "half_baths_total": 0,
+    '            "terminal_hvacs_total": 0
+    '          },
+    '          "estimate": "5347cddc-d3dd-46dd-b2de-d81f774ac3cc",
+    '          "use_group": "Cancer Care",
+    '          "unit_count": 0,
+    '          "exclude_area": false,
+    '          "use_group_id": "cf570083-c783-4c31-bd4f-bed540426a79",
+    '          "costOfTradesSubtotal": 41832086
+    
+    If Not Me.debugMode Then GoTo e1
+    Dim val
+    Dim useGroups As Collection
+    Dim useGroup As Dictionary
+    
+    If useGroupID = "" Then
+        val = Me.estimateJson("estimate")("stats")(statName)
+    Else
+        Set useGroups = Me.estimateJson("estimate")("stats")("UseGroups")
+        For Each useGroup In useGroups
+            If useGroup("id") = useGroupID Then
+                If useGroup.Exists(statName) Then
+                    val = useGroup(statName)
+                Else
+                    val = useGroup("totals")(statName)
+                End If
+                GoTo finally
+            End If
+        Next
+    End If
+
+finally:
+    getStat = cStr_safe(val)
+
+Exit Function
+e1:
+    pp "failed to find stat '" & statName & "' within estimate json " & useGroupID
+    'pass
+
+End Function
 
 Property Get metaDataAsString() As String
 

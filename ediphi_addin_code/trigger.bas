@@ -18,7 +18,8 @@ Sub triggerReportBuilder(ediphiCSVfilename As String)
     End If
     On Error GoTo e1
     
-    If getEnv("AUTO_UPDATE") <> 0 Then
+    If getEnv("AUTO_UPDATE") <> 0 And updateNeeded Then
+        Debug.Print ThisWorkbook.Name & " == updating " & REPORT_BUILDER_FILENAME
         Set reportBuilderWB = fetchReportBuilder()
     Else
         On Error GoTo e2

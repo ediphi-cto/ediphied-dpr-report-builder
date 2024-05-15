@@ -582,8 +582,8 @@ Dim dTotal As Double
         'Add Sort if by Phase Code
         With lObj
             .Sort.SortFields.Clear
-            .Sort.SortFields.Add Key:=Range("tblTotals[JobCost]"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
-            .Sort.SortFields.Add Key:=Range("tblTotals[SortOrder]"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+            .Sort.SortFields.Add key:=Range("tblTotals[JobCost]"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
+            .Sort.SortFields.Add key:=Range("tblTotals[SortOrder]"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
             With .Sort
                 .Header = xlYes
                 .MatchCase = False

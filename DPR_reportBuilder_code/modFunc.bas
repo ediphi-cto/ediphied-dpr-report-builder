@@ -90,40 +90,40 @@ Sub XL_SQL(ByVal sSht As String, ByVal sRprt As String, ByVal sSql As String)
     End With
 End Sub
 
-Sub CleanTempFolder()
-    Dim file As String, count As Long
-    Dim countOf, Ret
-    On Error Resume Next
-    sDir = DriveName(ThisWorkbook.Path)
-    file = Dir$(cmdPath & "DPR Report Builder*.xlsm")
-    Do Until file = ""
-        Ret = IsWorkBookOpen(file)
-        If Ret = True Then
-            
-        Else
-            Kill (file)
-        End If
-        file = Dir$()
-    Loop
-    On Error GoTo 0
-End Sub
-
-Function IsWorkBookOpen(fileName As String)
-    Dim ff As Long, ErrNo As Long
-
-    On Error Resume Next
-    ff = FreeFile()
-    Open fileName For Input Lock Read As #ff
-    Close ff
-    ErrNo = Err
-    On Error GoTo 0
-
-    Select Case ErrNo
-    Case 0:    IsWorkBookOpen = False
-    Case 70:   IsWorkBookOpen = True
-    Case Else:
-    End Select
-End Function
+'Sub CleanTempFolder()
+'    Dim file As String, count As Long
+'    Dim countOf, Ret
+'    On Error Resume Next
+'    sDir = DriveName(ThisWorkbook.Path)
+'    file = Dir$(cmdPath & "DPR Report Builder*.xlsm")
+'    Do Until file = ""
+'        Ret = IsWorkBookOpen(file)
+'        If Ret = True Then
+'
+'        Else
+'            Kill (file)
+'        End If
+'        file = Dir$()
+'    Loop
+'    On Error GoTo 0
+'End Sub
+'
+'Function IsWorkBookOpen(fileName As String)
+'    Dim ff As Long, ErrNo As Long
+'
+'    On Error Resume Next
+'    ff = FreeFile()
+'    Open fileName For Input Lock Read As #ff
+'    Close ff
+'    ErrNo = Err
+'    On Error GoTo 0
+'
+'    Select Case ErrNo
+'    Case 0:    IsWorkBookOpen = False
+'    Case 70:   IsWorkBookOpen = True
+'    Case Else:
+'    End Select
+'End Function
 
 Function GetFilenameFromPath(ByVal strPath As String) As String
 ' Returns the rightmost characters of a string upto but not including the rightmost '\'

@@ -67,3 +67,9 @@ Public Sub hideMe()
     Next
 
 End Sub
+
+Public Sub showMe()
+    
+    ThisWorkbook.Windows(1).Visible = True
+    
+End Sub

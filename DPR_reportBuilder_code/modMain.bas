@@ -171,8 +171,8 @@ Sub LoadWorkbook()
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
     sSht = ActiveSheet.Name
-    Call LoadXMLTables
-    Call LaborHrProjection
+    'Call LoadXMLTables
+    'Call LaborHrProjection
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
     frmReportLevel.Show
@@ -196,99 +196,99 @@ Dim fileSavename As String
 End Sub
 
 
-Sub NewReport() 'Generate new report
-Dim wsh As Object
-Dim strPath As String
-Dim cmdLine As String
-Dim sWB As String
-Dim sXML As String
-Dim Ret, countOf
-Dim file As String, count As Long
-Dim waitOnReturn As Boolean: waitOnReturn = True
-Dim windowStyle As Integer: windowStyle = 1
-sDir = DriveName(ThisWorkbook.Path)
-sUser = CStr(Environ("USERNAME"))
-cmdPath = "C:\Users\" & sUser & "\AppData\Local\Temp\DPRReporter\"
-    Sheet2.Activate
-    If Dir(cmdPath, vbDirectory) = "" Then
-        MkDir cmdPath
-    End If
-    sWB = cmdPath & "DPR Report Builder for WinEst.xlsm"
-    sXML = cmdPath & "ReportTables.xml"
-    If Dir(sXML) <> "" Then
-        Kill sXML
-    End If
-    Set wsh = VBA.CreateObject("WScript.Shell")
-    strPath = Chr(34) & "C:\Program Files (x86)\WinEst\winest.exe" & Chr(34)
-    cmdLine = " /x /notallitems /emptyfields /tpl DPRTpl.xml " & Chr(34) & cmdPath & "ReportTables.xml" & Chr(34)
-    If Len(strPath) > 0 Then
-        wsh.Run strPath & cmdLine, windowStyle, waitOnReturn
-    Else
-        MsgBox "Path doesn't exist"
-    End If
-    If Dir(sWB) <> "" Then
-        Ret = IsWorkBookOpen(sWB)
-        If Ret = True Then
-            file = Dir$(cmdPath & "DPR Excel Report Builder*.xlsm")
-            Do Until file = ""
-                countOf = (countOf + 1)
-                file = Dir$()
-            Loop
-            sWB = cmdPath & "DPR Excel Report Builder-" & countOf & ".xlsm"
-        Else
-            Kill sWB
-        End If
-    End If
-    CleanTempFolder
-    Application.DisplayAlerts = False
-    ThisWorkbook.SaveAs sWB
-    Application.DisplayAlerts = True
-    Call LoadWorkbook
-End Sub
-
-Sub VarReport() 'Generate Variance XML file (Estimate 2)
-Dim fileData As String
-Dim fol As String
-Dim wsh As Object
-Dim strPath As String
-Dim sTempFldr As String
-Dim cmdLine As String
-Dim sWB As String
-Dim sXML As String
-Dim Ret, countOf
-Dim file As String, count As Long
-Dim waitOnReturn As Boolean: waitOnReturn = True
-Dim windowStyle As Integer: windowStyle = 1
-sDir = DriveName(ThisWorkbook.Path)
-sUser = CStr(Environ("USERNAME"))
-
-'    fol = ThisWorkbook.Path & "\ReportData\"
-    sVarXML = GetFilenameFromPath(cmdPath)
-    fileData = FNameScrub(sVarXML)
-    Set wsh = VBA.CreateObject("WScript.Shell")
-    sTempFldr = "C:\Users\" & sUser & "\AppData\Local\Temp\DPRReporter\"
-'Kill Temp Variance XML file
-    sXML = sTempFldr & "VarReportTables.xml"
-    If Dir(sXML) <> "" Then
-        Kill sXML
-    End If
-    
-    strPath = Chr(34) & "C:\Program Files (x86)\WinEst\winest.exe" & Chr(34)
-'1st command line: This will open the selected estimate. The command line doesn't always execute fully
-    cmdLine = "/uAdministrator /p /x /notallitems /emptyfields /tpl DPRTpl.xml " & Chr(34) & cmdPath & Chr(34) & " " & Chr(34) & sTempFldr & "VarReportTables.xml" & Chr(34)
-    If Len(strPath) > 0 Then
-        wsh.Run strPath & cmdLine, windowStyle, waitOnReturn
-    End If
-'2nd command line:This will run the XML command again from the estimate that was opened above.
-    cmdLine = "/x /notallitems /emptyfields /tpl DPRTpl.xml " & Chr(34) & sTempFldr & "VarReportTables.xml" & Chr(34)
-    If Len(strPath) > 0 Then
-        wsh.Run strPath & cmdLine, windowStyle, waitOnReturn
-        Range("rngVarEstID").Value = fileData
-    Else
-        MsgBox "Path doesn't exist"
-    End If
-    Call xmlVarTotalsTable
-End Sub
+'Sub NewReport() 'Generate new report
+'Dim wsh As Object
+'Dim strPath As String
+'Dim cmdLine As String
+'Dim sWB As String
+'Dim sXML As String
+'Dim Ret, countOf
+'Dim file As String, count As Long
+'Dim waitOnReturn As Boolean: waitOnReturn = True
+'Dim windowStyle As Integer: windowStyle = 1
+'sDir = DriveName(ThisWorkbook.Path)
+'sUser = CStr(Environ("USERNAME"))
+'cmdPath = "C:\Users\" & sUser & "\AppData\Local\Temp\DPRReporter\"
+'    Sheet2.Activate
+'    If Dir(cmdPath, vbDirectory) = "" Then
+'        MkDir cmdPath
+'    End If
+'    sWB = cmdPath & "DPR Report Builder for WinEst.xlsm"
+'    sXML = cmdPath & "ReportTables.xml"
+'    If Dir(sXML) <> "" Then
+'        Kill sXML
+'    End If
+'    Set wsh = VBA.CreateObject("WScript.Shell")
+'    strPath = Chr(34) & "C:\Program Files (x86)\WinEst\winest.exe" & Chr(34)
+'    cmdLine = " /x /notallitems /emptyfields /tpl DPRTpl.xml " & Chr(34) & cmdPath & "ReportTables.xml" & Chr(34)
+'    If Len(strPath) > 0 Then
+'        wsh.Run strPath & cmdLine, windowStyle, waitOnReturn
+'    Else
+'        MsgBox "Path doesn't exist"
+'    End If
+'    If Dir(sWB) <> "" Then
+'        Ret = IsWorkBookOpen(sWB)
+'        If Ret = True Then
+'            file = Dir$(cmdPath & "DPR Excel Report Builder*.xlsm")
+'            Do Until file = ""
+'                countOf = (countOf + 1)
+'                file = Dir$()
+'            Loop
+'            sWB = cmdPath & "DPR Excel Report Builder-" & countOf & ".xlsm"
+'        Else
+'            Kill sWB
+'        End If
+'    End If
+'    CleanTempFolder
+'    Application.DisplayAlerts = False
+'    ThisWorkbook.SaveAs sWB
+'    Application.DisplayAlerts = True
+'    Call LoadWorkbook
+'End Sub
+'
+'Sub VarReport() 'Generate Variance XML file (Estimate 2)
+'Dim fileData As String
+'Dim fol As String
+'Dim wsh As Object
+'Dim strPath As String
+'Dim sTempFldr As String
+'Dim cmdLine As String
+'Dim sWB As String
+'Dim sXML As String
+'Dim Ret, countOf
+'Dim file As String, count As Long
+'Dim waitOnReturn As Boolean: waitOnReturn = True
+'Dim windowStyle As Integer: windowStyle = 1
+'sDir = DriveName(ThisWorkbook.Path)
+'sUser = CStr(Environ("USERNAME"))
+'
+''    fol = ThisWorkbook.Path & "\ReportData\"
+'    sVarXML = GetFilenameFromPath(cmdPath)
+'    fileData = FNameScrub(sVarXML)
+'    Set wsh = VBA.CreateObject("WScript.Shell")
+'    sTempFldr = "C:\Users\" & sUser & "\AppData\Local\Temp\DPRReporter\"
+''Kill Temp Variance XML file
+'    sXML = sTempFldr & "VarReportTables.xml"
+'    If Dir(sXML) <> "" Then
+'        Kill sXML
+'    End If
+'
+'    strPath = Chr(34) & "C:\Program Files (x86)\WinEst\winest.exe" & Chr(34)
+''1st command line: This will open the selected estimate. The command line doesn't always execute fully
+'    cmdLine = "/uAdministrator /p /x /notallitems /emptyfields /tpl DPRTpl.xml " & Chr(34) & cmdPath & Chr(34) & " " & Chr(34) & sTempFldr & "VarReportTables.xml" & Chr(34)
+'    If Len(strPath) > 0 Then
+'        wsh.Run strPath & cmdLine, windowStyle, waitOnReturn
+'    End If
+''2nd command line:This will run the XML command again from the estimate that was opened above.
+'    cmdLine = "/x /notallitems /emptyfields /tpl DPRTpl.xml " & Chr(34) & sTempFldr & "VarReportTables.xml" & Chr(34)
+'    If Len(strPath) > 0 Then
+'        wsh.Run strPath & cmdLine, windowStyle, waitOnReturn
+'        Range("rngVarEstID").Value = fileData
+'    Else
+'        MsgBox "Path doesn't exist"
+'    End If
+'    Call xmlVarTotalsTable
+'End Sub
 
 Sub FileSaveAs()
 Dim fileName As String
@@ -331,7 +331,7 @@ Dim fso As Object
     MsgBox "Workbook Saved.", vbOKOnly, "DPR Reporter"
 End Sub
 
-Sub ReLoadWorkbook()
+'Sub ReLoadWorkbook()
 '    sSht = ActiveSheet.Name
 '    With Excel.Application
 '       .ScreenUpdating = False
@@ -354,7 +354,7 @@ Sub ReLoadWorkbook()
 '       .EnableEvents = True
 '       .Calculation = Excel.xlCalculationAutomatic
 '    End With
-End Sub
+'End Sub
 
 Sub SheetFormatting()
     On Error Resume Next
@@ -690,18 +690,6 @@ Sub loadImage()
     End With
 End Sub
 
-'Sub CallVSTOMethod()
-'    Dim addIn As COMAddIn
-'    Dim automationObject As Object
-'    On Error GoTo errHndlr
-'    Set addIn = Application.COMAddIns("DPR_Reporter_CP1")
-'    Set automationObject = addIn.Object
-'    automationObject.ImportData
-'    Exit Sub
-'errHndlr:
-'    frmReportFormat.Show (0)
-'
-'End Sub
 
 
 

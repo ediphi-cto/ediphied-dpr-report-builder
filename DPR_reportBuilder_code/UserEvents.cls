@@ -27,14 +27,14 @@ End Function
 
 Function teamsPost(msg As String) As Boolean
     
-    Dim data As String
+    Dim Data As String
     Dim RESTcall As New MSXML2.XMLHTTP60
-    data = toJSON(msg)
+    Data = toJSON(msg)
     
     With RESTcall
         .Open "POST", TEAMS_WEBHOOK, False
         .setRequestHeader "Content-type", "application/json"
-        .send (data)
+        .send (Data)
         teamsPost = (.responseText = "ok")
     End With
 
@@ -45,16 +45,16 @@ End Function
 
 Function slackPost(msg As String, Optional url As String) As Boolean
     On Error GoTo e1
-    Dim data As String
+    Dim Data As String
     Dim RESTcall As Object
     msg = thisReportBuilder.metaDataAsString & msg
-    data = slackBody(msg, url)
+    Data = slackBody(msg, url)
     
     Set RESTcall = CreateObject("MSXML2.XMLHTTP")
     With RESTcall
         .Open "POST", SLACK_WEBHOOK, False
         .setRequestHeader "Content-type", "application/json"
-        .send (data)
+        .send (Data)
         slackPost = (.responseText = "ok")
     End With
 

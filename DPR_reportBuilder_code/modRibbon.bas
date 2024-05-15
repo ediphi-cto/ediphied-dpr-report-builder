@@ -108,8 +108,9 @@ Sub g2b4(control As IRibbonControl)
 End Sub
 
 Sub g2b4a(control As IRibbonControl)
-    MsgBox "Data Refresh does not include Variance Reports." & vbCrLf & "Click OK to continue.", vbInformation, "Data Refresh"
-    Call Refresh_XML
+    MsgBox "This feature is currently not supported"
+'    MsgBox "Data Refresh does not include Variance Reports." & vbCrLf & "Click OK to continue.", vbInformation, "Data Refresh"
+'    Call Refresh_XML
 End Sub
 
 'GROUP 3----------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -2,16 +2,17 @@ Attribute VB_Name = "modExecSummary"
 Option Explicit
 
 Sub ExecSummary()
-Dim rngSeries As Excel.Range
-Dim rngCategory As Excel.Range
-Dim dProjCosts As Double
-Dim dMarkup As Double
-Dim RngToCover As Range
-Dim ChtOb As ChartObject
+    Dim rngSeries As Excel.Range
+    Dim rngCategory As Excel.Range
+    Dim dProjCosts As Double
+    Dim dMarkup As Double
+    Dim RngToCover As Range
+    Dim ChtOb As ChartObject
 
     sJobUM = Range("rngJobUnitName").Value
     Set ows = Sheet2
     'On Error GoTo errHndlr
+    ows.visible = xlSheetVisible
     ows.Activate
     iGTRow = ows.Range("exConstCosts").row
     iGTCol = ows.Range("exTotal").Offset(0, 5).Column

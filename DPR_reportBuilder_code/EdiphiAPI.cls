@@ -106,7 +106,7 @@ End Function
 
 Function parse_sort_codes_response(response_txt As String) As Dictionary
     
-    Dim data As Object
+    Dim Data As Object
     Dim data_dict As Dictionary
     Dim sort_codes As Object, sort_code As Object, sort_field As Object
     Dim ans As New Dictionary
@@ -114,10 +114,10 @@ Function parse_sort_codes_response(response_txt As String) As Dictionary
     Dim desc As String
     Dim code As String
     Dim qty_var
-    Dim Dict As New Dictionary
+    Dim dict As New Dictionary
     
-    Set data = ParseJson(response_txt)
-    Set data_dict = data("load")
+    Set Data = ParseJson(response_txt)
+    Set data_dict = Data("load")
     Set sort_codes = data_dict("sort_codes")
     Set sort_field = data_dict("sort_fields")(1)
     
@@ -135,11 +135,11 @@ Function parse_sort_codes_response(response_txt As String) As Dictionary
                     code_dict.Add "quantifier", CDbl(qty_var)
                 End If
             End If
-            Dict.Add code, code_dict
+            dict.Add code, code_dict
         End If
     Next
     
-    ans.Add "sort_codes", Dict
+    ans.Add "sort_codes", dict
     Set parse_sort_codes_response = ans
 
 End Function

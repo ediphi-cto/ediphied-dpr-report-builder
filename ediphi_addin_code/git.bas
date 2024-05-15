@@ -28,14 +28,14 @@ Function myRepoPath() As String
 
 End Function
 
-Sub extractInPlace(WB As Workbook)
+Sub extractInPlace(wb As Workbook)
      
     Dim vbaPROJ As VBProject
     Dim vbaMODULE As VBComponent
     Dim repoPath As String
     Dim fso As New FileSystemObject
     
-    Set vbaPROJ = WB.VBProject
+    Set vbaPROJ = wb.VBProject
     repoPath = myRepoPath()
     
     If Not fso.FolderExists(repoPath) Then
@@ -60,11 +60,11 @@ Sub extractInPlace(WB As Workbook)
     
 End Sub
 
-Sub cloneMeInto(WB As Workbook)
+Sub cloneMeInto(wb As Workbook)
     
     gitExplode
-    clearVBAfrom WB
-    ImportVBComponentsInto WB, myRepoPath()
+    clearVBAfrom wb
+    ImportVBComponentsInto wb, myRepoPath()
     
 End Sub
 
@@ -86,10 +86,10 @@ Function ImportVBComponentsInto(targetWb As Workbook, directoryPath As String)
     
 End Function
 
-Sub clearVBAfrom(WB As Workbook)
+Sub clearVBAfrom(wb As Workbook)
     Dim vbComp As VBIDE.VBComponent
     Dim vbProj As VBIDE.VBProject
-    Set vbProj = WB.VBProject
+    Set vbProj = wb.VBProject
     
     For Each vbComp In vbProj.VBComponents
         If vbComp.Type = vbext_ct_StdModule Or vbComp.Type = vbext_ct_ClassModule Or vbComp.Type = vbext_ct_MSForm Then
