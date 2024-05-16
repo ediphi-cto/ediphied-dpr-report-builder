@@ -93,7 +93,12 @@ Sub setMetaData()
         .[rngEstDate].Value = Format(Now(), "m/dd/yyyy")
         .[rngProjectName].Value = thisReportBuilder.ProjectName
         .[rngEstimator].Value = Application.UserName
-        .[rngJobSize].Value = Me.getStat("grossArea")
+        .[rngJobSize].Value = Me.estimateJson("estimate")("stats")("grossArea")
+        If cStr_safe(.[rngJobSize].Value) = "" Then
+            'MN TODO remove once this is known to be fixed
+            Dim post As New UserEvents
+            post.slackPost "gross area not found"
+        End If
         'MN TODO
         .[rngProjectAddress].Value = "" 'get project from api
         .[rngProjectCityStateZip].Value = "" 'get project from api
@@ -201,6 +206,12 @@ Sub parseMarkups2Table()
     Dim markupRow As Dictionary
     Dim dataColl As New Collection
     
+    If markups.count = 0 Then
+        'add a blank row so the table creates, many things ref the resulting tblTotals table
+        markups.Add ParseJson( _
+        "{""id"":"""",""order"":"""",""description"":"""",""percentage"":"""",""total"":""""}")
+    End If
+        
     For Each markup In markups
         Set markupRow = New Dictionary
         With markupRow
@@ -310,10 +321,12 @@ Function isBaseBid(dict As Dictionary) As Boolean
 End Function
 
 Sub calculateUseGroupValues(dict As Dictionary)
-
+    If Not Me.debugMode Then On Error GoTo e1
     Dim allocations As Dictionary
     Dim i As Integer, hasMultiple As Boolean
     Set allocations = ParseJson(dict("use_groups"))
+    
+    If allocations.count = 0 Then GoTo e1
     
     Dim k
     i = 0
@@ -332,8 +345,15 @@ Sub calculateUseGroupValues(dict As Dictionary)
         dict("Use Group") = "Multiple"
     End If
     
+finally:
     dict.Remove "use_groups"
 
+Exit Sub
+e1:
+    dict.Add "Use Group_code", "99999"
+    dict.Add "Use Group", "None"
+    Resume finally
+    
 End Sub
 
 Property Get EstimateName() As String
@@ -447,6 +467,8 @@ Private Sub Class_Initialize()
         Set .rawDataWS = reportWB.Worksheets("raw data")
         Set .pivotDataWS = reportWB.Worksheets("pivot data")
     End With
+
+    ActiveWindow.WindowState = xlMaximized
 
 Exit Sub
 e1:

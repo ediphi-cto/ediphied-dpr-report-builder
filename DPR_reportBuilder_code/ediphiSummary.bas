@@ -2,7 +2,8 @@ Attribute VB_Name = "ediphiSummary"
 Option Explicit
 
 Sub createSummary(groupByHeader As String)
-
+    On Error GoTo e1
+    
     Dim summaryWS As Worksheet
     Set summaryWS = ThisWorkbook.Worksheets("Systems Summary")
     
@@ -11,7 +12,9 @@ Sub createSummary(groupByHeader As String)
     
     Dim printRan As Range
     Set printRan = summaryWS.[\print]
-    printRan.Offset(1, 0).Resize(summaryRows.count - 2, 1).EntireRow.Insert
+    Dim rowCt As Integer
+    rowCt = WorksheetFunction.Max(summaryRows.count - 2, 1)
+    printRan.Offset(1, 0).Resize(rowCt, 1).EntireRow.Insert
     Set printRan = printDictList2Range(dictColl:=summaryRows, startCell:=printRan, noHeaders:=True)
     
     With summaryWS
@@ -26,7 +29,13 @@ Sub createSummary(groupByHeader As String)
             .Apply
         End With
         .visible = xlSheetVisible
+        .Activate
+        .[SysStart].Select
     End With
+
+Exit Sub
+e1:
+    logError "Failed to build summary report"
 
 End Sub
 
@@ -93,29 +102,3 @@ e2:
     logError "Could not find total cost column in tblEdiphiPivotData"
     
 End Function
-
-Sub ghj()
-
-    Dim pivotDataWS As Worksheet
-    Set pivotDataWS = ThisWorkbook.Worksheets("pivot data")
-    
-    Dim tbl As ListObject
-    Set tbl = pivotDataWS.ListObjects("tblEdiphiPivotData")
-
-    pp tbl.Range
-
-    ows.Sort.SortFields.Clear
-    ows.Sort.SortFields.Add key:=Range(ows.Range("SysStart").Offset(1, 0), ows.Range("SysEnd").Offset(-2, 0)), _
-                            SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
-    ows.Sort.SortFields.Add key:=Range(ows.Range("SysStart").Offset(1, 1), ows.Range("SysEnd").Offset(-2, 1)), _
-                            SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
-    With ows.Sort
-        .SetRange Range(ows.Range("SysStart").Offset(1, 0), ows.Range("SysEnd").Offset(-2, 6))
-        .Header = xlGuess
-        .MatchCase = False
-        .Orientation = xlTopToBottom
-        .SortMethod = xlPinYin
-        .Apply
-    End With
-
-End Sub

@@ -26,7 +26,7 @@ Sub Addons()
     Set lObj = Sheet0.ListObjects("tblTotals")
         If lObj.ListRows.count < 1 Then Exit Sub
         i = iGTRow + 2
-        X = iGTCol
+        x = iGTCol
         For r = 1 To lObj.DataBodyRange.Rows.count
             If UCase(lObj.DataBodyRange(r, 7)) = "UPPER" Then
                 With ows.Cells(i, 3)
@@ -36,7 +36,7 @@ Sub Addons()
                     .Font.Color = -16777216
                 End With
                 If lObj.DataBodyRange(r, 5) <> "" Then
-                    With ows.Cells(i, X - 3)
+                    With ows.Cells(i, x - 3)
                         .Style = "Percent"
                         .FormulaR1C1 = lObj.DataBodyRange(r, 5) / 100
                         .NumberFormat = "0.00%"
@@ -44,13 +44,13 @@ Sub Addons()
                         .Font.Color = -16777216
                     End With
                 End If
-                With ows.Cells(i, X)
+                With ows.Cells(i, x)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     .FormulaR1C1 = lObj.DataBodyRange(r, 6)
                     .Font.Size = 12
                     .Font.Color = -16777216
                 End With
-                With ows.Cells(i, X - 1)
+                With ows.Cells(i, x - 1)
                     .FormulaR1C1 = "=IFERROR(RC[1]/rngJobSize,0)"
                     .NumberFormat = Range("rngNewCur_2").NumberFormatLocal
                     .Font.Size = 12
@@ -67,7 +67,7 @@ Sub Addons()
             .Font.ThemeColor = xlThemeColorDark1
             .Font.TintAndShade = 0
         End With
-        With ows.Cells(i, X - 1)
+        With ows.Cells(i, x - 1)
             .FormulaR1C1 = "=IFERROR(RC[1]/rngJobSize,0)"
             .NumberFormat = Range("rngNewCur_2").NumberFormatLocal
             .Font.Size = 12
@@ -75,7 +75,7 @@ Sub Addons()
             .Font.ThemeColor = xlThemeColorDark1
             .Font.TintAndShade = 0
         End With
-        With ows.Cells(i, X)
+        With ows.Cells(i, x)
             Y = iGTRow - i
             .FormulaR1C1 = "=SUM(R[" & Y & "]C:R[-1]C)"
             .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
@@ -97,7 +97,7 @@ Sub Addons()
     Set lObj = Sheet0.ListObjects("tblTotals")
         Y = i
         i = i + 2
-        X = iGTCol
+        x = iGTCol
         For r = 1 To lObj.DataBodyRange.Rows.count
             If lObj.DataBodyRange(r, 7) = "Lower" Then
                 With ows.Cells(i, 3)
@@ -107,7 +107,7 @@ Sub Addons()
                     .Font.Color = -16777216
                 End With
                 If lObj.DataBodyRange(r, 5) <> "" Then
-                    With ows.Cells(i, X - 3)
+                    With ows.Cells(i, x - 3)
                         .Style = "Percent"
                         .FormulaR1C1 = lObj.DataBodyRange(r, 5) / 100
                         .NumberFormat = "0.00%"
@@ -115,7 +115,7 @@ Sub Addons()
                         .Font.Color = -16777216
                     End With
                 End If
-                With ows.Cells(i, X)
+                With ows.Cells(i, x)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     If lObj.DataBodyRange(r, 6).Value <> "" Then
                         .FormulaR1C1 = lObj.DataBodyRange(r, 6)
@@ -125,7 +125,7 @@ Sub Addons()
                     .Font.Size = 12
                     .Font.Color = -16777216
                 End With
-                With ows.Cells(i, X - 1)
+                With ows.Cells(i, x - 1)
                     .FormulaR1C1 = "=IFERROR(RC[1]/rngJobSize,0)"
                     .NumberFormat = Range("rngNewCur_2").NumberFormatLocal
                     .Font.Size = 12
@@ -142,7 +142,7 @@ Sub Addons()
             .Font.ThemeColor = xlThemeColorDark1
             .Font.TintAndShade = 0
         End With
-        With ows.Cells(i, X - 1)
+        With ows.Cells(i, x - 1)
             .FormulaR1C1 = "=IFERROR(RC[1]/rngJobSize,0)"
             .NumberFormat = Range("rngNewCur_2").NumberFormatLocal
             .Font.Size = 12
@@ -150,7 +150,7 @@ Sub Addons()
             .Font.ThemeColor = xlThemeColorDark1
             .Font.TintAndShade = 0
         End With
-        With ows.Cells(i, X)
+        With ows.Cells(i, x)
             Y = Y - i
             .FormulaR1C1 = "=SUM(R[" & Y & "]C:R[-1]C)"
             .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
@@ -340,7 +340,7 @@ Dim C
 
 'Other Project Costs
         Set lObj = Sheet0.ListObjects("tblTotals")
-        X = i - 1
+        x = i - 1
         i = i + 1
         For r = 1 To lObj.DataBodyRange.Rows.count
             If lObj.DataBodyRange(r, 7) = "Lower" Then
@@ -386,7 +386,7 @@ Dim C
     Next r
         
 'Other Project Costs Totals
-        Y = X - i
+        Y = x - i
         ows.Cells(i, 2).Value = "TOTAL"
         With ows.Range(ows.Cells(i, 2), ows.Cells(i, z - 1))
             With .Interior
@@ -806,7 +806,7 @@ Dim dTotal As Double
     
 'Other Project Costs
         Set lObj = Sheet0.ListObjects("tblTotals")
-        X = i - 1
+        x = i - 1
         i = i + 1
         For r = 1 To lObj.DataBodyRange.Rows.count
             If lObj.DataBodyRange(r, 7) = "Lower" Then
@@ -950,7 +950,7 @@ Dim dTotal As Double
         Next r
         
 'Other Project Costs Totals
-        Y = X - i
+        Y = x - i
         ows.Cells(i, 2).Value = "TOTAL"
         With ows.Range(ows.Cells(i, 2), ows.Cells(i, z))
             With .Interior
@@ -1096,7 +1096,7 @@ Sub Addons_VAR()
     Set lObj = Sheet0.ListObjects("tblTotals")
         If lObj.ListRows.count < 1 Then Exit Sub
         i = iGTRow + 2
-        X = iGTCol
+        x = iGTCol
         For r = 1 To lObj.DataBodyRange.Rows.count
             If lObj.DataBodyRange(r, 7) = "Upper" Then
                 With ows.Cells(i, 3)
@@ -1105,19 +1105,19 @@ Sub Addons_VAR()
                     .Font.Size = 12
                     .Font.Color = -16777216
                 End With
-                With ows.Cells(i, X)
+                With ows.Cells(i, x)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     .FormulaR1C1 = lObj.DataBodyRange(r, 14)
                     .Font.Size = 12
                     .Font.Color = -16777216
                 End With
-                With ows.Cells(i, X - 1)
+                With ows.Cells(i, x - 1)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     .FormulaR1C1 = lObj.DataBodyRange(r, 13)
                     .Font.Size = 12
                     .Font.Color = -16777216
                 End With
-                With ows.Cells(i, X - 2)
+                With ows.Cells(i, x - 2)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     .FormulaR1C1 = lObj.DataBodyRange(r, 6)
                     .Font.Size = 12
@@ -1135,7 +1135,7 @@ Sub Addons_VAR()
             .Font.TintAndShade = 0
         End With
 
-        With ows.Cells(i, X)
+        With ows.Cells(i, x)
             Y = iGTRow - i
             .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
             .FormulaR1C1 = "=SUM(R[" & Y & "]C:R[-1]C)"
@@ -1144,7 +1144,7 @@ Sub Addons_VAR()
             .Font.ThemeColor = xlThemeColorDark1
             .Font.TintAndShade = 0
         End With
-        With ows.Cells(i, X - 2)
+        With ows.Cells(i, x - 2)
             .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
             .FormulaR1C1 = "=SUM(R[" & Y & "]C:R[-1]C)"
             .Font.Size = 12
@@ -1152,7 +1152,7 @@ Sub Addons_VAR()
             .Font.ThemeColor = xlThemeColorDark1
             .Font.TintAndShade = 0
         End With
-        With ows.Cells(i, X - 1)
+        With ows.Cells(i, x - 1)
             .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
             .FormulaR1C1 = "=SUM(R[" & Y & "]C:R[-1]C)"
             .Font.Size = 12
@@ -1173,7 +1173,7 @@ Sub Addons_VAR()
     Set lObj = Sheet0.ListObjects("tblTotals")
         Y = i
         i = i + 2
-        X = iGTCol
+        x = iGTCol
         For r = 1 To lObj.DataBodyRange.Rows.count
             If lObj.DataBodyRange(r, 7) = "Lower" Then
                 With ows.Cells(i, 3)
@@ -1182,19 +1182,19 @@ Sub Addons_VAR()
                     .Font.Size = 12
                     .Font.Color = -16777216
                 End With
-                With ows.Cells(i, X)
+                With ows.Cells(i, x)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     .FormulaR1C1 = lObj.DataBodyRange(r, 14)
                     .Font.Size = 12
                     .Font.Color = -16777216
                 End With
-                With ows.Cells(i, X - 1)
+                With ows.Cells(i, x - 1)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     .FormulaR1C1 = lObj.DataBodyRange(r, 13)
                     .Font.Size = 12
                     .Font.Color = -16777216
                 End With
-                With ows.Cells(i, X - 2)
+                With ows.Cells(i, x - 2)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     .FormulaR1C1 = lObj.DataBodyRange(r, 6)
                     .Font.Size = 12
@@ -1212,7 +1212,7 @@ Sub Addons_VAR()
             .Font.TintAndShade = 0
         End With
 
-        With ows.Cells(i, X)
+        With ows.Cells(i, x)
             Y = Y - i
             .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
             .FormulaR1C1 = "=SUM(R[" & Y & "]C:R[-1]C)"
@@ -1221,7 +1221,7 @@ Sub Addons_VAR()
             .Font.ThemeColor = xlThemeColorDark1
             .Font.TintAndShade = 0
         End With
-        With ows.Cells(i, X - 2)
+        With ows.Cells(i, x - 2)
             .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
             .FormulaR1C1 = "=SUM(R[" & Y & "]C:R[-1]C)"
             .Font.Size = 12
@@ -1229,7 +1229,7 @@ Sub Addons_VAR()
             .Font.ThemeColor = xlThemeColorDark1
             .Font.TintAndShade = 0
         End With
-        With ows.Cells(i, X - 1)
+        With ows.Cells(i, x - 1)
             .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
             .FormulaR1C1 = "=SUM(R[" & Y & "]C:R[-1]C)"
             .Font.Size = 12

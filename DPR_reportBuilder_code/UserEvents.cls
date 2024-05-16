@@ -12,7 +12,6 @@ Option Explicit
 Const TEAMS_WEBHOOK As String = ""
 Const SLACK_WEBHOOK As String = "https://hooks.slack.com/triggers/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"
 
-
 Function slackBody(msg As String, Optional url As String)
         Dim user As String, tenant As String
         user = Application.UserName

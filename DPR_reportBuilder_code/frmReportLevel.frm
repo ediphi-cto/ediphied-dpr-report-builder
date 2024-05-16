@@ -23,14 +23,20 @@ Private Sub cmdOK_Click()
     
 '    sCurrency = Range("rngCurrency").Text
     eventsOff
-    sSht = "Detailed Backup Report"
-    sRprt = "DETAILED BACKUP"
+    If isFirstReport() Then
+        sSht = "Detailed Backup Report"
+        sRprt = "DETAILED BACKUP"
+    Else
+        sSht = "Level Report"
+        sRprt = "LEVEL REPORT"
+    End If
     sGTLvl1 = cboBLvl1.List(cboBLvl1.ListIndex, 1)
     iLvl = numLevel.Value 'numValue is the depth of grouping
     ReportTrack
     
     createSummary sGTLvl1
-    Call ExecSummary
+    ThisWorkbook.Worksheets("splash").visible = xlHidden
+    ExecSummary
     Create_PivotTable_ODBC_MO
     ReApplyAddons
     
@@ -353,13 +359,8 @@ Private Sub cmdOK1_Click()
     
 Exit Sub
 e1:
-    logError "Failed to create your report" & vbLf & vbLf & TRY_UPDATING_MSG
-    
-    With Application
-        .ScreenUpdating = False
-        .EnableEvents = False
-    End With
-    
+    logError "Failed to create your report" '& vbLf & vbLf & TRY_UPDATING_MSG
+    eventsOn
     Unload Me
     
 End Sub
@@ -651,6 +652,7 @@ End Sub
 
 Private Sub cmdOK3_Click()
 'sCurrency = Range("rngCurrency").Text
+
     sSht = "Control Estimate - " & getPtCount
     sRprt = sCRprtName
     sGTLvl1 = cboCLvl1.List(cboCLvl1.ListIndex, 1)

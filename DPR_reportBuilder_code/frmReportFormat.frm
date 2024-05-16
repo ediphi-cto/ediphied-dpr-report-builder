@@ -18,7 +18,7 @@ Option Explicit
 Dim sPF As String
 Dim sType As String
 Dim bLoading As Boolean
-Dim X, iRow
+Dim x, iRow
 Dim C As Integer
 
 Private Sub chkVarAddon_Click()
@@ -65,7 +65,7 @@ Private Sub chkVarSlicers_Click()
 Dim Sh As Shape
 Dim oSlicer As Slicer
 Dim oSlicercache As SlicerCache
-Dim X As Integer, C
+Dim x As Integer, C
 If bLoading = True Then Exit Sub
 
 Application.ScreenUpdating = False
@@ -74,9 +74,9 @@ Application.ScreenUpdating = False
         Set lObj = Sheet0.ListObjects("tblRptTrack")
         Set C = lObj.ListColumns(1).DataBodyRange.Find(sRprt, LookIn:=xlValues)
         If Not C Is Nothing Then
-            X = C.Offset(0, 1).Value
+            x = C.Offset(0, 1).Value
         End If
-        For i = 1 To X
+        For i = 1 To x
             Select Case i
                 Case Is = 1
                     ActiveWorkbook.SlicerCaches.Add2(pt, sLvl1Item) _
@@ -195,7 +195,7 @@ Private Sub ckbSlicers_Click()
 Dim Sh As Shape
 Dim oSlicer As Slicer
 Dim oSlicercache As SlicerCache
-Dim X As Integer, C
+Dim x As Integer, C
 If bLoading = True Then Exit Sub
 
 Application.ScreenUpdating = False
@@ -204,9 +204,9 @@ Application.ScreenUpdating = False
         Set lObj = Sheet0.ListObjects("tblRptTrack")
         Set C = lObj.ListColumns(1).DataBodyRange.Find(sRprt, LookIn:=xlValues)
         If Not C Is Nothing Then
-            X = C.Offset(0, 1).Value
+            x = C.Offset(0, 1).Value
         End If
-        For i = 1 To X
+        For i = 1 To x
             Select Case i
                 Case Is = 1
                     ActiveWorkbook.SlicerCaches.Add2(pt, sLvl1Item) _
@@ -289,8 +289,8 @@ If bLoading = True Then Exit Sub
 End Sub
 
 Private Sub ListBox1_Click()
-    X = ListBox1.ListIndex
-    Select Case X
+    x = ListBox1.ListIndex
+    Select Case x
         Case 0
             sPF = sLvl1Item
         Case 1
@@ -339,14 +339,14 @@ End Sub
 Sub loadForm()
 Dim oShape As Shape
 Dim C
-    X = 0
+    x = 0
     sRprt = ows.PivotTables(1).Name
     Set lObj = Sheet0.ListObjects("tblRptTrack")
     Set C = lObj.ListColumns(1).DataBodyRange.Find(sRprt, LookIn:=xlValues)
     If Not C Is Nothing Then
-        X = C.Offset(0, 1).Value
+        x = C.Offset(0, 1).Value
     End If
-    For i = 1 To X
+    For i = 1 To x
     Select Case i
         Case Is = 1
             sLvl1Item = pt.PivotFields(2).Name

@@ -282,7 +282,7 @@ Function dictsTo2DArray(dictCollection As Collection, Optional noHeaders As Bool
     
     If noHeaders Then
         startInt = 1
-        endInt = dictCollection.count - 1
+        endInt = WorksheetFunction.Max(1, dictCollection.count - 1)
     Else
         startInt = 0
         endInt = dictCollection.count
@@ -316,6 +316,12 @@ Function dictsTo2DArray(dictCollection As Collection, Optional noHeaders As Bool
     ' Return the filled array
     dictsTo2DArray = outputArray
     
+End Function
+
+Function isFirstReport()
+
+    isFirstReport = Not ThisWorkbook.Worksheets("EstData").[rngIsTemp]
+
 End Function
 
 Sub updateLocally()

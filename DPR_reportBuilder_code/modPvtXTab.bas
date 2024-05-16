@@ -24,7 +24,7 @@ Application.ScreenUpdating = False
         .TableRange1.Font.Name = "Franklin Gothic Book"
         .RepeatItemsOnEachPrintedPage = False
     End With
-    X = 1
+    x = 1
     'Build Levels
     On Error Resume Next
     For i = 1 To iLvl
@@ -32,16 +32,16 @@ Application.ScreenUpdating = False
         Case 1 'Group Level 1
             With pt.PivotFields(sLvl1Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl1Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl1Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl1Item)
                 '.Caption = sLvl1Name
@@ -50,20 +50,20 @@ Application.ScreenUpdating = False
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
         Case 2
             With pt.PivotFields(sLvl2Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl2Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl2Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl2Item)
                 '.Caption = sLvl2Name
@@ -72,21 +72,21 @@ Application.ScreenUpdating = False
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
 'Group Level 3
         Case 3
             With pt.PivotFields(sLvl3Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl3Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl3Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl3Item)
                 '.Caption = sLvl3Name
@@ -95,21 +95,21 @@ Application.ScreenUpdating = False
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
 'Group Level 4
         Case 4
             With pt.PivotFields(sLvl4Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl4Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl4Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl4Item)
                 '.Caption = sLvl4Name
@@ -118,21 +118,21 @@ Application.ScreenUpdating = False
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
 'Group Level 5
         Case 5
             With pt.PivotFields(sLvl5Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl5Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl5Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl5Item)
                 '.Caption = sLvl5Name
@@ -141,7 +141,7 @@ Application.ScreenUpdating = False
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
         End Select
     Next i
     On Error GoTo 0

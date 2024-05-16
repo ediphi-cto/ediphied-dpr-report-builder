@@ -37,13 +37,13 @@ nFlag = True
 End Sub
 
 Private Sub cmdOK_Click()
-    X = 0
+    x = 0
     For i = 0 To lstSheets.ListCount - 1
         If lstSheets.Selected(i) = True Then
-            X = X + 1
+            x = x + 1
         End If
     Next i
-    If X = 0 Then
+    If x = 0 Then
         MsgBox "No sheets were selected." & vbCrLf & "Please make a selection to continue.", vbCritical, "Invalid Selection"
         Exit Sub
     End If
@@ -61,14 +61,14 @@ Private Sub cmdPdf_Click()
     Dim fileName As String
     Dim fileSavename As String
     Dim ans
-    X = 0
+    x = 0
     sDir = CurDir()
     For i = 0 To lstSheets.ListCount - 1
         If lstSheets.Selected(i) = True Then
-            X = X + 1
+            x = x + 1
         End If
     Next i
-    If X = 0 Then
+    If x = 0 Then
         MsgBox "No sheets were selected." & vbCrLf & "Please make a selection to continue.", vbCritical, "Invalid Selection"
         Exit Sub
     End If
@@ -92,13 +92,13 @@ Private Sub cmdPdf_Click()
 End Sub
 
 Private Sub cmdPreview_Click()
-    X = 0
+    x = 0
     For i = 0 To lstSheets.ListCount - 1
         If lstSheets.Selected(i) = True Then
-            X = X + 1
+            x = x + 1
         End If
     Next i
-    If X = 0 Then
+    If x = 0 Then
         MsgBox "No sheets were selected." & vbCrLf & "Please make a selection to continue.", vbCritical, "Invalid Selection"
         Exit Sub
     End If
@@ -136,7 +136,8 @@ On Error Resume Next
     Dim sImage As Shape
     For Each ows In ActiveWorkbook.Worksheets
         If ows.Name <> "EstData" And ows.Name <> "XMLTables" Then
-           ows.PageSetup.LeftFooterPicture.fileName = sPth & pic
+           'MN to RON: these logos are causing long load time, off for now until the new logos are figured out
+           'ows.PageSetup.LeftFooterPicture.fileName = sPth & pic
         End If
     Next ows
 End Sub
@@ -155,11 +156,12 @@ Private Sub UserForm_Activate()
     With lstSheets
         .Clear
         Dim ws As Worksheet
-        For Each ws In ActiveWorkbook.Worksheets
-            If ws.visible Then
+        For Each ws In ThisWorkbook.Worksheets
+            If ws.visible = xlSheetVisible And ws.Cells(1, 2).Value <> "" Then
                 .AddItem
-                .List(i, 0) = ows.Name
-                .List(i, 1) = ows.Cells(1, 2).Value
+                .List(i, 0) = ws.Name
+                .List(i, 1) = ws.Cells(1, 2).Value
+                pp ws.Cells(1, 2).Value
                 i = i + 1
             End If
         Next

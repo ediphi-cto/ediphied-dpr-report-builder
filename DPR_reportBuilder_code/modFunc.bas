@@ -248,8 +248,8 @@ End Function
 Function rtfScrub()
 Dim regexObject As RegExp
 Dim rtfText As String
-Dim X
-    X = 0
+Dim x
+    x = 0
     Set regexObject = New RegExp
     With regexObject
         .Pattern = "({\\)(.+?)(})|(\\)(.+?)(\b)"
@@ -263,9 +263,9 @@ Dim X
             If .PivotItems(i) <> "" Then
                 rtfText = LTrim(Replace(Replace(Replace(regexObject.Replace(.PivotItems(i), ""), "}", ""), Chr(13), ""), Chr(10), ""))
                 If rtfText = "" Then
-                    .PivotItems(i).Value = Space(X) & "-"
+                    .PivotItems(i).Value = Space(x) & "-"
                 Else
-                    .PivotItems(i).Value = Space(X) & rtfText
+                    .PivotItems(i).Value = Space(x) & rtfText
                 End If
             End If
             
@@ -275,8 +275,8 @@ Dim X
     On Error GoTo 0
     Exit Function
 errHndlr:
-    X = X + 1
-    If X >= 20 Then Exit Function
+    x = x + 1
+    If x >= 20 Then Exit Function
     Resume
 End Function
 
@@ -350,15 +350,15 @@ End Function
 
 Function LevelQty(ws As Worksheet, tblNam As String) As Boolean
 Dim oTbl As ListObject
-Dim X As Long
+Dim x As Long
 
     Set oTbl = ws.ListObjects(tblNam)
     i = 0
-    For X = 1 To oTbl.DataBodyRange.Rows.count
-      If oTbl.ListColumns("LevelQuantity").DataBodyRange.Rows(X).Value <> "" Then
+    For x = 1 To oTbl.DataBodyRange.Rows.count
+      If oTbl.ListColumns("LevelQuantity").DataBodyRange.Rows(x).Value <> "" Then
           i = i + 1
       End If
-    Next X
+    Next x
     If i = 0 Then
         LevelQty = False
         Exit Function

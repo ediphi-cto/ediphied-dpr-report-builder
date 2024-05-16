@@ -5,7 +5,7 @@ Option Explicit
         Lib "user32" ( _
             ByVal hwnd As Long, _
             ByVal hwndInsertAfter As Long, _
-            ByVal X As Long, ByVal Y As Long, _
+            ByVal x As Long, ByVal Y As Long, _
             ByVal cx As Long, ByVal cy As Long, _
             ByVal wFlags As Long) _
     As LongPtr
@@ -14,7 +14,7 @@ Option Explicit
         Lib "user32" ( _
             ByVal hwnd As Long, _
             ByVal hwndInsertAfter As Long, _
-            ByVal X As Long, ByVal Y As Long, _
+            ByVal x As Long, ByVal Y As Long, _
             ByVal cx As Long, ByVal cy As Long, _
             ByVal wFlags As Long) _
     As LongPtr
@@ -157,7 +157,7 @@ Public iRow As Long
 Public C As Long
 Public i As Integer
 Public r As Integer
-Public X As Integer
+Public x As Integer
 Public Y As Integer
 Public z As Integer
 Public ptc As Integer
@@ -382,13 +382,15 @@ Sub SheetFormatting()
 End Sub
 
 Sub SheetFormatingAll()
-    On Error Resume Next
+    On Error GoTo e1
     For Each ows In ActiveWorkbook.Worksheets
         If ows.CodeName = "Sheet2" Then
             ows.PageSetup.PrintArea = ows.Range("$B$1:$K$56").Address
         ElseIf ows.CodeName = "Sheet3" Then
             ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
             ows.PageSetup.PrintTitleRows = "$1:$7"
+        ElseIf ows.Name = "splash" Then
+            'pass
         Else
             Set pt = ows.PivotTables(1)
             ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
@@ -403,8 +405,16 @@ Sub SheetFormatingAll()
                 ows.PageSetup.Orientation = xlLandscape
             End If
         End If
+
+nextInLoop:
     Next ows
     On Error GoTo 0
+    
+Exit Sub
+e1:
+    'will fail if a ws exists without a pivot table, skip to next
+    Resume nextInLoop
+    
 End Sub
 
 Sub PageSetup()

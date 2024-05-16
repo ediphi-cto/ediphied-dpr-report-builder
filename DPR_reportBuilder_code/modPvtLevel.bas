@@ -7,7 +7,15 @@ Public Sub Create_PivotTable_ODBC_MO()
         .EnableEvents = False
     End With
     bPvt = True
-    sSht = GetUniqueSheetName("Detailed Backup")
+    
+    Dim shtName As String
+    If isFirstReport() Then
+        shtName = "Level Report"
+    Else
+        shtName = "Detailed Backup"
+    End If
+    
+    sSht = GetUniqueSheetName(shtName)
     Set ptCache = ActiveWorkbook.PivotCaches.Create( _
         SourceType:=xlDatabase, SourceData:="tblEdiphiPivotData", Version:=xlPivotTableVersion15)
     ActiveWorkbook.Sheets.Add(Before:=Sheet4).Name = sSht
@@ -28,7 +36,7 @@ Public Sub Create_PivotTable_ODBC_MO()
         .RepeatItemsOnEachPrintedPage = False
         .ManualUpdate = True
     End With
-    X = 1
+    x = 1
 
     On Error Resume Next
     For i = 1 To iLvl
@@ -36,17 +44,17 @@ Public Sub Create_PivotTable_ODBC_MO()
         Case 1 'Group Level 1
             With pt.PivotFields(sLvl1Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl1Code)
                 'MN TODO: this assumes a fixed column width, but we have use groups of varying count
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl1Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl1Item)
                 '.Caption = sLvl1Name
@@ -55,21 +63,21 @@ Public Sub Create_PivotTable_ODBC_MO()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
         Case 2
             With pt.PivotFields(sLvl2Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl2Code)
                 'MN:  len of Array(False...) needs to be dynamically set bc of use group columns
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl2Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl2Item)
                 '.Caption = sLvl2Name
@@ -78,21 +86,21 @@ Public Sub Create_PivotTable_ODBC_MO()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
 'Group Level 3
         Case 3
             With pt.PivotFields(sLvl3Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl3Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl3Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl3Item)
                 '.Caption = sLvl3Name
@@ -101,21 +109,21 @@ Public Sub Create_PivotTable_ODBC_MO()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
 'Group Level 4
         Case 4
             With pt.PivotFields(sLvl4Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl4Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl4Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl4Item)
                 '.Caption = sLvl4Name
@@ -124,21 +132,21 @@ Public Sub Create_PivotTable_ODBC_MO()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
 'Group Level 5
         Case 5
             With pt.PivotFields(sLvl5Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl5Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl5Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl5Item)
                 '.Caption = sLvl5Name
@@ -147,7 +155,7 @@ Public Sub Create_PivotTable_ODBC_MO()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
         End Select
     Next i
     On Error GoTo 0
@@ -156,37 +164,37 @@ Public Sub Create_PivotTable_ODBC_MO()
 'Field ItemCode
     With pt.PivotFields("ItemCode")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field ItemDesc
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("Description")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field Comments
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("ItemNote")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field TOQty
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("TakeoffQty")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field TOUnit
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("TakeoffUnit")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field Unit Price
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("UnitPrice")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
     pt.ManualUpdate = False
     

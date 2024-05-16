@@ -26,23 +26,23 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
         .RepeatItemsOnEachPrintedPage = False
         .ManualUpdate = True
     End With
-    X = 1
+    x = 1
     On Error Resume Next
     For i = 1 To iLvl
     Select Case i
         Case 1 'Group Level 1
             With pt.PivotFields(sLvl1Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl1Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl1Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl1Item)
                 '.Caption = sLvl1Name
@@ -51,20 +51,20 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
         Case 2
             With pt.PivotFields(sLvl2Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl2Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl2Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl2Item)
                 '.Caption = sLvl2Name
@@ -73,21 +73,21 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
 'Group Level 3
         Case 3
             With pt.PivotFields(sLvl3Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl3Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl3Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl3Item)
                 '.Caption = sLvl3Name
@@ -96,21 +96,21 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
 'Group Level 4
         Case 4
             With pt.PivotFields(sLvl4Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl4Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl4Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl4Item)
                 '.Caption = sLvl4Name
@@ -119,21 +119,21 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
 'Group Level 5
         Case 5
             With pt.PivotFields(sLvl5Code)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl5Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            X = X + 1
+            x = x + 1
             With pt.PivotFields(sLvl5Item)
                 .Orientation = xlRowField
-                .Position = X
+                .Position = x
             End With
             With pt.PivotFields(sLvl5Item)
                 '.Caption = sLvl5Name
@@ -142,7 +142,7 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            X = X + 1
+            x = x + 1
         End Select
     Next i
     On Error GoTo 0
@@ -151,62 +151,62 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
 'Field ItemCode
     With pt.PivotFields("ItemCode")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field ItemDesc
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("Description")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
     
 'Field Est1_Qty
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("Est1_Qty")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field EST1_UM
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("Est1_UM")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field Est1_UnitPrice
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("Est1_Unit")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field Est2_Qty
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("Est2_Qty")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field Est2_UM
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("Est2_UM")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field Est2_UnitPrice
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("Est2_Unit")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field VarQty
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("VarQty")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
 'Field VarUnit
-    X = X + 1
+    x = x + 1
     With pt.PivotFields("VarUnit")
         .Orientation = xlRowField
-        .Position = X
+        .Position = x
     End With
     pt.ManualUpdate = False
 'Field Item Code
