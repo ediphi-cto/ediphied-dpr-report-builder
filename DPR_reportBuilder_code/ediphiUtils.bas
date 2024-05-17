@@ -348,3 +348,22 @@ Sub updateLocally()
     ThisWorkbook.Close Savechanges:=False
     
 End Sub
+
+Function deepCopy(source As Dictionary) As Dictionary
+    Dim key As Variant
+    Dim newDict As Dictionary
+    Set newDict = New Dictionary
+    
+    For Each key In source.Keys
+        If TypeName(source(key)) = "Dictionary" Then
+            ' Recursive call to deepcopy if the item is a dictionary
+            newDict.Add key, deepCopy(source(key))
+        Else
+            ' Directly copy the value if it is not a dictionary
+            newDict.Add key, source(key)
+        End If
+    Next key
+    
+    Set deepCopy = newDict
+End Function
+

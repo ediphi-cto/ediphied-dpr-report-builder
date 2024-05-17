@@ -181,8 +181,12 @@ Sub transformDataForPivotTable()
                 Set li = Me.findOne(rowDict("id"), "line_items")
                 If Not li Is Nothing And li.Exists("notes") Then rowDict.Add "ItemNote", li("notes")
             End If
-            calculateUseGroupValues rowDict
-            dataColl.Add rowDict
+            Dim splitUseRows As Collection
+            Dim useRowDict As Dictionary
+            Set splitUseRows = calculateUseGroupValues(rowDict, splitByUse:=True) 'MN return a collection of rowdict, add each to dataColl
+            For Each useRowDict In splitUseRows
+                dataColl.Add useRowDict
+            Next
         End If
         Set ran = ran.Offset(1, 0)
         If ran.row > ran.Parent.UsedRange.Rows.count Then Exit Do
@@ -356,44 +360,68 @@ Function isBaseBid(dict As Dictionary) As Boolean
 
 End Function
 
-Sub calculateUseGroupValues(dict As Dictionary)
+Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As Collection 'MN TO: return as collection
     On Error GoTo e1
     Dim allocations As Dictionary
     Dim i As Integer, hasMultiple As Boolean
-    Set allocations = ParseJson(dict("use_groups"))
-    
-    If allocations.count = 0 Then GoTo e1
-    
+    Dim coll As New Collection
     Dim k
-    i = 0
-    For Each k In allocations.Keys
-        i = i + 1
-        dict.Add k, Round(cDbl_safe(dict("GrandTotal")) * cDbl_safe(allocations(k)) / 100, 2)
-        dict.Add k & "_qty", cDbl_safe(dict("TakeOffQty")) * cDbl_safe(allocations(k) / 100)
-        If i = 1 Then
-            dict.Add "Use Group_code", k
-            dict.Add "Use Group", k
-            dict.Add "Use Group_combined", k
-        End If
-    Next
     
-    If i > 1 Then
-        dict("Use Group_code") = "9999"
-        dict("Use Group") = "Multiple"
-        dict("Use Group_combined") = "Multiple"
-    End If
-    
-finally:
+    Set allocations = ParseJson(dict("use_groups"))
     dict.Remove "use_groups"
 
-Exit Sub
+    If allocations.count = 0 Then GoTo e1
+    
+    If splitByUse And allocations.count > 1 Then
+    
+        Dim newDict As Dictionary
+        For Each k In allocations.Keys
+            Set newDict = New Dictionary
+            Set newDict = deepCopy(dict)
+            newDict("GrandTotal") = Round(cDbl_safe(dict("GrandTotal")) * cDbl_safe(allocations(k)) / 100, 2)
+            newDict("TakeOffQty") = cDbl_safe(dict("TakeOffQty")) * cDbl_safe(allocations(k) / 100)
+            newDict.Add "Use Group_code", k
+            newDict.Add "Use Group", k
+            newDict.Add "Use Group_combined", k
+            coll.Add newDict
+        Next
+        
+    Else
+    
+        i = 0
+        For Each k In allocations.Keys
+            i = i + 1
+            dict.Add k, Round(cDbl_safe(dict("GrandTotal")) * cDbl_safe(allocations(k)) / 100, 2)
+            dict.Add k & "_qty", cDbl_safe(dict("TakeOffQty")) * cDbl_safe(allocations(k) / 100)
+            If i = 1 Then
+                dict.Add "Use Group_code", k
+                dict.Add "Use Group", k
+                dict.Add "Use Group_combined", k
+            End If
+        Next
+        
+        If i > 1 Then
+            dict("Use Group_code") = "9999"
+            dict("Use Group") = "Multiple"
+            dict("Use Group_combined") = "Multiple"
+        End If
+        coll.Add dict
+        
+    End If
+
+finally:
+    Set calculateUseGroupValues = coll
+
+Exit Function
 e1:
     dict.Add "Use Group_code", "99999"
     dict.Add "Use Group", "None"
     dict.Add "Use Group_combined", "None"
+    Set coll = New Collection
+    coll.Add dict
     Resume finally
     
-End Sub
+End Function
 
 Property Get EstimateName() As String
     EstimateName = Me.rawDataWS.Range("E1").Value

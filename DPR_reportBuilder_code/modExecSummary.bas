@@ -106,7 +106,7 @@ setCharts:
     Set rngSeries = Sheet3.Range(Sheet3.Range("SysStart").Offset(1, 1), Sheet3.Range("SysEnd").Offset(-1, 1))
     Set rngCategory = Sheet3.Range(Sheet3.Range("SysStart").Offset(1, 6), Sheet3.Range("SysEnd").Offset(-1, 6))
     ActiveSheet.ChartObjects("chrtExecSummary").Activate
-    ActiveChart.SetSourceData Source:=Sheets("Systems Summary").Range(rngSeries.address & "," & rngCategory.address)
+    ActiveChart.SetSourceData source:=Sheets("Systems Summary").Range(rngSeries.address & "," & rngCategory.address)
 
     Set RngToCover = ActiveSheet.Range("$H$27:$K$55")
     Set ChtOb = ActiveChart.Parent
