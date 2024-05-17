@@ -43,6 +43,60 @@ e1:
     
 End Function
 
+Function getProject(project_id) As Dictionary
+    '{
+    '  id: 85c2c84e-cf97-4f16-870a-469a5329e842
+    '  name:   test -Ketan
+    '  owner: 98bee4f0-80d1-4010-af12-462dfa348184
+    '  created_at: 2024-05-14 19:24:49.971+00
+    '  updated_at: 2024-05-15 19:50:51.885+00
+    '  phase:   WAITING
+    '  deleted_at:
+    '  industry:   LIFE_SCIENCES
+    '  region: ae556d40-7b27-4162-892c-c98c3fbd456f
+    '  client_name:   xyz
+    '  address: 59 Moore Drive, Durham, NC, USA
+    '  task_number:
+    '  opportunity:
+    '  test: False
+    '  markup_budget: 0
+    '  public: False
+    '  color:
+    '  archived:
+    '  lng_lat: -78.86869279999999,35.9384034
+    '  city:   Durham
+    '  state:   NC
+    '  zip: 27709
+    '}
+
+    Dim req As New MSXML2.XMLHTTP60
+    Dim url As String
+    Dim payload As String
+    payload = "{""#project#"":{""table"":""projects"",""operation"":{""method"":""load"",""properties"":{""id"":""" & project_id & """}}}}"
+    url = BASE_URL & "data/pipeline"
+    With req
+        .Open "POST", url, True
+        .setRequestHeader "Content-Type", "application/json"
+        .setRequestHeader "api-token", apiKey
+        .setRequestHeader "api-tenant", TENANT_LABEL
+        .send payload
+        While req.readyState <> 4
+            DoEvents
+        Wend
+        If .Status = "200" Then
+            Set getProject = ParseJson(.responseText)("data")("load")("projects")(1)
+        Else
+            GoTo e1
+        End If
+    End With
+
+Exit Function
+e1:
+    logError "failed to fetch projct " & project_id
+
+End Function
+
+
 Function get_sort_codes(sort_field_id) As Dictionary
     Dim req As New MSXML2.XMLHTTP60
     Dim url As String
