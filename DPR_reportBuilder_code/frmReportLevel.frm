@@ -34,7 +34,7 @@ Private Sub cmdOK_Click()
     iLvl = numLevel.Value
     ReportTrack
     createSummary sGTLvl1
-    ThisWorkbook.Worksheets("splash").visible = xlHidden
+    'ThisWorkbook.Worksheets("Cover").visible = xlHidden
     ExecSummary
     Create_PivotTable_ODBC_MO splitByUse:=chkSplitByUsePrimary.Value
     ReApplyAddons
@@ -377,7 +377,7 @@ Private Sub cmdOK1_Click()
     Call clearStrings
     
     Dim post As New UserEvents
-    post.slackPost "Level Report Successfully Created" & vbLf & sortLabel & _
+    post.slackPost "Level Report Successfully Created" & vbLf & sortLabel & vbLf & _
         "Uses Split: " & cStr_safe(chkSplitByUseLevel.Value), url:=myUrl
 
 finally:

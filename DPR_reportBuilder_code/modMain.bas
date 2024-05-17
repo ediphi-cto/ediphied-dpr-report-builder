@@ -364,6 +364,8 @@ Sub SheetFormatting()
         ElseIf ows.CodeName = "Sheet3" Then
             ows.PageSetup.PrintArea = ActualUsedRange(ows).address
             ows.PageSetup.PrintTitleRows = "$1:$7"
+        ElseIf ows.name = "Cover" Then
+            'pass
         Else
             Set pt = ows.PivotTables(1)
             ows.PageSetup.PrintArea = ActualUsedRange(ows).address
@@ -389,8 +391,6 @@ Sub SheetFormatingAll()
         ElseIf ows.CodeName = "Sheet3" Then
             ows.PageSetup.PrintArea = ActualUsedRange(ows).address
             ows.PageSetup.PrintTitleRows = "$1:$7"
-        ElseIf ows.name = "splash" Then
-            'pass
         Else
             Set pt = ows.PivotTables(1)
             ows.PageSetup.PrintArea = ActualUsedRange(ows).address

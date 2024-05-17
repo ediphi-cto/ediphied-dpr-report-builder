@@ -112,9 +112,9 @@ Sub setOpenState()
     
     Dim sht As Worksheet
     
-    ThisWorkbook.Worksheets("splash").visible = xlSheetVisible
+    ThisWorkbook.Worksheets("Cover").visible = xlSheetVisible
     For Each sht In ThisWorkbook.Worksheets
-        If sht.name <> "splash" Then
+        If sht.name <> "Cover" Then
             sht.visible = xlSheetVeryHidden
         End If
     Next

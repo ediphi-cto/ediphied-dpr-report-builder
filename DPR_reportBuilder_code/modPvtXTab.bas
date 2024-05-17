@@ -6,8 +6,8 @@ Application.ScreenUpdating = False
     sVal3 = "Cost/" & Range("rngJobUnitName").Value & " "
     sJobUM = Range("rngJobUnitName").Value
 
-    Set ptCache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlExternal, Version:=xlPivotTableVersion15)
-    Set ptCache.Recordset = rsNew
+    Set ptCache = ActiveWorkbook.PivotCaches.Create( _
+        SourceType:=xlDatabase, SourceData:="tblEdiphiPivotDataUseSplit", Version:=xlPivotTableVersion15)
     ActiveWorkbook.Sheets.Add(Before:=Sheet4).name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
@@ -144,9 +144,9 @@ Application.ScreenUpdating = False
             x = x + 1
         End Select
     Next i
-    On Error GoTo 0
+
     'Set Values Area
-    'On Error Resume Next
+
     pt.AddDataField pt.PivotFields("Amount"), "Sum of Amount", xlSum
     With pt.PivotFields("Sum of Amount")
         .Caption = "Amount "
