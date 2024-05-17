@@ -9,14 +9,14 @@ Dim rGT, c1, c2, c3, c4, c5
 Dim rngGT, rng1, rng2, rng3, rng4, rng5, rngMU, rngT As Range
 Dim iGT, iL1, iL2, iL3, iL4 As Integer
 Dim sGT, sST1, sST2, sST3, sST4 As String
-Dim nm, Name
+Dim nm, name
 
 Sub ConvertFxL1() 'Convert Level 1 report to range with formulas
     Set ows = ActiveSheet
     On Error Resume Next
     For Each nm In ActiveWorkbook.Names
-        Name = nm.Name
-        ActiveWorkbook.Names(Name).Delete
+        name = nm.name
+        ActiveWorkbook.Names(name).Delete
     Next nm
     On Error GoTo 0
     col = 10 'Level 1 Total Column position
@@ -67,8 +67,8 @@ Sub ConvertFxL2() 'Convert Level 2 report to range with formulas
     Set ows = ActiveSheet
     On Error Resume Next
     For Each nm In ActiveWorkbook.Names
-        Name = nm.Name
-        ActiveWorkbook.Names(Name).Delete
+        name = nm.name
+        ActiveWorkbook.Names(name).Delete
     Next nm
     On Error GoTo 0
     col = 12 'Level 2 Total Column position
@@ -134,8 +134,8 @@ Sub ConvertFxL3() 'Convert Level 3 report to range with formulas
     Set ows = ActiveSheet
     On Error Resume Next
     For Each nm In ActiveWorkbook.Names
-        Name = nm.Name
-        ActiveWorkbook.Names(Name).Delete
+        name = nm.name
+        ActiveWorkbook.Names(name).Delete
     Next nm
     On Error GoTo 0
     col = 14 'Level 3 Total Column position
@@ -217,8 +217,8 @@ Sub ConvertFxL4() 'Convert Level 4 report to range with formulas
     Set ows = ActiveSheet
     On Error Resume Next
     For Each nm In ActiveWorkbook.Names
-        Name = nm.Name
-        ActiveWorkbook.Names(Name).Delete
+        name = nm.name
+        ActiveWorkbook.Names(name).Delete
     Next nm
     On Error GoTo 0
     col = 16 'Level 4 Total Column position
@@ -316,8 +316,8 @@ Sub ConvertFxL5() 'Convert Level 5 report to range with formulas
     Set ows = ActiveSheet
     On Error Resume Next
     For Each nm In ActiveWorkbook.Names
-        Name = nm.Name
-        ActiveWorkbook.Names(Name).Delete
+        name = nm.name
+        ActiveWorkbook.Names(name).Delete
     Next nm
     On Error GoTo 0
     col = 18 'Level 5 Total Column position

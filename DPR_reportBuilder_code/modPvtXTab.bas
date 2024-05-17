@@ -8,7 +8,7 @@ Application.ScreenUpdating = False
 
     Set ptCache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlExternal, Version:=xlPivotTableVersion15)
     Set ptCache.Recordset = rsNew
-    ActiveWorkbook.Sheets.Add(Before:=Sheet4).Name = sSht
+    ActiveWorkbook.Sheets.Add(Before:=Sheet4).name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
     ActiveWindow.DisplayHeadings = False
@@ -21,7 +21,7 @@ Application.ScreenUpdating = False
         .NullString = "0"
         .ShowDrillIndicators = False
         .TableRange1.Font.Size = 12
-        .TableRange1.Font.Name = "Franklin Gothic Book"
+        .TableRange1.Font.name = "Franklin Gothic Book"
         .RepeatItemsOnEachPrintedPage = False
     End With
     x = 1
@@ -208,7 +208,7 @@ Application.ScreenUpdating = False
         iGTRow = .Cells(.Cells.count).row
         iCol = .Cells(.Cells.count).Column
     End With
-    ActiveSheet.PageSetup.PrintArea = Range(Cells(1, 2), Cells(iGTRow, iCol)).Address
+    ActiveSheet.PageSetup.PrintArea = Range(Cells(1, 2), Cells(iGTRow, iCol)).address
     ActiveSheet.PageSetup.PrintTitleRows = "$1:$10"
 
     ows.Range("B12").HorizontalAlignment = xlLeft
@@ -217,7 +217,7 @@ Application.ScreenUpdating = False
         .HorizontalAlignment = xlCenter
     End With
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -267,11 +267,11 @@ Sub FormatXTab()
     End With
     Selection.HorizontalAlignment = xlRight
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = False
         .Underline = xlUnderlineStyleNone
-        .Color = -16777216
+        .color = -16777216
         .TintAndShade = 0
     End With
     
@@ -290,11 +290,11 @@ Sub FormatXTab()
         .Weight = xlThin
     End With
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = False
         .Underline = xlUnderlineStyleNone
-        .Color = -16777216
+        .color = -16777216
         .TintAndShade = 0
     End With
     Selection.HorizontalAlignment = xlRight
@@ -313,11 +313,11 @@ Sub FormatXTab()
         .Weight = xlThin
     End With
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = False
         .Underline = xlUnderlineStyleNone
-        .Color = -16777216
+        .color = -16777216
         .TintAndShade = 0
     End With
     Selection.HorizontalAlignment = xlRight
@@ -329,7 +329,7 @@ Sub XTabHeadings()
     'On Error Resume Next
     pt.PivotSelect "'" & sLvl0Item & "'", xlLabelOnly, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -366,7 +366,7 @@ Sub XTabHeadings()
 'Format Column Header 2
     pt.PivotSelect "'LevelQuantity'", xlLabelOnly, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -403,7 +403,7 @@ Sub XTabHeadings()
 'Format Column Header 3
     pt.PivotSelect "'Amount '", xlLabelOnly, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -446,7 +446,7 @@ Sub XTabHeadings()
 'Format Column Header 4
     pt.PivotSelect "'Cost/Unit '", xlLabelOnly, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -484,7 +484,7 @@ Sub XTabHeadings()
 'Format Column Header 5
     pt.PivotSelect "'" & sVal3 & "'", xlLabelOnly, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -503,7 +503,7 @@ Sub XTabHeadings()
 'Format Total Column Header 1
     pt.PivotSelect "'Amount ' 'Row Grand Total'", xlLabelOnly, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -533,7 +533,7 @@ Sub XTabHeadings()
 'Format Total Column Header 2
     pt.PivotSelect "'" & sVal3 & "' 'Row Grand Total'", xlLabelOnly, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -572,11 +572,11 @@ Sub FormatXLevel1()
         Selection.ColumnWidth = 45
     End If
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
-        .Color = -16777216
+        .color = -16777216
         .TintAndShade = 0
     End With
     With Selection
@@ -606,7 +606,7 @@ Sub FormatXLevel1()
         .PatternTintAndShade = 0
     End With
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -662,18 +662,18 @@ Sub FormatXLevel2()
     Selection.InsertIndent 1
     If iLvl = 2 Then
         With Selection.Font
-            .Name = "Franklin Gothic Book"
+            .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = False
-            .Color = -16777216
+            .color = -16777216
             .TintAndShade = 0
         End With
     Else
         With Selection.Font
-            .Name = "Franklin Gothic Book"
+            .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = True
-            .Color = -16777216
+            .color = -16777216
             .TintAndShade = 0
         End With
     End If
@@ -704,10 +704,10 @@ Sub FormatXLevel2()
     Selection.InsertIndent 1
     pt.PivotSelect "'" & sLvl2Item & "'[All;Total]", xlDataAndLabel + xlFirstRow, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
-        .Color = -16777216
+        .color = -16777216
         .TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl2Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -743,18 +743,18 @@ Sub FormatXLevel3()
     Selection.InsertIndent 2
     If iLvl = 3 Then
         With Selection.Font
-            .Name = "Franklin Gothic Book"
+            .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = False
-            .Color = -16777216
+            .color = -16777216
             .TintAndShade = 0
         End With
     Else
         With Selection.Font
-            .Name = "Franklin Gothic Book"
+            .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = True
-            .Color = -16777216
+            .color = -16777216
             .TintAndShade = 0
         End With
     End If
@@ -774,10 +774,10 @@ Sub FormatXLevel3()
     Selection.InsertIndent 2
     pt.PivotSelect "'" & sLvl3Item & "'[All;Total]", xlDataAndLabel + xlFirstRow, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
-        .Color = -16777216
+        .color = -16777216
         .TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl3Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -807,18 +807,18 @@ Sub FormatXLevel4()
     Selection.InsertIndent 3
     If iLvl = 4 Then
         With Selection.Font
-            .Name = "Franklin Gothic Book"
+            .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = False
-            .Color = -16777216
+            .color = -16777216
             .TintAndShade = 0
         End With
     Else
         With Selection.Font
-            .Name = "Franklin Gothic Book"
+            .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = True
-            .Color = -16777216
+            .color = -16777216
             .TintAndShade = 0
         End With
     End If
@@ -833,10 +833,10 @@ Sub FormatXLevel4()
     Selection.InsertIndent 3
     pt.PivotSelect "'" & sLvl4Item & "'[All;Total]", xlDataAndLabel + xlFirstRow, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
-        .Color = -16777216
+        .color = -16777216
         .TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl4Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -862,18 +862,18 @@ Sub FormatXLevel5()
     Selection.InsertIndent 4
     If iLvl = 5 Then
         With Selection.Font
-            .Name = "Franklin Gothic Book"
+            .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = False
-            .Color = -16777216
+            .color = -16777216
             .TintAndShade = 0
         End With
     Else
         With Selection.Font
-            .Name = "Franklin Gothic Book"
+            .name = "Franklin Gothic Book"
             .Size = 10
             .Bold = True
-            .Color = -16777216
+            .color = -16777216
             .TintAndShade = 0
         End With
     End If
@@ -892,10 +892,10 @@ Sub FormatXLevel5()
     Selection.InsertIndent 4
     pt.PivotSelect "'" & sLvl5Item & "'[All;Total]", xlDataAndLabel + xlFirstRow, True
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
-        .Color = -16777216
+        .color = -16777216
         .TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl5Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -925,7 +925,7 @@ Sub FormatXGrandTotal()
         .PatternTintAndShade = 0
     End With
     With Selection.Font
-        .Name = "Franklin Gothic Book"
+        .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
@@ -974,7 +974,7 @@ Dim shpName As String
         .FormulaR1C1 = StrConv(sRprt, vbUpperCase)
         .Font.ThemeColor = xlThemeColorDark1
         .Font.TintAndShade = 0
-        .Font.Name = "FrnkGothITC Bk BT"
+        .Font.name = "FrnkGothITC Bk BT"
         .Font.Size = 18
         .RowHeight = 35.25
     End With

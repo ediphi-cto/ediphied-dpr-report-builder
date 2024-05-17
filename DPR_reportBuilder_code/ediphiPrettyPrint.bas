@@ -172,7 +172,7 @@ End Function
 Function range_as_str(ran) As String
     
     If TypeName(ran) <> "Range" Then Exit Function
-    range_as_str = "Range Address: " & ran.Address & " Sheet: " & ran.Parent.Name
+    range_as_str = "Range Address: " & ran.address & " Sheet: " & ran.Parent.name
 
 End Function
 

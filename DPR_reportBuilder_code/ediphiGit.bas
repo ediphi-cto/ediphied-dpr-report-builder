@@ -24,7 +24,7 @@ End Sub
 
 Function myRepoPath() As String
 
-    myRepoPath = ThisWorkbook.Path & "\" & Split(ThisWorkbook.Name, ".")(0) & "_code\"
+    myRepoPath = ThisWorkbook.Path & "\" & Split(ThisWorkbook.name, ".")(0) & "_code\"
 
 End Function
 
@@ -49,11 +49,11 @@ Sub extractInPlace(WB As Workbook)
         With vbaMODULE
             Select Case .Type
                 Case 1
-                    .Export repoPath & .Name & ".bas"
+                    .Export repoPath & .name & ".bas"
                 Case 2
-                    .Export repoPath & .Name & ".cls"
+                    .Export repoPath & .name & ".cls"
                 Case 3
-                    .Export repoPath & .Name & ".frm"
+                    .Export repoPath & .name & ".frm"
             End Select
         End With
     Next

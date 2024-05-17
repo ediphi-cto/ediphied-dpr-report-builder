@@ -135,7 +135,7 @@ Sub loadLogo()
 On Error Resume Next
     Dim sImage As Shape
     For Each ows In ActiveWorkbook.Worksheets
-        If ows.Name <> "EstData" And ows.Name <> "XMLTables" Then
+        If ows.name <> "EstData" And ows.name <> "tables" Then
            'MN to RON: these logos are causing long load time, off for now until the new logos are figured out
            'ows.PageSetup.LeftFooterPicture.fileName = sPth & pic
         End If
@@ -145,7 +145,7 @@ End Sub
 Private Sub UserForm_Activate()
     bLoading = True
     optDPR_Click
-    sSht = ActiveSheet.Name
+    sSht = ActiveSheet.name
     cmdCancel.Picture = Application.CommandBars.GetImageMso("PrintPreviewClose", 24, 24)
     cmdPreview.Picture = Application.CommandBars.GetImageMso("FilePrintPreview", 24, 24)
     cmdOK.Picture = Application.CommandBars.GetImageMso("FilePrint", 24, 24)
@@ -159,7 +159,7 @@ Private Sub UserForm_Activate()
         For Each ws In ThisWorkbook.Worksheets
             If ws.visible = xlSheetVisible And ws.Cells(1, 2).Value <> "" Then
                 .AddItem
-                .List(i, 0) = ws.Name
+                .List(i, 0) = ws.name
                 .List(i, 1) = ws.Cells(1, 2).Value
                 pp ws.Cells(1, 2).Value
                 i = i + 1

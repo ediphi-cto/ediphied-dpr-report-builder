@@ -6,6 +6,7 @@ Public Const REPORT_BUILDER_DIR As String = "ediphi_cache"
 Public Const MY_FILENAME As String = "ediphi_addin.xlam"
 
 Sub installMe()
+    On Error GoTo e1
     
     'ask for an api key if thisworkbook does not have one
     Dim apiKey As String
@@ -22,22 +23,41 @@ Sub installMe()
     
     Dim fullFileName As String
     fullFileName = userXLStartPath & MY_FILENAME
+    
+    On Error Resume Next
+    Workbooks(MY_FILENAME).Close SaveChanges:=False
+    On Error GoTo e1
     With ThisWorkbook
         Application.DisplayAlerts = False
         hideMe
         .SaveAs filename:=fullFileName, FileFormat:=xlOpenXMLAddIn
         Application.DisplayAlerts = True
         MsgBox "SUCCESS!!!" & vbLf & vbLf & "The Ediphi / DPR report builder is now installed"
+        slackPost "Successful Install"
     End With
+
+Exit Sub
+e1:
+    MsgBox "failed to install report builder"
     
 End Sub
 
-Function fetchReportBuilder() As Workbook
+Function fetchReportBuilder(Optional wbIfUpdateDenied As Workbook, Optional forceDownload As Boolean) As Workbook
     
     'go get xlsm from S3, overwrite in user's excel start, this is a CICD hack
     Dim req As New MSXML2.XMLHTTP60
     Dim url As String
     Dim stream As New ADODB.stream
+    
+    If Not forceDownload Then
+        Dim ans
+        ans = MsgBox("There is a newer version of the Report Builder." & vbLf & vbLf & _
+            "I suggest you update now. Updating will take a couple of minutes. Would you like to update?", vbYesNo)
+        If ans = vbNo Then
+            Set fetchReportBuilder = wbIfUpdateDenied
+            Exit Function
+        End If
+    End If
     
     On Error GoTo e1
     url = getEnv("S3_URL")
@@ -74,6 +94,7 @@ Function fetchReportBuilder() As Workbook
     
 finally:
 Set stream = Nothing
+slackPost "Updated ReportBuilder From S3"
     
 Exit Function
 e1:
@@ -94,8 +115,19 @@ Function reportBuilderFullname() As String
 End Function
 
 Function updateNeeded() As Boolean
-
-    updateNeeded = getS3LastModifiedDate > getFileDateModified(reportBuilderFullname)
+    
+    'S3 is in UTC, so this covers to the west coast
+    Dim s3date As Date
+    Dim localDate As Date 'applying PST to UTC delta
+    
+    s3date = getS3LastModifiedDate
+    localDate = DateAdd("h", 8, getFileDateModified(reportBuilderFullname))
+    updateNeeded = s3date > localDate
+    If updateNeeded Then
+        slackPost "UPDATE NEEDED" & vbLf & _
+        "S3 date: " & Format(s3date, "mm/dd/yyyy hh:mm") & vbLf & _
+        "local date: " & Format(localDate, "mm/dd/yyyy hh:mm")
+    End If
     
 End Function
 
@@ -115,7 +147,7 @@ Function getS3LastModifiedDate() As Date
     End With
     Set req = Nothing
     arr = Split(lastModified, " ")
-    getS3LastModifiedDate = CDate(arr(2) & " " & arr(1) & " " & arr(3))
+    getS3LastModifiedDate = CDate(arr(2) & " " & arr(1) & " " & arr(3) & " " & arr(4))
     
 Exit Function
 e1:

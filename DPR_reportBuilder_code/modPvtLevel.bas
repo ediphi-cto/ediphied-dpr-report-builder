@@ -2,23 +2,27 @@ Attribute VB_Name = "modPvtLevel"
 Option Explicit
 
 Public Sub Create_PivotTable_ODBC_MO()
-    With Application
-        .ScreenUpdating = False
-        .EnableEvents = False
-    End With
+    On Error GoTo e1
+    
     bPvt = True
     
     Dim shtName As String
+    Dim sortLabel As String
     If isFirstReport() Then
-        shtName = "Level Report"
-    Else
         shtName = "Detailed Backup"
+    Else
+        If iLvl >= 1 Then sortLabel = sLvl1Name
+        If iLvl >= 2 Then sortLabel = sortLabel & " | " & sLvl2Name
+        If iLvl >= 3 Then sortLabel = sortLabel & " | " & sLvl3Name
+        If iLvl >= 4 Then sortLabel = sortLabel & " | " & sLvl4Name
+        If iLvl >= 5 Then sortLabel = sortLabel & " | " & sLvl5Name
+        shtName = "Level Sort Report"
     End If
     
     sSht = GetUniqueSheetName(shtName)
     Set ptCache = ActiveWorkbook.PivotCaches.Create( _
         SourceType:=xlDatabase, SourceData:="tblEdiphiPivotData", Version:=xlPivotTableVersion15)
-    ActiveWorkbook.Sheets.Add(Before:=Sheet4).Name = sSht
+    ActiveWorkbook.Sheets.Add(Before:=Sheet4).name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
     ActiveWindow.DisplayHeadings = False
@@ -31,7 +35,7 @@ Public Sub Create_PivotTable_ODBC_MO()
         .NullString = "~"
         .ShowDrillIndicators = False
         .TableRange1.Font.Size = 12
-        .TableRange1.Font.Name = "Franklin Gothic Book"
+        .TableRange1.Font.name = "Franklin Gothic Book"
         .TableRange1.VerticalAlignment = xlTop
         .RepeatItemsOnEachPrintedPage = False
         .ManualUpdate = True
@@ -42,6 +46,7 @@ Public Sub Create_PivotTable_ODBC_MO()
     For i = 1 To iLvl
     Select Case i
         Case 1 'Group Level 1
+            If bCkb1 = False Then sLvl1Item = sLvl1Name
             With pt.PivotFields(sLvl1Code)
                 .Orientation = xlRowField
                 .Position = x
@@ -65,6 +70,7 @@ Public Sub Create_PivotTable_ODBC_MO()
             End With
             x = x + 1
         Case 2
+            If bCkb2 = False Then sLvl2Item = sLvl2Name
             With pt.PivotFields(sLvl2Code)
                 .Orientation = xlRowField
                 .Position = x
@@ -89,6 +95,7 @@ Public Sub Create_PivotTable_ODBC_MO()
             x = x + 1
 'Group Level 3
         Case 3
+            If bCkb3 = False Then sLvl3Item = sLvl3Name
             With pt.PivotFields(sLvl3Code)
                 .Orientation = xlRowField
                 .Position = x
@@ -112,6 +119,7 @@ Public Sub Create_PivotTable_ODBC_MO()
             x = x + 1
 'Group Level 4
         Case 4
+            If bCkb4 = False Then sLvl4Item = sLvl4Name
             With pt.PivotFields(sLvl4Code)
                 .Orientation = xlRowField
                 .Position = x
@@ -135,6 +143,7 @@ Public Sub Create_PivotTable_ODBC_MO()
             x = x + 1
 'Group Level 5
         Case 5
+            If bCkb5 = False Then sLvl5Item = sLvl5Name
             With pt.PivotFields(sLvl5Code)
                 .Orientation = xlRowField
                 .Position = x
@@ -158,9 +167,7 @@ Public Sub Create_PivotTable_ODBC_MO()
             x = x + 1
         End Select
     Next i
-    On Error GoTo 0
-    
-    On Error Resume Next
+
 'Field ItemCode
     With pt.PivotFields("ItemCode")
         .Orientation = xlRowField
@@ -286,10 +293,9 @@ Public Sub Create_PivotTable_ODBC_MO()
     'pt.PivotFields("UnitPrice").PivotItems("(blank)").Caption = "-"
     'pt.PivotSelect "UnitPrice['(blank)']", xlDataAndLabel, True
     pt.PivotSelect "UnitPrice", xlDataAndLabel, True
-    On Error GoTo 0
+
 'Gross Total
     pt.AddDataField pt.PivotFields("GrandTotal"), "Sum of GrandTotal", xlSum
-    On Error Resume Next
     With pt.PivotFields("Sum of GrandTotal")
         .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
     End With
@@ -312,6 +318,7 @@ Public Sub Create_PivotTable_ODBC_MO()
     Call Addons
     Call SetSheetHeadings
     ows.Range("A1").Select
+    ows.Range("b1").Value = UCase(sortLabel & " " & shtName)
     Application.ScreenUpdating = True
   
     pic = "DPRLogo.25.png"
@@ -323,12 +330,10 @@ Public Sub Create_PivotTable_ODBC_MO()
     Set pt = Nothing
     Set rsNew = Nothing
     
-    With Application
-        .ScreenUpdating = False
-        .EnableEvents = False
-    End With
+Exit Sub
+e1:
+    logError "failed to build detailed estimate"
     
-    On Error GoTo 0
 End Sub
 
 Private Sub FrmtLvl1()
@@ -341,7 +346,7 @@ Private Sub FrmtLvl1()
         .WrapText = False
         .VerticalAlignment = xlCenter
         .HorizontalAlignment = xlLeft
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
         .Font.Bold = True
         .Font.Size = 12
@@ -404,7 +409,7 @@ Private Sub FrmtLvl2()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
 ''Format Level - 2 Subtotals
@@ -415,7 +420,7 @@ Private Sub FrmtLvl2()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl2Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -445,7 +450,7 @@ Private Sub FrmtLvl3()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
 ''Format Level - 3 Subtotals
@@ -456,7 +461,7 @@ Private Sub FrmtLvl3()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl3Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -486,7 +491,7 @@ Private Sub FrmtLvl4()
         .VerticalAlignment = xlTop
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
 ''Format Level - 4 Subtotals
@@ -497,7 +502,7 @@ Private Sub FrmtLvl4()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl4Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -527,7 +532,7 @@ Private Sub FrmtLvl5()
         .VerticalAlignment = xlTop
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
 ''Format Level - 5 Subtotals
@@ -538,7 +543,7 @@ Private Sub FrmtLvl5()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl5Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -599,7 +604,7 @@ Dim sLeft As Single
         .FormulaR1C1 = StrConv(sRprt, vbUpperCase)
         .Font.ThemeColor = xlThemeColorDark1
         .Font.TintAndShade = 0
-        .Font.Name = "FrnkGothITC Bk BT"
+        .Font.name = "FrnkGothITC Bk BT"
         .Font.Size = 18
         .RowHeight = 35.25
     End With
@@ -660,7 +665,7 @@ Dim sLeft As Single
         .Interior.PatternTintAndShade = 0
         .Font.ThemeColor = xlThemeColorDark1
         .Font.TintAndShade = 0
-        .Font.Name = "FrnkGothITC Bk BT"
+        .Font.name = "FrnkGothITC Bk BT"
         .Font.Size = 12
         .Font.Bold = True
     End With

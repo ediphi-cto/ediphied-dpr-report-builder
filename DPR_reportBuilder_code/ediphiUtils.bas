@@ -8,7 +8,7 @@ Public Const TRY_UPDATING_MSG As String = "Try updating it by pressing ALT + F8,
 Sub eventsOn()
 
     With Application
-        .Calculation = xlCalculationAutomatic
+        '.Calculation = xlCalculationAutomatic
         .EnableEvents = True
         .ScreenUpdating = True
     End With
@@ -18,7 +18,7 @@ End Sub
 Sub eventsOff()
 
     With Application
-        .Calculation = xlCalculationManual
+        '.Calculation = xlCalculationManual
         .EnableEvents = False
         .ScreenUpdating = False
     End With
@@ -51,7 +51,7 @@ Function GetUniqueSheetName(baseName As String) As String
     Do
         nameExists = False
         For Each ws In ThisWorkbook.Sheets
-            If ws.Name = uniqueName Then
+            If ws.name = uniqueName Then
                 ' If the name exists, generate a new name with a suffix
                 uniqueName = baseName & " " & suffix
                 suffix = suffix + 1
@@ -114,7 +114,7 @@ Sub setOpenState()
     
     ThisWorkbook.Worksheets("splash").visible = xlSheetVisible
     For Each sht In ThisWorkbook.Worksheets
-        If sht.Name <> "splash" Then
+        If sht.name <> "splash" Then
             sht.visible = xlSheetVeryHidden
         End If
     Next
@@ -160,6 +160,8 @@ Function reportErrors() As String
     
     post.slackPost "!!! ERRORS !!!" & vbLf & vbLf & msg
     MsgBox "The following errors occured: " & vbLf & vbLf & msg, vbCritical
+    
+    Set errors = Nothing
     
 End Function
 
@@ -331,7 +333,7 @@ Sub updateLocally()
     gitExplode
     setOpenState
     With ThisWorkbook
-        deployPath = Workbooks(EDIPHI_ADDIN_FILENAME).Path & "\ediphi_cache\" & .Name
+        deployPath = Workbooks(EDIPHI_ADDIN_FILENAME).Path & "\ediphi_cache\" & .name
         On Error Resume Next
         SetAttr deployPath, vbNormal
         On Error GoTo 0

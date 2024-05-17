@@ -70,7 +70,7 @@ If bLoading = True Then Exit Sub
 
 Application.ScreenUpdating = False
     If chkVarSlicers = True Then
-        sRprt = ows.PivotTables(1).Name
+        sRprt = ows.PivotTables(1).name
         Set lObj = Sheet0.ListObjects("tblRptTrack")
         Set C = lObj.ListColumns(1).DataBodyRange.Find(sRprt, LookIn:=xlValues)
         If Not C Is Nothing Then
@@ -98,7 +98,7 @@ Application.ScreenUpdating = False
         Next i
     Else
         For Each Sh In ActiveSheet.Shapes
-            If Sh.Name <> "grpHeading" And Sh.Name <> "grpHeadingVar" Then
+            If Sh.name <> "grpHeading" And Sh.name <> "grpHeadingVar" Then
                 Sh.Delete
             End If
         Next
@@ -200,7 +200,7 @@ If bLoading = True Then Exit Sub
 
 Application.ScreenUpdating = False
     If ckbSlicers = True Then
-        sRprt = ows.PivotTables(1).Name
+        sRprt = ows.PivotTables(1).name
         Set lObj = Sheet0.ListObjects("tblRptTrack")
         Set C = lObj.ListColumns(1).DataBodyRange.Find(sRprt, LookIn:=xlValues)
         If Not C Is Nothing Then
@@ -228,7 +228,7 @@ Application.ScreenUpdating = False
         Next i
     Else
         For Each Sh In ActiveSheet.Shapes
-            If Sh.Name <> "grpHeading" And Sh.Name <> "grpHeadingVar" Then
+            If Sh.name <> "grpHeading" And Sh.name <> "grpHeadingVar" Then
                 Sh.Delete
             End If
         Next
@@ -314,13 +314,13 @@ Private Sub UserForm_Activate()
     bLoading = True
     Set ows = ActiveSheet
     Set pt = ows.PivotTables(1)
-    If InStr(1, pt.Name, "XTab") > 0 Then
+    If InStr(1, pt.name, "XTab") > 0 Then
         sType = "XTab"
         ckbComments.Enabled = False
-    ElseIf InStr(1, pt.Name, "Control Estimate") > 0 Then
+    ElseIf InStr(1, pt.name, "Control Estimate") > 0 Then
         sType = "CEst"
         ckbComments.Enabled = True
-    ElseIf InStr(1, pt.Name, "Variance") > 0 Then
+    ElseIf InStr(1, pt.name, "Variance") > 0 Then
         sType = "Var"
         ckbComments.Enabled = True
         Frame6.visible = True
@@ -340,7 +340,7 @@ Sub loadForm()
 Dim oShape As Shape
 Dim C
     x = 0
-    sRprt = ows.PivotTables(1).Name
+    sRprt = ows.PivotTables(1).name
     Set lObj = Sheet0.ListObjects("tblRptTrack")
     Set C = lObj.ListColumns(1).DataBodyRange.Find(sRprt, LookIn:=xlValues)
     If Not C Is Nothing Then
@@ -349,19 +349,19 @@ Dim C
     For i = 1 To x
     Select Case i
         Case Is = 1
-            sLvl1Item = pt.PivotFields(2).Name
+            sLvl1Item = pt.PivotFields(2).name
             ListBox1.AddItem pt.PivotFields(2).Caption
         Case Is = 2
-            sLvl2Item = pt.PivotFields(4).Name
+            sLvl2Item = pt.PivotFields(4).name
             ListBox1.AddItem pt.PivotFields(4).Caption
         Case Is = 3
-            sLvl3Item = pt.PivotFields(6).Name
+            sLvl3Item = pt.PivotFields(6).name
             ListBox1.AddItem pt.PivotFields(6).Caption
         Case Is = 4
-            sLvl4Item = pt.PivotFields(8).Name
+            sLvl4Item = pt.PivotFields(8).name
             ListBox1.AddItem pt.PivotFields(8).Caption
         Case Is = 5
-            sLvl5Item = pt.PivotFields(10).Name
+            sLvl5Item = pt.PivotFields(10).name
             ListBox1.AddItem pt.PivotFields(10).Caption
         Case Else
     End Select
@@ -374,7 +374,7 @@ Dim C
     If ows.Columns(iCol - 3).Hidden = False Then Me.chkVarUnit.Value = True
     If ows.Columns(iCol - 4).Hidden = False Then Me.chkVarQty.Value = True
     For Each oShape In ows.Shapes
-        If oShape.Name <> "grpHeading" And oShape.Name <> "grpHeadingVar" Then
+        If oShape.name <> "grpHeading" And oShape.name <> "grpHeadingVar" Then
              ckbSlicers.Value = True
              chkVarSlicers.Value = True
              Exit For

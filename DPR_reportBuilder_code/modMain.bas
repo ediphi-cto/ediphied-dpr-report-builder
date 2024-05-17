@@ -170,7 +170,7 @@ Public dJobSz As Double
 Sub LoadWorkbook()
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
-    sSht = ActiveSheet.Name
+    sSht = ActiveSheet.name
     'Call LoadXMLTables
     'Call LaborHrProjection
     Application.DisplayAlerts = True
@@ -360,21 +360,21 @@ Sub SheetFormatting()
     On Error Resume Next
     Set ows = ActiveSheet
         If ows.CodeName = "Sheet2" Then
-            ows.PageSetup.PrintArea = ows.Range("$B$1:$K$56").Address
+            ows.PageSetup.PrintArea = ows.Range("$B$1:$K$56").address
         ElseIf ows.CodeName = "Sheet3" Then
-            ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
+            ows.PageSetup.PrintArea = ActualUsedRange(ows).address
             ows.PageSetup.PrintTitleRows = "$1:$7"
         Else
             Set pt = ows.PivotTables(1)
-            ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
-            If InStr(pt.Name, "XTab") Then
+            ows.PageSetup.PrintArea = ActualUsedRange(ows).address
+            If InStr(pt.name, "XTab") Then
                 ows.PageSetup.PrintTitleRows = "$1:$12"
             Else
                 ows.PageSetup.PrintTitleRows = "$1:$13"
             End If
             ows.PageSetup.FitToPagesWide = 1
             ows.PageSetup.FitToPagesTall = False
-            If InStr(pt.Name, "XTab") Or InStr(pt.Name, "ControlEstimate") Or InStr(pt.Name, "Variance") Then
+            If InStr(pt.name, "XTab") Or InStr(pt.name, "ControlEstimate") Or InStr(pt.name, "Variance") Then
                 ows.PageSetup.Orientation = xlLandscape
             End If
         End If
@@ -385,23 +385,23 @@ Sub SheetFormatingAll()
     On Error GoTo e1
     For Each ows In ActiveWorkbook.Worksheets
         If ows.CodeName = "Sheet2" Then
-            ows.PageSetup.PrintArea = ows.Range("$B$1:$K$56").Address
+            ows.PageSetup.PrintArea = ows.Range("$B$1:$K$56").address
         ElseIf ows.CodeName = "Sheet3" Then
-            ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
+            ows.PageSetup.PrintArea = ActualUsedRange(ows).address
             ows.PageSetup.PrintTitleRows = "$1:$7"
-        ElseIf ows.Name = "splash" Then
+        ElseIf ows.name = "splash" Then
             'pass
         Else
             Set pt = ows.PivotTables(1)
-            ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
-            If InStr(pt.Name, "XTab") Then
+            ows.PageSetup.PrintArea = ActualUsedRange(ows).address
+            If InStr(pt.name, "XTab") Then
                 ows.PageSetup.PrintTitleRows = "$1:$12"
             Else
                 ows.PageSetup.PrintTitleRows = "$1:$13"
             End If
             ows.PageSetup.FitToPagesWide = 1
             ows.PageSetup.FitToPagesTall = False
-            If InStr(pt.Name, "XTab") Or InStr(pt.Name, "ControlEstimate") Or InStr(pt.Name, "Variance") Then
+            If InStr(pt.name, "XTab") Or InStr(pt.name, "ControlEstimate") Or InStr(pt.name, "Variance") Then
                 ows.PageSetup.Orientation = xlLandscape
             End If
         End If
@@ -422,7 +422,7 @@ Sub PageSetup()
     Set ows = ActiveSheet
     pic = "DPRLogo.25.png"
     With ows.PageSetup
-        .LeftFooterPicture.fileName = sPth & pic
+        '.LeftFooterPicture.fileName = sPth & pic
         .LeftFooter = "&G"
         .CenterFooter = "Page &P of &N"
         .RightFooter = Range("rngEstName").text
@@ -435,7 +435,7 @@ Sub PageSetup()
         .BottomMargin = Application.InchesToPoints(0.75)
         .HeaderMargin = Application.InchesToPoints(0.25)
         .FooterMargin = Application.InchesToPoints(0.15)
-        If InStr(ows.Name, "Control Estimate") = 1 Or InStr(ows.Name, "Variance") = 1 Then
+        If InStr(ows.name, "Control Estimate") = 1 Or InStr(ows.name, "Variance") = 1 Then
             .Orientation = xlLandscape
         Else
             .Orientation = xlPortrait
@@ -480,12 +480,12 @@ Dim lvl As Integer
 Dim C
     Set ows = ActiveSheet
     sTheme = Range("rngTheme").Value
-    If ows.Name = "Executive Summary" Or ows.Name = "Systems Summary" Then
+    If ows.name = "Executive Summary" Or ows.name = "Systems Summary" Then
         ActiveSheet.Copy
         ActiveWorkbook.ApplyTheme (sTheme)
     Else
         Set pt = ows.PivotTables(1)
-        sRprt = ows.PivotTables(1).Name
+        sRprt = ows.PivotTables(1).name
         Set lObj = Sheet0.ListObjects("tblRptTrack")
         Set C = lObj.ListColumns(1).DataBodyRange.Find(sRprt, LookIn:=xlValues)
         If Not C Is Nothing Then
@@ -560,7 +560,7 @@ Sub FormatCntrlEst()
         End With
         With .FormatConditions(1).Interior
             .PatternColorIndex = xlAutomatic
-            .Color = 65535
+            .color = 65535
             .TintAndShade = 0
         End With
     End With
@@ -691,7 +691,7 @@ Sub loadImage()
     ActiveSheet.Shapes.AddShape(msoShapeRectangle, clLeft, clTop, clWidth, clHeight).Select
     Selection.ShapeRange.Fill.visible = msoFalse
     Selection.ShapeRange.Line.visible = msoFalse
-    Selection.ShapeRange.Name = "ProjectImage"
+    Selection.ShapeRange.name = "ProjectImage"
     With Selection.ShapeRange.Fill
         .visible = msoTrue
         .UserPicture fileName

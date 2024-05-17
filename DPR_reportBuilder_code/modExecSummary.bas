@@ -2,6 +2,8 @@ Attribute VB_Name = "modExecSummary"
 Option Explicit
 
 Sub ExecSummary()
+On Error GoTo e1
+
     Dim rngSeries As Excel.Range
     Dim rngCategory As Excel.Range
     Dim dProjCosts As Double
@@ -49,7 +51,7 @@ Sub ExecSummary()
                 With Cells(i, 2)
                     .Value = lObj.DataBodyRange(r, 4).Value
                     .Font.Size = 12
-                    .Font.Color = -16777216
+                    .Font.color = -16777216
                 End With
                 If lObj.DataBodyRange(r, 9).Value <> "" Then
                     With Cells(i, 4)
@@ -57,20 +59,20 @@ Sub ExecSummary()
                         .FormulaR1C1 = lObj.DataBodyRange(r, 5) / 100
                         .NumberFormat = "0.00%"
                         .Font.Size = 12
-                        .Font.Color = -16777216
+                        .Font.color = -16777216
                     End With
                 End If
                 With Cells(i, 7)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     .FormulaR1C1 = lObj.DataBodyRange(r, 6)
                     .Font.Size = 12
-                    .Font.Color = -16777216
+                    .Font.color = -16777216
                 End With
                 With Cells(i, 5)
                     .NumberFormat = Range("rngNewCur_2").NumberFormatLocal
                     .FormulaR1C1 = "=IFERROR(RC[2]/rngJobSize,0)"
                     .Font.Size = 12
-                    .Font.Color = -16777216
+                    .Font.color = -16777216
                 End With
                 i = i + 1
             End If
@@ -104,7 +106,7 @@ setCharts:
     Set rngSeries = Sheet3.Range(Sheet3.Range("SysStart").Offset(1, 1), Sheet3.Range("SysEnd").Offset(-1, 1))
     Set rngCategory = Sheet3.Range(Sheet3.Range("SysStart").Offset(1, 6), Sheet3.Range("SysEnd").Offset(-1, 6))
     ActiveSheet.ChartObjects("chrtExecSummary").Activate
-    ActiveChart.SetSourceData Source:=Sheets("Systems Summary").Range(rngSeries.Address & "," & rngCategory.Address)
+    ActiveChart.SetSourceData Source:=Sheets("Systems Summary").Range(rngSeries.address & "," & rngCategory.address)
 
     Set RngToCover = ActiveSheet.Range("$H$27:$K$55")
     Set ChtOb = ActiveChart.Parent
@@ -115,6 +117,10 @@ setCharts:
 errHndlr:
     'Call SheetFormatting
     Range("A1").Activate
-    Exit Sub
+
+Exit Sub
+e1:
+    logError "failed to build executive summary"
+
 End Sub
 

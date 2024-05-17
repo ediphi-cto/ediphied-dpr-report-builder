@@ -340,7 +340,7 @@ End Function
 Function TableExists(ws As Worksheet, tblNam As String) As Boolean
 Dim oTbl As ListObject
 For Each oTbl In ws.ListObjects
-    If oTbl.Name = tblNam Then
+    If oTbl.name = tblNam Then
         TableExists = True
         Exit Function
     End If

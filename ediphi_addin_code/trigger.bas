@@ -13,19 +13,23 @@ Sub triggerReportBuilder(ediphiCSVfilename As String)
     If Not checkIfOpen Is Nothing Then
         MsgBox "Only one DPR Report can be open at a time." & vbLf & vbLf & _
         "Close down your current DPR Report Builder and try again.", vbExclamation
-        Workbooks(ediphiCSVfilename).Close savechanges:=False
+        Workbooks(ediphiCSVfilename).Close SaveChanges:=False
         Exit Sub
     End If
     On Error GoTo e1
     
-    If getEnv("AUTO_UPDATE") <> 0 And updateNeeded Then
-        Debug.Print ThisWorkbook.Name & " == updating " & REPORT_BUILDER_FILENAME
-        Set reportBuilderWB = fetchReportBuilder()
+    On Error Resume Next
+    Set reportBuilderWB = Workbooks.Open(reportBuilderFullname)
+    On Error GoTo e1
+    
+    If reportBuilderWB Is Nothing Then
+        Set reportBuilderWB = fetchReportBuilder(forceDownload:=True)
     Else
-        On Error GoTo e2
-        Set reportBuilderWB = Workbooks.Open(reportBuilderFullname)
-        On Error GoTo e1
+        If getEnv("AUTO_UPDATE") <> 0 And updateNeeded Then
+            Set reportBuilderWB = fetchReportBuilder(wbIfUpdateDenied:=reportBuilderWB)
+        End If
     End If
+
     If reportBuilderWB Is Nothing Then GoTo e1
     'this is the hand off, where the addin tells the report builder where the data is
     reportBuilderWB.Worksheets("trigger").[a1].Value = ediphiCSVfilename

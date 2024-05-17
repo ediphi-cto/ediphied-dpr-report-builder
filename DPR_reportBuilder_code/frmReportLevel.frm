@@ -20,7 +20,7 @@ Public reportsRequested As Collection
 '***************************
 
 Private Sub cmdOK_Click()
-    
+    On Error GoTo e1
 '    sCurrency = Range("rngCurrency").Text
     eventsOff
     If isFirstReport() Then
@@ -31,9 +31,8 @@ Private Sub cmdOK_Click()
         sRprt = "LEVEL REPORT"
     End If
     sGTLvl1 = cboBLvl1.List(cboBLvl1.ListIndex, 1)
-    iLvl = numLevel.Value 'numValue is the depth of grouping
+    iLvl = numLevel.Value
     ReportTrack
-    
     createSummary sGTLvl1
     ThisWorkbook.Worksheets("splash").visible = xlHidden
     ExecSummary
@@ -47,10 +46,28 @@ Private Sub cmdOK_Click()
     bCkb4 = False
     bCkb5 = False
     bCkbAll = False
-    Unload Me
     Range("rngIsTemp").Value = True
+        
+    Dim sortLabel As String
+    If iLvl >= 1 Then sortLabel = sLvl1Name
+    If iLvl >= 2 Then sortLabel = sortLabel & vbLf & "   -" & sLvl2Name
+    If iLvl >= 3 Then sortLabel = sortLabel & vbLf & "      -" & sLvl3Name
+    If iLvl >= 4 Then sortLabel = sortLabel & vbLf & "         -" & sLvl4Name
+    If iLvl >= 5 Then sortLabel = sortLabel & vbLf & "            -" & sLvl5Name
+    
+    Dim post As New UserEvents
+    post.slackPost "Initial Estimate Created" & vbLf & sortLabel
+    
+finally:
     eventsOn
-    'MsgBox "Report Builder Loaded Successfully", vbOKOnly, "DPR Report Builder"
+    reportErrors
+    Unload Me
+    
+Exit Sub
+e1:
+    logError "general failure creating primary report"
+    Resume finally
+    
 End Sub
 
 Private Sub cboBLvl1_Change()
@@ -349,19 +366,26 @@ Private Sub cmdOK1_Click()
     bCkb5 = False
     bCkbAll = False
     
+    
+    Dim sortLabel As String
+    If iLvl >= 1 Then sortLabel = sLvl1Name
+    If iLvl >= 2 Then sortLabel = sortLabel & vbLf & "   -" & sLvl2Name
+    If iLvl >= 3 Then sortLabel = sortLabel & vbLf & "      -" & sLvl3Name
+    If iLvl >= 4 Then sortLabel = sortLabel & vbLf & "         -" & sLvl4Name
+    If iLvl >= 5 Then sortLabel = sortLabel & vbLf & "            -" & sLvl5Name
+    
     Dim post As New UserEvents
-    post.slackPost "Level Report Successfully Created" & vbLf & _
-       "Top Grouping: " & sGTLvl1 & vbLf & "Depth: " & iLvl
+    post.slackPost "Level Report Successfully Created" & vbLf & sortLabel
 
-    If Not thisReportBuilder Is Nothing Then thisReportBuilder.success = True
+finally:
     eventsOn
+    reportErrors
     Unload Me
     
 Exit Sub
 e1:
     logError "Failed to create your report" '& vbLf & vbLf & TRY_UPDATING_MSG
-    eventsOn
-    Unload Me
+    Resume finally
     
 End Sub
 
@@ -1586,7 +1610,7 @@ Public Function LoadCBO(cntrl As String, pg As String)
                     '.List(i, 0) = lObj.DataBodyRange.Cells(i, 5) 'sXpath1 'not needed
                     .List(i, 1) = sortFieldDict("name")
                     '.List(i, 2) = lObj.DataBodyRange.Cells(i, 4) 'sLvl1xNd 'not needed
-                    .List(i, 3) = sortFieldDict("name") 'use name for item
+                    .List(i, 3) = sortFieldDict("name") & "_combined"
                     .List(i, 4) = sortFieldDict("code")
                     i = i + 1
                 End If
@@ -1639,9 +1663,9 @@ End Function
 Function tblExists(tblName As String, modName As String)
 Set ows = Sheet0
     If TableExists(ows, tblName) Then
-        MsgBox "Table1 Exists on sheet " & ActiveSheet.Name
+        MsgBox "Table1 Exists on sheet " & ActiveSheet.name
     Else
-         MsgBox "Table1 Does Not Exist on sheet " & ActiveSheet.Name
+         MsgBox "Table1 Does Not Exist on sheet " & ActiveSheet.name
     End If
 End Function
 

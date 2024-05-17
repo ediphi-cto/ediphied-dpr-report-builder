@@ -3,7 +3,7 @@ Public Sub Create_PivotTable_ODBC_CntrlEst()
     bPvt = True
     Set ptCache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlExternal, Version:=xlPivotTableVersion15)
     Set ptCache.Recordset = rsNew
-    ActiveWorkbook.Sheets.Add(Before:=Sheet4).Name = sSht
+    ActiveWorkbook.Sheets.Add(Before:=Sheet4).name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
     ActiveWindow.DisplayHeadings = False
@@ -16,7 +16,7 @@ Public Sub Create_PivotTable_ODBC_CntrlEst()
         .NullString = "-"
         .ShowDrillIndicators = False
         .TableRange1.Font.Size = 12
-        .TableRange1.Font.Name = "Franklin Gothic Book"
+        .TableRange1.Font.name = "Franklin Gothic Book"
         .TableRange1.VerticalAlignment = xlTop
         .RepeatItemsOnEachPrintedPage = False
         .ManualUpdate = True
@@ -368,7 +368,7 @@ Private Sub FrmtCLvl1()
         .WrapText = False
         .VerticalAlignment = xlCenter
         .HorizontalAlignment = xlLeft
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
         .Font.Bold = True
         .Font.Size = 12
@@ -431,7 +431,7 @@ Private Sub FrmtCLvl2()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
 ''Format Level - 2 Subtotals
@@ -442,7 +442,7 @@ Private Sub FrmtCLvl2()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
     With Selection.Borders(xlEdgeTop)
@@ -472,7 +472,7 @@ Private Sub FrmtCLvl3()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
 ''Format Level - 3 Subtotals
@@ -483,7 +483,7 @@ Private Sub FrmtCLvl3()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl3Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -513,7 +513,7 @@ Private Sub FrmtCLvl4()
         .VerticalAlignment = xlTop
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
 ''Format Level - 4 Subtotals
@@ -524,7 +524,7 @@ Private Sub FrmtCLvl4()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl4Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -554,7 +554,7 @@ Private Sub FrmtCLvl5()
         .VerticalAlignment = xlTop
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
 ''Format Level - 5 Subtotals
@@ -565,7 +565,7 @@ Private Sub FrmtCLvl5()
         .VerticalAlignment = xlCenter
         .Font.Size = 12
         .Font.Bold = True
-        .Font.Color = -16777216
+        .Font.color = -16777216
         .Font.TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl5Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -626,7 +626,7 @@ Dim sLeft As Single
         .FormulaR1C1 = StrConv(sRprt, vbUpperCase)
         .Font.ThemeColor = xlThemeColorDark1
         .Font.TintAndShade = 0
-        .Font.Name = "FrnkGothITC Bk BT"
+        .Font.name = "FrnkGothITC Bk BT"
         .Font.Size = 18
         .RowHeight = 35.25
     End With
@@ -700,7 +700,7 @@ Dim sLeft As Single
         .Interior.PatternTintAndShade = 0
         .Font.ThemeColor = xlThemeColorDark1
         .Font.TintAndShade = 0
-        .Font.Name = "FrnkGothITC Bk BT"
+        .Font.name = "FrnkGothITC Bk BT"
         .Font.Size = 12
         .Font.Bold = False
     End With

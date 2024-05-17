@@ -18,10 +18,11 @@ Public Cancel As Boolean
 Public debugMode As Boolean
 Public success As Boolean
 Public estimateJson As Dictionary
+Public projectJson As Dictionary
 
 Private Sub triggerWS_Change(ByVal Target As Range)
     
-    If UCase(Target.Address(False, False)) = "A1" Then
+    If UCase(Target.address(False, False)) = "A1" Then
             If Me.debugMode Then On Error GoTo 0 Else On Error Resume Next
             debugMode = (getEnv("DEBUG") = 1)
             If Me.debugMode Then
@@ -83,6 +84,14 @@ Sub migrateDataFrom(csvFileName As String)
     
 End Sub
 
+Function ProperCase(val) As String
+    
+    Dim str As String
+    str = cStr_safe(val)
+    ProperCase = Replace(WorksheetFunction.Proper(str), "_", " ")
+
+End Function
+
 Sub setMetaData()
     
     Dim metaDataWS As Worksheet
@@ -94,16 +103,14 @@ Sub setMetaData()
         .[rngProjectName].Value = thisReportBuilder.ProjectName
         .[rngEstimator].Value = Application.UserName
         .[rngJobSize].Value = Me.estimateJson("estimate")("stats")("grossArea")
-        If cStr_safe(.[rngJobSize].Value) = "" Then
-            'MN TODO remove once this is known to be fixed
-            Dim post As New UserEvents
-            post.slackPost "gross area not found"
-        End If
-        'MN TODO
-        .[rngProjectAddress].Value = "" 'get project from api
-        .[rngProjectCityStateZip].Value = "" 'get project from api
-        .[rngProjectClient].Value = "" 'get project from api
-        .[rngSubHeading1].Value = WorksheetFunction.Proper(Me.estimateJson("estimate")("phase"))
+        .[rngProjectAddress].Value = Split(Me.projectJson("address"), ",")(0)
+        .[rngProjectCityStateZip].Value = _
+            Me.projectJson("city") & ", " & Me.projectJson("state") & " " & Me.projectJson("zip")
+        .[rngProjectClient].Value = Me.projectJson("client_name")
+        .[rngSubHeading2].Value = ProperCase(Me.estimateJson("estimate")("phase"))
+        .[rngSubHeading3].Value = Me.projectJson("task_number")
+        .[rngEstStatus].Value = ProperCase(Me.projectJson("phase"))
+        .[rngEstType].Value = ProperCase(Me.projectJson("industry"))
     End With
 
 End Sub
@@ -138,6 +145,7 @@ Sub transformDataForPivotTable()
             Me.sortFieldColl.Add sortFieldDict
             neededCols.Add sortFieldCode, ran.Column
             neededCols.Add sortFieldName, ran.Offset(0, 1).Column
+            neededCols.Add sortFieldName & "_combined", ran.Column
         End If
         Set ran = ran.Offset(0, 1)
     Loop
@@ -156,7 +164,11 @@ Sub transformDataForPivotTable()
         Set rowDict = New Dictionary
         For Each k In neededCols.Keys
             colOffset = neededCols(k) - 1
-            rowDict.Add k, ran.Offset(0, colOffset).Value
+            If InStr(k, "_combined") > 0 Then
+                rowDict.Add k, ran.Offset(0, colOffset).Value & " - " & ran.Offset(0, colOffset + 1).Value
+            Else
+                rowDict.Add k, ran.Offset(0, colOffset).Value
+            End If
         Next
         If Not isChildItem(rowDict) And isBaseBid(rowDict) Then
             'filter out alternates and assembly child line items
@@ -189,7 +201,21 @@ Sub transformDataForPivotTable()
    
     Dim tbl As ListObject
     Set tbl = Me.pivotDataWS.ListObjects.Add(xlSrcRange, printRan, , xlYes)
-    tbl.Name = "tblEdiphiPivotData"
+    tbl.name = "tblEdiphiPivotData"
+    
+    'numberformat columns
+    Dim col As ListColumn
+    Dim cell As Range
+    For Each col In tbl.ListColumns
+        If InStr("UnitPrice TakeoffQty", col.name) > 0 Then
+            With col.DataBodyRange
+                .NumberFormat = "0.00"
+                For Each cell In .Cells
+                    cell.Value = cell.Value 'required for formatting to take effect
+                Next
+            End With
+        End If
+    Next
     
    'populate the markups table
    parseMarkups2Table
@@ -234,12 +260,12 @@ Sub parseMarkups2Table()
     Next
     
     Dim printRan As Range
-    Set printRan = printDictList2Range(dataColl, ThisWorkbook.Worksheets("XMLTables").[\markups])
+    Set printRan = printDictList2Range(dataColl, ThisWorkbook.Worksheets("tables").[\markups])
     Dim tbl As ListObject
     Set tbl = printRan.Parent.ListObjects.Add(xlSrcRange, printRan, , xlYes)
     
     With tbl
-        .Name = "tblTotals"
+        .name = "tblTotals"
         .Sort.SortFields.Clear
         .Sort.SortFields.Add key:=Range("tblTotals[SortOrder]"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
         With .Sort
@@ -260,6 +286,7 @@ End Sub
 
 
 Sub fetchEstimateJson()
+
     If Me.debugMode Then On Error GoTo 0 Else On Error GoTo e1
     
     Dim api As New EdiphiAPI
@@ -267,9 +294,17 @@ Sub fetchEstimateJson()
     rawJson = api.getEstimateJSON(Me.EstimateID)
     Set Me.estimateJson = ParseJson(rawJson)("sanitizedEstimate")
     
+    If Me.debugMode Then On Error GoTo 0 Else On Error GoTo e2
+    Set Me.projectJson = api.getProject(Me.estimateJson("estimate")("project"))
+    
 Exit Sub
 e1:
     logError "failed to fetch estimate json from the api"
+
+
+Exit Sub
+e2:
+    logError "failed to fetch project json from the api"
 
 End Sub
 
@@ -295,6 +330,7 @@ End Function
 
 Function isChildItem(dict As Dictionary) As Boolean
     
+    On Error Resume Next
     isChildItem = dict("parent") <> ""
     
 End Function
@@ -321,7 +357,7 @@ Function isBaseBid(dict As Dictionary) As Boolean
 End Function
 
 Sub calculateUseGroupValues(dict As Dictionary)
-    If Not Me.debugMode Then On Error GoTo e1
+    On Error GoTo e1
     Dim allocations As Dictionary
     Dim i As Integer, hasMultiple As Boolean
     Set allocations = ParseJson(dict("use_groups"))
@@ -337,12 +373,14 @@ Sub calculateUseGroupValues(dict As Dictionary)
         If i = 1 Then
             dict.Add "Use Group_code", k
             dict.Add "Use Group", k
+            dict.Add "Use Group_combined", k
         End If
     Next
     
     If i > 1 Then
         dict("Use Group_code") = "9999"
         dict("Use Group") = "Multiple"
+        dict("Use Group_combined") = "Multiple"
     End If
     
 finally:
@@ -352,6 +390,7 @@ Exit Sub
 e1:
     dict.Add "Use Group_code", "99999"
     dict.Add "Use Group", "None"
+    dict.Add "Use Group_combined", "None"
     Resume finally
     
 End Sub
@@ -368,8 +407,8 @@ Property Get EstimateID() As String
     EstimateID = Me.rawDataWS.Range("C1").Value
 End Property
 
-Property Get ProjectID() As String
-    ProjectID = Me.rawDataWS.Range("B1").Value
+Property Get projectID() As String
+    projectID = Me.rawDataWS.Range("B1").Value
 End Property
 
 Property Get embeddedJSON() As String

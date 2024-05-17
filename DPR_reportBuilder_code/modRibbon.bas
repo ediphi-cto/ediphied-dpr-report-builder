@@ -70,7 +70,7 @@ End Sub
 
 'Callback for g2b2 onAction
 Sub g2b2(control As IRibbonControl)
-    If ActiveSheet.Name = "Executive Summary" Or ActiveSheet.Name = "Systems Summary" Then
+    If ActiveSheet.name = "Executive Summary" Or ActiveSheet.name = "Systems Summary" Then
         Exit Sub
     Else
         frmReportFormat.Show
