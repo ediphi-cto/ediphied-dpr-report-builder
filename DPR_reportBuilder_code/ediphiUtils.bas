@@ -158,11 +158,25 @@ Function reportErrors() As String
         msg = msg + e + vbLf
     Next
     
-    post.slackPost "!!! ERRORS !!!" & vbLf & vbLf & msg
+    post.slackPost "!!! ERRORS !!!" & vbLf & vbLf & msg, url:=myUrl
     MsgBox "The following errors occured: " & vbLf & vbLf & msg, vbCritical
     
     Set errors = Nothing
     
+End Function
+
+Function myUrl() As String
+    On Error GoTo e1
+    
+    Dim projectId As String, estimateId As String
+    projectId = ThisWorkbook.Worksheets("raw data").[b1]
+    estimateId = ThisWorkbook.Worksheets("raw data").[c1]
+    myUrl = "https://dpr.ediphi.com/projects/" & projectId & "/estimates/" & estimateId
+
+Exit Function
+e1:
+    'pass
+
 End Function
 
 Sub closeMe(Optional hideErrors As Boolean)

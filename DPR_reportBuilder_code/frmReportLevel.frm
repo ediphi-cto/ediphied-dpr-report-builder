@@ -36,10 +36,9 @@ Private Sub cmdOK_Click()
     createSummary sGTLvl1
     ThisWorkbook.Worksheets("splash").visible = xlHidden
     ExecSummary
-    Create_PivotTable_ODBC_MO
+    Create_PivotTable_ODBC_MO splitByUse:=chkSplitByUsePrimary.Value
     ReApplyAddons
     
-    Call clearStrings
     bCkb1 = False
     bCkb2 = False
     bCkb3 = False
@@ -49,14 +48,16 @@ Private Sub cmdOK_Click()
     Range("rngIsTemp").Value = True
         
     Dim sortLabel As String
-    If iLvl >= 1 Then sortLabel = sLvl1Name
+    If iLvl >= 1 Then sortLabel = "-" & sLvl1Name
     If iLvl >= 2 Then sortLabel = sortLabel & vbLf & "   -" & sLvl2Name
     If iLvl >= 3 Then sortLabel = sortLabel & vbLf & "      -" & sLvl3Name
     If iLvl >= 4 Then sortLabel = sortLabel & vbLf & "         -" & sLvl4Name
     If iLvl >= 5 Then sortLabel = sortLabel & vbLf & "            -" & sLvl5Name
+    Call clearStrings
     
     Dim post As New UserEvents
-    post.slackPost "Initial Estimate Created" & vbLf & sortLabel
+    post.slackPost "Initial Estimate Created" & vbLf & sortLabel & vbLf & _
+        "Uses Split: " & cStr_safe(chkSplitByUsePrimary.Value), url:=myUrl
     
 finally:
     eventsOn
@@ -357,8 +358,8 @@ Private Sub cmdOK1_Click()
     sGTLvl1 = cboLvl1.List(cboLvl1.ListIndex, 1)
     iLvl = numLevel.Value
     ReportTrack
-    Create_PivotTable_ODBC_MO
-    clearStrings
+    Create_PivotTable_ODBC_MO splitByUse:=chkSplitByUseLevel.Value
+    
     bCkb1 = False
     bCkb2 = False
     bCkb3 = False
@@ -366,16 +367,18 @@ Private Sub cmdOK1_Click()
     bCkb5 = False
     bCkbAll = False
     
-    
+
     Dim sortLabel As String
-    If iLvl >= 1 Then sortLabel = sLvl1Name
+    If iLvl >= 1 Then sortLabel = "-" & sLvl1Name
     If iLvl >= 2 Then sortLabel = sortLabel & vbLf & "   -" & sLvl2Name
     If iLvl >= 3 Then sortLabel = sortLabel & vbLf & "      -" & sLvl3Name
     If iLvl >= 4 Then sortLabel = sortLabel & vbLf & "         -" & sLvl4Name
     If iLvl >= 5 Then sortLabel = sortLabel & vbLf & "            -" & sLvl5Name
+    Call clearStrings
     
     Dim post As New UserEvents
-    post.slackPost "Level Report Successfully Created" & vbLf & sortLabel
+    post.slackPost "Level Report Successfully Created" & vbLf & sortLabel & _
+        "Uses Split: " & cStr_safe(chkSplitByUseLevel.Value), url:=myUrl
 
 finally:
     eventsOn

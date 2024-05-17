@@ -1,8 +1,15 @@
 Attribute VB_Name = "modPvtLevel"
 Option Explicit
 
-Public Sub Create_PivotTable_ODBC_MO()
+Public Sub Create_PivotTable_ODBC_MO(splitByUse As Boolean)
     On Error GoTo e1
+    
+    Dim dataTblName As String
+    If splitByUse Then
+        dataTblName = "tblEdiphiPivotDataUseSplit"
+    Else
+        dataTblName = "tblEdiphiPivotData"
+    End If
     
     bPvt = True
     
@@ -16,12 +23,13 @@ Public Sub Create_PivotTable_ODBC_MO()
         If iLvl >= 3 Then sortLabel = sortLabel & " | " & sLvl3Name
         If iLvl >= 4 Then sortLabel = sortLabel & " | " & sLvl4Name
         If iLvl >= 5 Then sortLabel = sortLabel & " | " & sLvl5Name
+        sortLabel = sortLabel & " | "
         shtName = "Level Sort Report"
     End If
     
     sSht = GetUniqueSheetName(shtName)
     Set ptCache = ActiveWorkbook.PivotCaches.Create( _
-        SourceType:=xlDatabase, SourceData:="tblEdiphiPivotData", Version:=xlPivotTableVersion15)
+        SourceType:=xlDatabase, SourceData:=dataTblName, Version:=xlPivotTableVersion15)
     ActiveWorkbook.Sheets.Add(Before:=Sheet4).name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False

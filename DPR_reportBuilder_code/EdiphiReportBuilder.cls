@@ -116,7 +116,33 @@ Sub setMetaData()
 End Sub
 
 Sub transformDataForPivotTable()
+    
+    Dim neededCols As Dictionary
+    Set neededCols = findNeededColumns()
+    Dim dataColl As Collection
+    
+    Dim startRan As Range
+    Set startRan = Me.pivotDataWS.[a1]
 
+    Set dataColl = pivotDataRows(neededCols, splitByUse:=False)
+    printPivotDataAsTable dataColl, startRan, "tblEdiphiPivotData"
+    
+    Dim tbl As ListObject
+    Dim lastHeaderCol As Integer
+    Set tbl = Me.pivotDataWS.ListObjects("tblEdiphiPivotData")
+    lastHeaderCol = tbl.HeaderRowRange.Columns(tbl.HeaderRowRange.Columns.count).Column
+    Set startRan = Me.pivotDataWS.Cells(tbl.HeaderRowRange.row, lastHeaderCol + 2)
+    
+    Set dataColl = pivotDataRows(neededCols, splitByUse:=True)
+    printPivotDataAsTable dataColl, startRan, "tblEdiphiPivotDataUseSplit"
+    
+   'populate the markups table
+   parseMarkups2Table
+   
+End Sub
+
+
+Function findNeededColumns() As Dictionary
     Dim ran As Range
     Set ran = Me.rawDataWS.[a3]
     Dim colNameMap As Dictionary
@@ -126,7 +152,7 @@ Sub transformDataForPivotTable()
     Dim sortFieldDict As Dictionary
     Dim sortFieldName As String, sortFieldCode As String
     
-    '[1] Find Columns of Interest
+    'Find Columns of Interest
     'create a neededCols as dict where:
     '      key: column names, value: column ints
     
@@ -149,9 +175,14 @@ Sub transformDataForPivotTable()
         End If
         Set ran = ran.Offset(0, 1)
     Loop
+
+    Set findNeededColumns = neededCols
+
+End Function
    
-   '[2] Gather Data Rows into Collection of Dicts
-   
+Function pivotDataRows(neededCols As Dictionary, splitByUse As Boolean) As Collection
+    
+    Dim ran As Range
     Dim rowDict As Dictionary
     Dim dataColl As New Collection
     Dim colOffset As Integer
@@ -183,7 +214,7 @@ Sub transformDataForPivotTable()
             End If
             Dim splitUseRows As Collection
             Dim useRowDict As Dictionary
-            Set splitUseRows = calculateUseGroupValues(rowDict, splitByUse:=True) 'MN return a collection of rowdict, add each to dataColl
+            Set splitUseRows = calculateUseGroupValues(rowDict, splitByUse:=splitByUse) 'MN return a collection of rowdict, add each to dataColl
             For Each useRowDict In splitUseRows
                 dataColl.Add useRowDict
             Next
@@ -196,16 +227,20 @@ Sub transformDataForPivotTable()
         'no line items, can happen when the estimate is all alternates and no base bid
         Me.Cancel = True
         MsgBox "There aren't any Base Bid line items in your ediphi estimate", vbCritical
-        Exit Sub
+        Exit Function
     End If
     
+    Set pivotDataRows = dataColl
+    
+End Function
+
+Sub printPivotDataAsTable(dataColl As Collection, startCell As Range, tblName As String)
     Dim printRan As Range
-    Set printRan = printDictList2Range( _
-    dictColl:=dataColl, startCell:=Me.pivotDataWS.[a1], asText:=True)
+    Set printRan = printDictList2Range(dictColl:=dataColl, startCell:=startCell, asText:=True)
    
     Dim tbl As ListObject
     Set tbl = Me.pivotDataWS.ListObjects.Add(xlSrcRange, printRan, , xlYes)
-    tbl.name = "tblEdiphiPivotData"
+    tbl.name = tblName
     
     'numberformat columns
     Dim col As ListColumn
@@ -220,9 +255,6 @@ Sub transformDataForPivotTable()
             End With
         End If
     Next
-    
-   'populate the markups table
-   parseMarkups2Table
 
 End Sub
 
@@ -295,7 +327,7 @@ Sub fetchEstimateJson()
     
     Dim api As New EdiphiAPI
     Dim rawJson As String
-    rawJson = api.getEstimateJSON(Me.EstimateID)
+    rawJson = api.getEstimateJSON(Me.estimateId)
     Set Me.estimateJson = ParseJson(rawJson)("sanitizedEstimate")
     
     If Me.debugMode Then On Error GoTo 0 Else On Error GoTo e2
@@ -379,7 +411,7 @@ Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As C
             Set newDict = New Dictionary
             Set newDict = deepCopy(dict)
             newDict("GrandTotal") = Round(cDbl_safe(dict("GrandTotal")) * cDbl_safe(allocations(k)) / 100, 2)
-            newDict("TakeOffQty") = cDbl_safe(dict("TakeOffQty")) * cDbl_safe(allocations(k) / 100)
+            newDict("TakeoffQty") = cDbl_safe(dict("TakeoffQty")) * cDbl_safe(allocations(k) / 100)
             newDict.Add "Use Group_code", k
             newDict.Add "Use Group", k
             newDict.Add "Use Group_combined", k
@@ -392,7 +424,7 @@ Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As C
         For Each k In allocations.Keys
             i = i + 1
             dict.Add k, Round(cDbl_safe(dict("GrandTotal")) * cDbl_safe(allocations(k)) / 100, 2)
-            dict.Add k & "_qty", cDbl_safe(dict("TakeOffQty")) * cDbl_safe(allocations(k) / 100)
+            dict.Add k & "_qty", cDbl_safe(dict("TakeoffQty")) * cDbl_safe(allocations(k) / 100)
             If i = 1 Then
                 dict.Add "Use Group_code", k
                 dict.Add "Use Group", k
@@ -401,7 +433,7 @@ Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As C
         Next
         
         If i > 1 Then
-            dict("Use Group_code") = "9999"
+            dict("Use Group_code") = "zzz"
             dict("Use Group") = "Multiple"
             dict("Use Group_combined") = "Multiple"
         End If
@@ -414,7 +446,7 @@ finally:
 
 Exit Function
 e1:
-    dict.Add "Use Group_code", "99999"
+    dict.Add "Use Group_code", "zzzz"
     dict.Add "Use Group", "None"
     dict.Add "Use Group_combined", "None"
     Set coll = New Collection
@@ -431,12 +463,12 @@ Property Get ProjectName() As String
     ProjectName = Me.rawDataWS.Range("D1").Value
 End Property
 
-Property Get EstimateID() As String
-    EstimateID = Me.rawDataWS.Range("C1").Value
+Property Get estimateId() As String
+    estimateId = Me.rawDataWS.Range("C1").Value
 End Property
 
-Property Get projectID() As String
-    projectID = Me.rawDataWS.Range("B1").Value
+Property Get projectId() As String
+    projectId = Me.rawDataWS.Range("B1").Value
 End Property
 
 Property Get embeddedJSON() As String
