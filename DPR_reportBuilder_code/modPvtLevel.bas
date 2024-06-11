@@ -683,7 +683,7 @@ Dim sLeft As Single
     ows.Columns(iCol).ColumnWidth = 20
     
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.Goto Sheets(sSht).Range("B1")
+    Application.GoTo Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(6, iCol))

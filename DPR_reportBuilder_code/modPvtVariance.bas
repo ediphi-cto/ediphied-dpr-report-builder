@@ -985,7 +985,7 @@ Dim sLeft As Single
     
 
     Sheets("EstData").Shapes("grpHeadingVar").Copy
-    Application.Goto Sheets(sSht).Range("B1")
+    Application.GoTo Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeadingVar")
     Set cl = Range(Cells(1, 2), Cells(6, iCol))

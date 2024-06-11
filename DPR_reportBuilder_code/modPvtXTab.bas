@@ -992,7 +992,7 @@ Dim shpName As String
     
     ows.Range("A9").EntireRow.Hidden = True
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.Goto Sheets(sSht).Range("B1")
+    Application.GoTo Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(8, iCol))
