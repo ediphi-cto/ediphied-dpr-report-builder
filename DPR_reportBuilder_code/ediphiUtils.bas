@@ -297,28 +297,32 @@ Function dictsTo2DArray(dictCollection As Collection, Optional noHeaders As Bool
     Dim startInt As Integer, endInt As Integer
     
     If noHeaders Then
-        startInt = 1
-        endInt = WorksheetFunction.Max(1, dictCollection.count - 1)
-    Else
         startInt = 0
+        endInt = dictCollection.count - 1
+    Else
+        startInt = 1
         endInt = dictCollection.count
     End If
     
     ' Redim the output array to fit all keys and dictionaries
-    ReDim outputArray(startInt To endInt, 0 To allKeys.count - 1)
+    If noHeaders Or dictCollection.count = 1 Then
+        ReDim outputArray(0 To endInt, 0 To allKeys.count - 1)
+    Else
+        ReDim outputArray(0 To dictCollection.count, 0 To allKeys.count - 1)
+    End If
     
     If Not noHeaders Then
         ' Set the first row to be the keys (headers)
         i = 0
         For Each key In allKeys.Keys
-            outputArray(startInt, i) = key
+            outputArray(0, i) = key
             i = i + 1
         Next key
     End If
     
     ' Set the subsequent rows to be the values from each dictionary
-    For i = 1 To endInt
-        Set dict = dictCollection(i)
+    For i = startInt To endInt
+        Set dict = dictCollection(i - startInt + 1) ' Adjusting index for collection
         For j = 0 To allKeys.count - 1
             key = allKeys.Keys(j)
             If dict.Exists(key) Then
@@ -333,6 +337,7 @@ Function dictsTo2DArray(dictCollection As Collection, Optional noHeaders As Bool
     dictsTo2DArray = outputArray
     
 End Function
+
 
 Function isFirstReport()
 
