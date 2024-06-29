@@ -27,8 +27,8 @@ Private Sub cmdOK_Click()
         sSht = "Detailed Backup Report"
         sRprt = "DETAILED BACKUP"
     Else
-        sSht = "Level Report"
-        sRprt = "LEVEL REPORT"
+        sSht = "Level Report - " & getPtCount
+        sRprt = sRprtName
     End If
     sGTLvl1 = cboBLvl1.List(cboBLvl1.ListIndex, 1)
     iLvl = numLevel.Value
@@ -353,8 +353,8 @@ Private Sub cmdOK1_Click()
     End If
     
 '   sCurrency = Range("rngCurrency").Text
-    'sSht = "Level Report - " & getPtCount
-    'sRprt = sRprtName
+    sSht = "Level Report - " & getPtCount
+    sRprt = sRprtName
     sGTLvl1 = cboLvl1.List(cboLvl1.ListIndex, 1)
     iLvl = numLevel.Value
     ReportTrack
@@ -1027,7 +1027,7 @@ Private Sub cboLvl0_Click()
             'sXpath0 = .List(.ListIndex, 0)
             sLvl0Name = .List(.ListIndex, 1)
             'sLvl0xNd = .List(.ListIndex, 2)
-            'sLvl0Item = .List(.ListIndex, 3)
+            sLvl0Item = .List(.ListIndex, 3)
             sLvl0Code = .List(.ListIndex, 4)
             ckbXLvl1.Enabled = True
             ckbXLvl1.Value = False

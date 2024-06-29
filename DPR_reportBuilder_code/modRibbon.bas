@@ -163,8 +163,8 @@ End Sub
 
 'Callback for g4m1b2 onAction
 Sub g4m1b2(control As IRibbonControl)
-    Range("rngTheme").Value = "\\azr-corp-store\Estimators\DPR Reporter\Document Themes\DPR_ThemeDark.thmx"
-    ActiveWorkbook.ApplyTheme ("\\azr-corp-store\Estimators\DPR Reporter\Document Themes\DPR_ThemeDark.thmx")
+    Range("rngTheme").Value = "\\azr-corp-store\Estimators\DPR Reporter\Document Themes\DPR_Theme.thmx"
+    ActiveWorkbook.ApplyTheme ("\\azr-corp-store\Estimators\DPR Reporter\Document Themes\DPR_Theme.thmx")
 End Sub
 
 'Callback for g4m1b3 onAction

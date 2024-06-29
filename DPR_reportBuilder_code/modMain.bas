@@ -701,6 +701,8 @@ Sub loadImage()
 End Sub
 
 
-
+Sub Events_On()
+    Application.EnableEvents = True
+End Sub
 
 
