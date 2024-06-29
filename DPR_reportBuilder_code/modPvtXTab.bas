@@ -1,7 +1,9 @@
 Attribute VB_Name = "modPvtXTab"
 Option Explicit
 Public Sub Create_PivotTable_ODBC_XT()
-Application.ScreenUpdating = False
+Dim pvtCField, pvtSField, pvtOField As PivotField
+'Application.ScreenUpdating = False
+
     bPvt = True
     sVal3 = "Cost/" & Range("rngJobUnitName").Value & " "
     sJobUM = Range("rngJobUnitName").Value
@@ -24,9 +26,12 @@ Application.ScreenUpdating = False
         .TableRange1.Font.name = "Franklin Gothic Book"
         .RepeatItemsOnEachPrintedPage = False
     End With
+    Set pvtCField = pt.CalculatedFields.Add("UnitCost", "=GrandTotal / TakeoffQty")
+    Set pvtSField = pt.CalculatedFields.Add("CostSF", "=GrandTotal /" & Range("rngJobSize").Value)
+    Set pvtOField = pt.CalculatedFields.Add("AreaSize", "=" & Range("rngJobSize").Value)
     x = 1
     'Build Levels
-    On Error Resume Next
+'    On Error Resume Next
     For i = 1 To iLvl
     Select Case i
         Case 1 'Group Level 1
@@ -144,23 +149,23 @@ Application.ScreenUpdating = False
             x = x + 1
         End Select
     Next i
-
+    
     'Set Values Area
 
-    pt.AddDataField pt.PivotFields("Amount"), "Sum of Amount", xlSum
-    With pt.PivotFields("Sum of Amount")
+    pt.AddDataField pt.PivotFields("GrandTotal"), "Sum of GrandTotal", xlSum
+    With pt.PivotFields("Sum of GrandTotal")
         .Caption = "Amount "
         .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
     End With
     
-    pt.AddDataField pt.PivotFields("Cost/Unit"), "Sum of Cost/Unit", xlSum
-    With pt.PivotFields("Sum of Cost/Unit")
+    pt.AddDataField pt.PivotFields("UnitCost"), "Sum of UnitCost", xlSum
+    With pt.PivotFields("Sum of UnitCost")
         .Caption = "Cost/Unit "
         .NumberFormat = Range("rngNewCur_2").NumberFormatLocal
     End With
 
-    pt.AddDataField pt.PivotFields("Cost/SF"), "Sum of Cost/SF", xlSum
-    With pt.PivotFields("Sum of Cost/SF")
+    pt.AddDataField pt.PivotFields("CostSF"), "Sum of CostSF", xlSum
+    With pt.PivotFields("Sum of CostSF")
         .Caption = sVal3
         .NumberFormat = Range("rngNewCur_2").NumberFormatLocal
     End With
@@ -174,15 +179,15 @@ Application.ScreenUpdating = False
         .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
         .LayoutForm = xlTabular
     End With
-    With pt.PivotFields("LevelQuantity")
+    'ToDo RB This is the Overline Qty. Using UseGroup for now
+    With pt.PivotFields("Use Group") 'pt.PivotFields("LevelQuantity")
         .Orientation = xlColumnField
         .Position = 2
     End With
-    With pt.PivotFields("LevelQuantity")
+    With pt.PivotFields("Use Group") 'pt.PivotFields("LevelQuantity")
         .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
         .LayoutForm = xlTabular
     End With
-    
     Call FormatXTab
     Call FormatXGrandTotal
     Call XTabHeadings
@@ -243,10 +248,11 @@ Application.ScreenUpdating = False
     sLvl4Item = ""
     sLvl5Item = ""
     bPvt = False
-    Set ptCache.Recordset = Nothing
+'    Set ptCache.Recordset = Nothing
     Set ptCache = Nothing
     Set pt = Nothing
     Set rsNew = Nothing
+    
 End Sub
 
 Sub FormatXTab()
@@ -364,7 +370,7 @@ Sub XTabHeadings()
         .Weight = xlThin
     End With
 'Format Column Header 2
-    pt.PivotSelect "'LevelQuantity'", xlLabelOnly, True
+    pt.PivotSelect "'Use Group'", xlLabelOnly, True
     With Selection.Font
         .name = "Franklin Gothic Book"
         .Size = 12
@@ -1003,6 +1009,8 @@ Dim shpName As String
         .Width = cl.Width
     End With
 End Sub
+
+
 
 
 

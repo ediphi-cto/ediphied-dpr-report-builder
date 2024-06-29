@@ -163,8 +163,8 @@ End Sub
 
 'Callback for g4m1b2 onAction
 Sub g4m1b2(control As IRibbonControl)
-    Range("rngTheme").Value = "\\azr-corp-store\Estimators\DPR Reporter\Document Themes\DPR_ThemeDark.thmx"
-    ActiveWorkbook.ApplyTheme ("\\azr-corp-store\Estimators\DPR Reporter\Document Themes\DPR_ThemeDark.thmx")
+    Range("rngTheme").Value = "\\azr-corp-store\Estimators\DPR Reporter\Document Themes\DPR_Theme.thmx"
+    ActiveWorkbook.ApplyTheme ("\\azr-corp-store\Estimators\DPR Reporter\Document Themes\DPR_Theme.thmx")
 End Sub
 
 'Callback for g4m1b3 onAction
@@ -303,3 +303,5 @@ End Function
 Public Function getlabel81(control As IRibbonControl, ByRef Label)
     Label = Sheet1.ListObjects("tblCurrency").DataBodyRange(9, 1).Value
 End Function
+
+

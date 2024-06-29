@@ -338,7 +338,7 @@ End Sub
 
 Sub loadForm()
 Dim oShape As Shape
-Dim C
+Dim C, arr
     x = 0
     sRprt = ows.PivotTables(1).name
     Set lObj = Sheet0.ListObjects("tblRptTrack")
@@ -349,20 +349,45 @@ Dim C
     For i = 1 To x
     Select Case i
         Case Is = 1
-            sLvl1Item = pt.PivotFields(2).name
-            ListBox1.AddItem pt.PivotFields(2).Caption
+            If C.Offset(0, 10).Value = False Then
+                arr = Split(C.Offset(0, 13).Value, "_")
+                sLvl1Item = arr(0)
+            Else
+                sLvl1Item = C.Offset(0, 13).Value
+            End If
+            ListBox1.AddItem sLvl1Item
         Case Is = 2
-            sLvl2Item = pt.PivotFields(4).name
-            ListBox1.AddItem pt.PivotFields(4).Caption
+            If C.Offset(0, 15).Value = False Then
+                arr = Split(C.Offset(0, 18).Value, "_")
+                sLvl2Item = arr(0)
+            Else
+                sLvl2Item = C.Offset(0, 18).Value
+            End If
+            ListBox1.AddItem sLvl2Item
         Case Is = 3
-            sLvl3Item = pt.PivotFields(6).name
-            ListBox1.AddItem pt.PivotFields(6).Caption
+            If C.Offset(0, 20).Value = False Then
+                arr = Split(C.Offset(0, 23).Value, "_")
+                sLvl3Item = arr(0)
+            Else
+                sLvl3Item = C.Offset(0, 23).Value
+            End If
+            ListBox1.AddItem sLvl3Item
         Case Is = 4
-            sLvl4Item = pt.PivotFields(8).name
-            ListBox1.AddItem pt.PivotFields(8).Caption
+            If C.Offset(0, 25).Value = False Then
+                arr = Split(C.Offset(0, 28).Value, "_")
+                sLvl4Item = arr(0)
+            Else
+                sLvl4Item = C.Offset(0, 28).Value
+            End If
+            ListBox1.AddItem sLvl4Item
         Case Is = 5
-            sLvl5Item = pt.PivotFields(10).name
-            ListBox1.AddItem pt.PivotFields(10).Caption
+            If C.Offset(0, 30).Value = False Then
+                arr = Split(C.Offset(0, 33).Value, "_")
+                sLvl5Item = arr(0)
+            Else
+                sLvl5Item = C.Offset(0, 33).Value
+            End If
+            ListBox1.AddItem sLvl5Item
         Case Else
     End Select
     Next i
@@ -424,5 +449,9 @@ Private Sub UserForm_Initialize()
     Me.StartUpPosition = 0
     Me.Top = Application.Top + 115
     Me.Left = Application.Left + 25
+    Me.Width = 341
+    Me.Height = 329
 End Sub
+
+
 
