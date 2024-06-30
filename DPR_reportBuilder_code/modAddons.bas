@@ -2,7 +2,6 @@ Attribute VB_Name = "modAddons"
 Option Explicit
 
 Sub Addons()
-    'MN TODO: this is where markups are added
     i = 0
     sJobUM = Range("rngJobUnitName").Value
     If ows.PivotTables.count > 0 Then
