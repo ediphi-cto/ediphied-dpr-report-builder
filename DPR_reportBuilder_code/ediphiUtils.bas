@@ -3,7 +3,48 @@ Option Explicit
 Public Const EDIPHI_ADDIN_FILENAME As String = "ediphi_addin.xlam"
 Public thisReportBuilder As EdiphiReportBuilder
 Public errors As Collection
-Public Const TRY_UPDATING_MSG As String = "Try updating it by pressing ALT + F8, then typing 'ediphiUpdate', and hit Enter"
+Public Const TRY_UPDATING_MSG As String = ""
+
+
+Function DictionaryToJson(dict As Object) As String
+    Dim key As Variant
+    Dim json As String
+    Dim isFirst As Boolean
+    
+    isFirst = True
+    json = "{"
+    
+    For Each key In dict.Keys
+        If Not isFirst Then
+            json = json & ","
+        Else
+            isFirst = False
+        End If
+        
+        json = json & """" & key & """:"
+        
+        Select Case TypeName(dict(key))
+            Case "Dictionary"
+                ' Recursively call DictionaryToJson for nested dictionaries
+                json = json & DictionaryToJson(dict(key))
+            Case "Boolean"
+                If dict(key) Then
+                    json = json & "true"
+                Else
+                    json = json & "false"
+                End If
+            Case "String"
+                ' Strings need to be properly escaped and wrapped in double quotes
+                json = json & """" & Replace(dict(key), """", "\""") & """"
+            Case Else
+                json = json & dict(key)
+        End Select
+    Next key
+    
+    json = json & "}"
+    
+    DictionaryToJson = json
+End Function
 
 Sub eventsOn()
 
