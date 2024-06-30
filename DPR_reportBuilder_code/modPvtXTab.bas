@@ -1,8 +1,9 @@
 Attribute VB_Name = "modPvtXTab"
 Option Explicit
+
 Public Sub Create_PivotTable_ODBC_XT()
-Dim pvtCField, pvtSField, pvtOField As PivotField
-'Application.ScreenUpdating = False
+    Dim pvtCField, pvtSField, pvtOField As PivotField
+    'Application.ScreenUpdating = False
 
     bPvt = True
     sVal3 = "Cost/" & Range("rngJobUnitName").Value & " "
@@ -180,11 +181,11 @@ Dim pvtCField, pvtSField, pvtOField As PivotField
         .LayoutForm = xlTabular
     End With
     'ToDo RB This is the Overline Qty. Using UseGroup for now
-    With pt.PivotFields("Use Group") 'pt.PivotFields("LevelQuantity")
+    With pt.PivotFields("Use Group_area") 'pt.PivotFields("LevelQuantity")
         .Orientation = xlColumnField
         .Position = 2
     End With
-    With pt.PivotFields("Use Group") 'pt.PivotFields("LevelQuantity")
+    With pt.PivotFields("Use Group_area") 'pt.PivotFields("LevelQuantity")
         .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
         .LayoutForm = xlTabular
     End With
@@ -370,7 +371,7 @@ Sub XTabHeadings()
         .Weight = xlThin
     End With
 'Format Column Header 2
-    pt.PivotSelect "'Use Group'", xlLabelOnly, True
+    pt.PivotSelect "'Use Group_area'", xlLabelOnly, True
     With Selection.Font
         .name = "Franklin Gothic Book"
         .Size = 12
@@ -380,6 +381,7 @@ Sub XTabHeadings()
         .TintAndShade = 0
         .ThemeFont = xlThemeFontMinor
     End With
+    Selection.NumberFormat = "#,### GSF; (#,###) GSF; -"
     With Selection.Interior
         .Pattern = xlSolid
         .PatternColorIndex = xlAutomatic
@@ -998,7 +1000,7 @@ Dim shpName As String
     
     ows.Range("A9").EntireRow.Hidden = True
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.GoTo Sheets(sSht).Range("B1")
+    Application.Goto Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(8, iCol))

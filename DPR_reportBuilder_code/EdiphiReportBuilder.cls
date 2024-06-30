@@ -214,7 +214,7 @@ Function pivotDataRows(neededCols As Dictionary, splitByUse As Boolean) As Colle
             End If
             Dim splitUseRows As Collection
             Dim useRowDict As Dictionary
-            Set splitUseRows = calculateUseGroupValues(rowDict, splitByUse:=splitByUse) 'MN return a collection of rowdict, add each to dataColl
+            Set splitUseRows = calculateUseGroupValues(rowDict, splitByUse:=splitByUse)
             For Each useRowDict In splitUseRows
                 dataColl.Add useRowDict
             Next
@@ -398,6 +398,8 @@ Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As C
     Dim i As Integer, hasMultiple As Boolean
     Dim coll As New Collection
     Dim k
+    Dim useAreasDict As Dictionary
+    
     
     Set allocations = ParseJson(dict("use_groups"))
     dict.Remove "use_groups"
@@ -414,6 +416,7 @@ Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As C
             newDict("TakeoffQty") = cDbl_safe(dict("TakeoffQty")) * cDbl_safe(allocations(k) / 100)
             newDict.Add "Use Group_code", k
             newDict.Add "Use Group", k
+            newDict.Add "Use Group_area", getAreaByUseName(k)
             newDict.Add "Use Group_combined", k
             coll.Add newDict
         Next
@@ -452,6 +455,28 @@ e1:
     Set coll = New Collection
     coll.Add dict
     Resume finally
+    
+End Function
+
+Function getAreaByUseName(useName) As Double
+    If Me.debugMode Then On Error GoTo 0 Else On Error GoTo e1
+    Dim useGroup As Dictionary
+    Dim useGroups As Collection
+    Set useGroups = Me.estimateJson("estimate")("stats")("useGroups")
+    
+    For Each useGroup In useGroups
+        If useGroup("label") = useName Then
+            getAreaByUseName = cDbl_safe(useGroup("gsf"))
+            Exit Function
+        ElseIf useGroup("use_group") = useName Then
+            getAreaByUseName = cDbl_safe(useGroup("gsf"))
+            Exit Function
+        End If
+    Next
+
+Exit Function
+e1:
+    'pass
     
 End Function
 
@@ -588,6 +613,11 @@ Function ediphiToDPRcolumnNameMap() As Dictionary
         .Add "quantity", "TakeoffQty"
         .Add "uom", "TakeoffUnit"
         .Add "total_uc", "UnitPrice"
+        .Add "labor_uc", "Labor10"
+        .Add "material_uc", "Material20"
+        .Add "sub_uc", "Sub50"
+        .Add "equip_uc", "Equipment30"
+        .Add "other_uc", "Other40"
         .Add "alternate", "alternate"
         .Add "use_groups", "use_groups"
     End With
