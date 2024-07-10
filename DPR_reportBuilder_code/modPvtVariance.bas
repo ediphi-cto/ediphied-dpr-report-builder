@@ -10,7 +10,7 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
     ActiveWindow.DisplayGridlines = False
     ActiveWindow.DisplayHeadings = False
     With ptCache
-        .CreatePivotTable TableDestination:=ows.Range("B13"), tableName:=sSht
+        .CreatePivotTable TableDestination:=ows.Range("B13"), TableName:=sSht
     End With
     Set pt = ows.PivotTables(1)
     With pt

@@ -690,6 +690,7 @@ On Error GoTo e1
     ReportTrack
     
 'Build pivot report
+    Call CollectDataIntoDictionary
     Call Create_PivotTable_ODBC_CntrlEst
     
     bCkb1 = False
@@ -698,8 +699,20 @@ On Error GoTo e1
     bCkb4 = False
     bCkb5 = False
     bCkbAll = False
+    
+    sLvl1Code = ""
+    sLvl1Item = ""
+    sLvl2Code = ""
+    sLvl2Item = ""
+    sLvl3Code = ""
+    sLvl3Item = ""
+    sLvl4Code = ""
+    sLvl4Item = ""
+    sLvl5Code = ""
+    sLvl5Item = ""
     Unload Me
-    'MsgBox "Report Complete", vbOKOnly, "DPR Report Builder"
+    
+    MsgBox "Control Estimate Report Complete" & vbCrLf & "Use the Report Options to show/hide Category Columns.", vbOKOnly, "DPR Report Builder"
     
     On Error GoTo finally
     
@@ -1630,7 +1643,7 @@ Private Sub UserForm_Initialize()
         End With
     Else
         With MultiPage1
-            .Pages(0).Enabled = False
+            .Pages(0).visible = False
             .Pages(1).Enabled = True
             .Pages(2).Enabled = True
             .Pages(3).Enabled = True
@@ -1752,5 +1765,7 @@ Private Sub UserForm_Terminate()
     'If Not thisReportBuilder.success Then closeMe
     
 End Sub
+
+
 
 

@@ -34,7 +34,7 @@ Public Sub Create_PivotTable_ODBC_MO(splitByUse As Boolean)
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
     ActiveWindow.DisplayHeadings = False
-    Set pt = ptCache.CreatePivotTable(TableDestination:=ows.Range("B13"), tableName:=sSht)
+    Set pt = ptCache.CreatePivotTable(TableDestination:=ows.Range("B13"), TableName:=sSht)
     With pt
         .TableStyle2 = "DPR_Estimating_Style_01"
         .HasAutoFormat = False

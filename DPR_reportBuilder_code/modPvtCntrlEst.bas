@@ -280,7 +280,7 @@ Public Sub Create_PivotTable_ODBC_CntrlEst()
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
     ActiveWindow.DisplayHeadings = False
-    Set pt = ptCache.CreatePivotTable(TableDestination:=ows.Range("B13"), tableName:=sSht)
+    Set pt = ptCache.CreatePivotTable(TableDestination:=ows.Range("B13"), TableName:=sSht)
     With pt
         .TableStyle2 = "DPR_CntrlEst"
         .HasAutoFormat = False
@@ -1102,3 +1102,5 @@ Sub clear_sCat()
     sCat62 = 0
     sCat70 = 0
 End Sub
+
+

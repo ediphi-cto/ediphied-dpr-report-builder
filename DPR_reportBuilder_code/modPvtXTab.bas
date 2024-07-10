@@ -15,7 +15,7 @@ Public Sub Create_PivotTable_ODBC_XT()
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
     ActiveWindow.DisplayHeadings = False
-    Set pt = ptCache.CreatePivotTable(TableDestination:=ows.Range("B9"), tableName:=sSht)
+    Set pt = ptCache.CreatePivotTable(TableDestination:=ows.Range("B9"), TableName:=sSht)
     With pt
         .TableStyle2 = "CrossTabReport_1"
         .HasAutoFormat = False
@@ -1009,6 +1009,8 @@ Dim shpName As String
         .Width = cl.Width
     End With
 End Sub
+
+
 
 
 
