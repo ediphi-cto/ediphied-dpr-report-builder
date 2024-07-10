@@ -415,10 +415,9 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
     Call ResetSheetScroll
     bPvt = False
     On Error GoTo 0
-    Set ptCache.Recordset = Nothing
     Set ptCache = Nothing
     Set pt = Nothing
-    Set rsNew = Nothing
+
 End Sub
 
 Private Sub FrmtLvl1VAR()

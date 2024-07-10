@@ -56,7 +56,7 @@ Private Sub cmdOK_Click()
     Call clearStrings
     
     Dim post As New UserEvents
-    post.slackPost "Initial Estimate Created" & vbLf & sortLabel & vbLf & _
+    post.slackPost "INITIAL REPORT Created" & vbLf & sortLabel & vbLf & _
         "Uses Split: " & cStr_safe(chkSplitByUsePrimary.Value), url:=myUrl
     
 finally:
@@ -678,6 +678,7 @@ End Sub
 '**********************************************************************************************************************************************
 
 Private Sub cmdOK3_Click()
+On Error GoTo e1
 'sCurrency = Range("rngCurrency").Text
 
     sSht = "Control Estimate - " & getPtCount
@@ -690,7 +691,6 @@ Private Sub cmdOK3_Click()
     
 'Build pivot report
     Call Create_PivotTable_ODBC_CntrlEst
-    Call clearStrings
     
     bCkb1 = False
     bCkb2 = False
@@ -699,7 +699,30 @@ Private Sub cmdOK3_Click()
     bCkb5 = False
     bCkbAll = False
     Unload Me
-    MsgBox "Report Complete", vbOKOnly, "DPR Report Builder"
+    'MsgBox "Report Complete", vbOKOnly, "DPR Report Builder"
+    
+    On Error GoTo finally
+    
+    Dim sortLabel As String
+    
+    If iLvl >= 1 Then sortLabel = "-" & sLvl1Name
+    If iLvl >= 2 Then sortLabel = sortLabel & vbLf & "   -" & sLvl2Name
+    If iLvl >= 3 Then sortLabel = sortLabel & vbLf & "      -" & sLvl3Name
+    If iLvl >= 4 Then sortLabel = sortLabel & vbLf & "         -" & sLvl4Name
+    If iLvl >= 5 Then sortLabel = sortLabel & vbLf & "            -" & sLvl5Name
+    Call clearStrings
+    
+    Dim post As New UserEvents
+    post.slackPost "CONTROL ESTIMATE Created" & vbLf & sortLabel, url:=myUrl
+    
+finally:
+    eventsOn
+
+Exit Sub
+e1:
+    logError "general failure creating control estimate"
+    Resume finally
+    
 End Sub
 
 Private Sub cboCLvl1_Change()
@@ -978,6 +1001,7 @@ End Sub
 '*****Multipage1 Page 4*****
 '***************************
 Private Sub cmdOK2_Click()
+On Error GoTo e1
 'sCurrency = Range("rngCurrency").Text
     sSht = "XTab Report - " & getPtCount
     sRprt = sXRprtName
@@ -989,14 +1013,36 @@ Private Sub cmdOK2_Click()
     
 'Build pivot report
     Create_PivotTable_ODBC_XT
-    Call clearStrings
     ckbXLvl1 = False
     ckbXLvl2 = False
     ckbXLvl3 = False
     ckbXLvl4 = False
     ckbXLvl5 = False
     Unload Me
-    MsgBox "Report Complete", vbOKOnly, "DPR Report Builder"
+    'MsgBox "Report Complete", vbOKOnly, "DPR Report Builder"
+    
+    On Error GoTo finally
+    
+    Dim sortLabel As String
+    sortLabel = "Columns: " & cboLvl0.Value & vbLf
+    If iLvl >= 1 Then sortLabel = "-" & sLvl1Name
+    If iLvl >= 2 Then sortLabel = sortLabel & vbLf & "   -" & sLvl2Name
+    If iLvl >= 3 Then sortLabel = sortLabel & vbLf & "      -" & sLvl3Name
+    If iLvl >= 4 Then sortLabel = sortLabel & vbLf & "         -" & sLvl4Name
+    If iLvl >= 5 Then sortLabel = sortLabel & vbLf & "            -" & sLvl5Name
+    Call clearStrings
+    
+    Dim post As New UserEvents
+    post.slackPost "CROSS TAB Report Created" & vbLf & sortLabel, url:=myUrl
+    
+finally:
+    eventsOn
+
+Exit Sub
+e1:
+    logError "general failure creating cross tab report"
+    Resume finally
+    
 End Sub
 
 Private Sub cboLvl0_Change()
@@ -1586,7 +1632,7 @@ Private Sub UserForm_Initialize()
         With MultiPage1
             .Pages(0).Enabled = False
             .Pages(1).Enabled = True
-            .Pages(2).Enabled = False
+            .Pages(2).Enabled = True
             .Pages(3).Enabled = True
             .Pages(4).Enabled = False
         End With
@@ -1594,7 +1640,7 @@ Private Sub UserForm_Initialize()
     
     LoadCBO "cboBLvl1", "Page1"
     LoadCBO "cboLvl1", "Page2"
-    'LoadCBO "cboCLvl1", "Page3"
+    LoadCBO "cboCLvl1", "Page3"
     LoadCBO "cboLvl0", "Page4"
     
 End Sub

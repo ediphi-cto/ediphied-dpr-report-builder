@@ -181,13 +181,15 @@ Function findNeededColumns() As Dictionary
 End Function
    
 Function pivotDataRows(neededCols As Dictionary, splitByUse As Boolean) As Collection
+    'this function takes the raw data ws and creates dictionaries for each row (a line item)
+    'it will create multiple dictionaries for line items that are allocated to use groups if splitByUse is true
     
     Dim ran As Range
     Dim rowDict As Dictionary
     Dim dataColl As New Collection
     Dim colOffset As Integer
     Dim k
-    Dim grandTotal As Double
+    Dim grandTotal As Double, crewHours As Double, unitsPerHr As Double
     Dim li As Dictionary
     
     Set ran = Me.rawDataWS.[a4]
@@ -203,21 +205,37 @@ Function pivotDataRows(neededCols As Dictionary, splitByUse As Boolean) As Colle
         Next
         If Not isChildItem(rowDict) And isBaseBid(rowDict) Then
             'filter out alternates and assembly child line items
+            
+            'create a grand total column
             grandTotal = cDbl_safe(rowDict("UnitPrice")) * cDbl_safe(rowDict("TakeoffQty"))
             grandTotal = Round(grandTotal, 2)
             rowDict.Add "GrandTotal", grandTotal
+            
+            'create a manhours column
+            unitsPerHr = cDbl_safe(rowDict("UnitsPerHour"))
+            If unitsPerHr <> 0 Then
+                crewHours = cDbl_safe(rowDict("TakeoffQty")) / unitsPerHr
+            Else
+                crewHours = 0
+            End If
+            rowDict.Add "Manhours", crewHours 'MN TODO this needs to change once ediphi allows crews applied to labor rates
+            
+            'create a notes column
             If rowDict.Exists("ItemNote") Then
                 'pass
             Else
                 Set li = Me.findOne(rowDict("id"), "line_items")
                 If Not li Is Nothing And li.Exists("notes") Then rowDict.Add "ItemNote", li("notes")
             End If
+            
+            'create use group columns
             Dim splitUseRows As Collection
             Dim useRowDict As Dictionary
             Set splitUseRows = calculateUseGroupValues(rowDict, splitByUse:=splitByUse)
             For Each useRowDict In splitUseRows
                 dataColl.Add useRowDict
             Next
+            
         End If
         Set ran = ran.Offset(1, 0)
         If ran.row > ran.Parent.UsedRange.Rows.count Then Exit Do
@@ -614,6 +632,7 @@ Function ediphiToDPRcolumnNameMap() As Dictionary
         .Add "uom", "TakeoffUnit"
         .Add "total_uc", "UnitPrice"
         .Add "labor_uc", "Labor10"
+        .Add "prod_rate", "UnitsPerHour"
         .Add "material_uc", "Material20"
         .Add "sub_uc", "Sub50"
         .Add "equip_uc", "Equipment30"

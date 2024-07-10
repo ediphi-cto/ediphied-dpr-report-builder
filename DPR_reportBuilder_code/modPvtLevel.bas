@@ -333,10 +333,8 @@ Public Sub Create_PivotTable_ODBC_MO(splitByUse As Boolean)
     Call PageSetup
     Call ResetSheetScroll
     bPvt = False
-    Set ptCache.Recordset = Nothing
     Set ptCache = Nothing
     Set pt = Nothing
-    Set rsNew = Nothing
     
 Exit Sub
 e1:

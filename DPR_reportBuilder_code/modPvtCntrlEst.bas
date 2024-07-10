@@ -1,8 +1,9 @@
 Attribute VB_Name = "modPvtCntrlEst"
 Public Sub Create_PivotTable_ODBC_CntrlEst()
     bPvt = True
-    Set ptCache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlExternal, Version:=xlPivotTableVersion15)
-    Set ptCache.Recordset = rsNew
+    
+    Set ptCache = ActiveWorkbook.PivotCaches.Create( _
+    SourceType:=xlDatabase, SourceData:="tblEdiphiPivotDataUseSplit", Version:=xlPivotTableVersion15)
     ActiveWorkbook.Sheets.Add(Before:=Sheet4).name = sSht
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
@@ -352,10 +353,9 @@ Public Sub Create_PivotTable_ODBC_CntrlEst()
     bPvt = False
     On Error GoTo 0
     If bCode = True Then MsgBox "Highlighted rows indicate uncategorized items", vbInformation, "Category Codes"
-    Set ptCache.Recordset = Nothing
     Set ptCache = Nothing
     Set pt = Nothing
-    Set rsNew = Nothing
+
 End Sub
 
 Private Sub FrmtCLvl1()

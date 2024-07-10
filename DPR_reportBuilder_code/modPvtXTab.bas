@@ -249,10 +249,8 @@ Public Sub Create_PivotTable_ODBC_XT()
     sLvl4Item = ""
     sLvl5Item = ""
     bPvt = False
-'    Set ptCache.Recordset = Nothing
     Set ptCache = Nothing
     Set pt = Nothing
-    Set rsNew = Nothing
     
 End Sub
 
@@ -381,7 +379,7 @@ Sub XTabHeadings()
         .TintAndShade = 0
         .ThemeFont = xlThemeFontMinor
     End With
-    Selection.NumberFormat = "#,### GSF; (#,###) GSF; -"
+    Selection.NumberFormat = "#,###"" GSF""; (#,###)"" GSF""; -"
     With Selection.Interior
         .Pattern = xlSolid
         .PatternColorIndex = xlAutomatic
