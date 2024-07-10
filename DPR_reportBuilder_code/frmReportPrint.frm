@@ -37,13 +37,13 @@ nFlag = True
 End Sub
 
 Private Sub cmdOK_Click()
-    x = 0
+    X = 0
     For i = 0 To lstSheets.ListCount - 1
         If lstSheets.Selected(i) = True Then
-            x = x + 1
+            X = X + 1
         End If
     Next i
-    If x = 0 Then
+    If X = 0 Then
         MsgBox "No sheets were selected." & vbCrLf & "Please make a selection to continue.", vbCritical, "Invalid Selection"
         Exit Sub
     End If
@@ -61,14 +61,14 @@ Private Sub cmdPdf_Click()
     Dim fileName As String
     Dim fileSavename As String
     Dim ans
-    x = 0
+    X = 0
     sDir = CurDir()
     For i = 0 To lstSheets.ListCount - 1
         If lstSheets.Selected(i) = True Then
-            x = x + 1
+            X = X + 1
         End If
     Next i
-    If x = 0 Then
+    If X = 0 Then
         MsgBox "No sheets were selected." & vbCrLf & "Please make a selection to continue.", vbCritical, "Invalid Selection"
         Exit Sub
     End If
@@ -92,13 +92,13 @@ Private Sub cmdPdf_Click()
 End Sub
 
 Private Sub cmdPreview_Click()
-    x = 0
+    X = 0
     For i = 0 To lstSheets.ListCount - 1
         If lstSheets.Selected(i) = True Then
-            x = x + 1
+            X = X + 1
         End If
     Next i
-    If x = 0 Then
+    If X = 0 Then
         MsgBox "No sheets were selected." & vbCrLf & "Please make a selection to continue.", vbCritical, "Invalid Selection"
         Exit Sub
     End If

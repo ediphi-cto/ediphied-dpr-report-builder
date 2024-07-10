@@ -22,7 +22,7 @@ Public projectJson As Dictionary
 
 Private Sub triggerWS_Change(ByVal Target As Range)
     
-    If UCase(Target.address(False, False)) = "A1" Then
+    If UCase(Target.Address(False, False)) = "A1" Then
             If Me.debugMode Then On Error GoTo 0 Else On Error Resume Next
             debugMode = (getEnv("DEBUG") = 1)
             If Me.debugMode Then
@@ -51,7 +51,7 @@ Sub migrateDataFrom(csvFileName As String)
     Dim csvFullname As String
     Set csvWB = Workbooks(csvFileName)
     csvFullname = csvWB.FullName
-    colCt = csvWB.Worksheets(1).UsedRange.Columns.count
+    colCt = csvWB.Worksheets(1).UsedRange.Columns.Count
     
     'then close the csv silent
     csvWB.Close Savechanges:=False
@@ -130,7 +130,7 @@ Sub transformDataForPivotTable()
     Dim tbl As ListObject
     Dim lastHeaderCol As Integer
     Set tbl = Me.pivotDataWS.ListObjects("tblEdiphiPivotData")
-    lastHeaderCol = tbl.HeaderRowRange.Columns(tbl.HeaderRowRange.Columns.count).Column
+    lastHeaderCol = tbl.HeaderRowRange.Columns(tbl.HeaderRowRange.Columns.Count).Column
     Set startRan = Me.pivotDataWS.Cells(tbl.HeaderRowRange.row, lastHeaderCol + 2)
     
     Set dataColl = pivotDataRows(neededCols, splitByUse:=True)
@@ -238,10 +238,10 @@ Function pivotDataRows(neededCols As Dictionary, splitByUse As Boolean) As Colle
             
         End If
         Set ran = ran.Offset(1, 0)
-        If ran.row > ran.Parent.UsedRange.Rows.count Then Exit Do
+        If ran.row > ran.Parent.UsedRange.Rows.Count Then Exit Do
     Loop
     
-    If dataColl.count = 0 Then
+    If dataColl.Count = 0 Then
         'no line items, can happen when the estimate is all alternates and no base bid
         Me.Cancel = True
         MsgBox "There aren't any Base Bid line items in your ediphi estimate", vbCritical
@@ -286,7 +286,7 @@ Sub parseMarkups2Table()
     Dim markupRow As Dictionary
     Dim dataColl As New Collection
     
-    If markups.count = 0 Then
+    If markups.Count = 0 Then
         'add a blank row so the table creates, many things ref the resulting tblTotals table
         markups.Add ParseJson( _
         "{""id"":"""",""order"":"""",""description"":"""",""percentage"":"""",""total"":""""}")
@@ -422,9 +422,9 @@ Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As C
     Set allocations = ParseJson(dict("use_groups"))
     dict.Remove "use_groups"
 
-    If allocations.count = 0 Then GoTo e1
+    If allocations.Count = 0 Then GoTo e1
     
-    If splitByUse And allocations.count > 1 Then
+    If splitByUse And allocations.Count > 1 Then
     
         Dim newDict As Dictionary
         For Each k In allocations.Keys

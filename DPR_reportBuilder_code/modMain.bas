@@ -5,7 +5,7 @@ Option Explicit
         Lib "user32" ( _
             ByVal hwnd As Long, _
             ByVal hwndInsertAfter As Long, _
-            ByVal x As Long, ByVal Y As Long, _
+            ByVal X As Long, ByVal Y As Long, _
             ByVal cx As Long, ByVal cy As Long, _
             ByVal wFlags As Long) _
     As LongPtr
@@ -14,7 +14,7 @@ Option Explicit
         Lib "user32" ( _
             ByVal hwnd As Long, _
             ByVal hwndInsertAfter As Long, _
-            ByVal x As Long, ByVal Y As Long, _
+            ByVal X As Long, ByVal Y As Long, _
             ByVal cx As Long, ByVal cy As Long, _
             ByVal wFlags As Long) _
     As LongPtr
@@ -114,6 +114,20 @@ Public sLvl2Code As String
 Public sLvl3Code As String
 Public sLvl4Code As String
 Public sLvl5Code As String
+
+Public iLvl0Item As Integer
+Public iLvl1Item As Integer
+Public iLvl2Item As Integer
+Public iLvl3Item As Integer
+Public iLvl4Item As Integer
+Public iLvl5Item As Integer
+Public iLvl0Code As Integer
+Public iLvl1Code As Integer
+Public iLvl2Code As Integer
+Public iLvl3Code As Integer
+Public iLvl4Code As Integer
+Public iLvl5Code As Integer
+
 Public sLvl0Name As String
 Public sLvl1Name As String
 Public sLvl2Name As String
@@ -157,7 +171,7 @@ Public iRow As Long
 Public C As Long
 Public i As Integer
 Public r As Integer
-Public x As Integer
+Public X As Integer
 Public Y As Integer
 Public z As Integer
 Public ptc As Integer
@@ -360,15 +374,15 @@ Sub SheetFormatting()
     On Error Resume Next
     Set ows = ActiveSheet
         If ows.CodeName = "Sheet2" Then
-            ows.PageSetup.PrintArea = ows.Range("$B$1:$K$56").address
+            ows.PageSetup.PrintArea = ows.Range("$B$1:$K$56").Address
         ElseIf ows.CodeName = "Sheet3" Then
-            ows.PageSetup.PrintArea = ActualUsedRange(ows).address
+            ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
             ows.PageSetup.PrintTitleRows = "$1:$7"
         ElseIf ows.name = "Cover" Then
             'pass
         Else
             Set pt = ows.PivotTables(1)
-            ows.PageSetup.PrintArea = ActualUsedRange(ows).address
+            ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
             If InStr(pt.name, "XTab") Then
                 ows.PageSetup.PrintTitleRows = "$1:$12"
             Else
@@ -387,13 +401,13 @@ Sub SheetFormatingAll()
     On Error GoTo e1
     For Each ows In ActiveWorkbook.Worksheets
         If ows.CodeName = "Sheet2" Then
-            ows.PageSetup.PrintArea = ows.Range("$B$1:$K$56").address
+            ows.PageSetup.PrintArea = ows.Range("$B$1:$K$56").Address
         ElseIf ows.CodeName = "Sheet3" Then
-            ows.PageSetup.PrintArea = ActualUsedRange(ows).address
+            ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
             ows.PageSetup.PrintTitleRows = "$1:$7"
         Else
             Set pt = ows.PivotTables(1)
-            ows.PageSetup.PrintArea = ActualUsedRange(ows).address
+            ows.PageSetup.PrintArea = ActualUsedRange(ows).Address
             If InStr(pt.name, "XTab") Then
                 ows.PageSetup.PrintTitleRows = "$1:$12"
             Else
@@ -425,7 +439,7 @@ Sub PageSetup()
         '.LeftFooterPicture.fileName = sPth & pic
         .LeftFooter = "&G"
         .CenterFooter = "Page &P of &N"
-        .RightFooter = Range("rngEstName").text
+        .RightFooter = Range("rngEstName").Text
     End With
     Application.PrintCommunication = False
     With ows.PageSetup
@@ -491,10 +505,10 @@ Dim C
         If Not C Is Nothing Then
             lvl = C.Offset(0, 1).Value
         End If
-        iAddRow = ActualUsedRange(ows).Rows.count
+        iAddRow = ActualUsedRange(ows).Rows.Count
         With pt.TableRange1
-            iGTRow = .Cells(.Cells.count).row
-            iCol = .Cells(.Cells.count).Column
+            iGTRow = .Cells(.Cells.Count).row
+            iCol = .Cells(.Cells.Count).Column
         End With
         On Error Resume Next
         ActiveSheet.Range(Cells(iGTRow + 1, 2), Cells(iAddRow, iCol)).Select
@@ -551,7 +565,7 @@ Sub FormatCntrlEst()
     With pt.RowRange
         .FormatConditions.Delete
         .FormatConditions.Add Type:=xlExpression, Formula1:=sFormula
-        .FormatConditions(.FormatConditions.count).SetFirstPriority
+        .FormatConditions(.FormatConditions.Count).SetFirstPriority
         .FormatConditions(1).StopIfTrue = False
         With .FormatConditions(1).Font
             .Bold = False
@@ -560,7 +574,7 @@ Sub FormatCntrlEst()
         End With
         With .FormatConditions(1).Interior
             .PatternColorIndex = xlAutomatic
-            .color = 65535
+            .Color = 65535
             .TintAndShade = 0
         End With
     End With

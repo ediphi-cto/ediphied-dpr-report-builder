@@ -89,7 +89,7 @@ Function coll_as_str(coll As Collection, Optional indent_lvl As Integer = 0, Opt
     Dim coll_size As Integer
     Dim i As Integer
     
-    coll_size = coll.count
+    coll_size = coll.Count
     If coll_size = 0 Then
         coll_as_str = "EMPTY COLLECTION"
         Exit Function
@@ -172,7 +172,7 @@ End Function
 Function range_as_str(ran) As String
     
     If TypeName(ran) <> "Range" Then Exit Function
-    range_as_str = "Range Address: " & ran.address & " Sheet: " & ran.Parent.name
+    range_as_str = "Range Address: " & ran.Address & " Sheet: " & ran.Parent.name
 
 End Function
 

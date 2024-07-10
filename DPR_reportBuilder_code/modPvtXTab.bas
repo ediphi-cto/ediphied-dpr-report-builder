@@ -15,7 +15,7 @@ Public Sub Create_PivotTable_ODBC_XT()
     Set ows = ActiveSheet
     ActiveWindow.DisplayGridlines = False
     ActiveWindow.DisplayHeadings = False
-    Set pt = ptCache.CreatePivotTable(TableDestination:=ows.Range("B9"), TableName:=sSht)
+    Set pt = ptCache.CreatePivotTable(TableDestination:=ows.Range("B9"), tableName:=sSht)
     With pt
         .TableStyle2 = "CrossTabReport_1"
         .HasAutoFormat = False
@@ -30,7 +30,7 @@ Public Sub Create_PivotTable_ODBC_XT()
     Set pvtCField = pt.CalculatedFields.Add("UnitCost", "=GrandTotal / TakeoffQty")
     Set pvtSField = pt.CalculatedFields.Add("CostSF", "=GrandTotal /" & Range("rngJobSize").Value)
     Set pvtOField = pt.CalculatedFields.Add("AreaSize", "=" & Range("rngJobSize").Value)
-    x = 1
+    X = 1
     'Build Levels
 '    On Error Resume Next
     For i = 1 To iLvl
@@ -38,16 +38,16 @@ Public Sub Create_PivotTable_ODBC_XT()
         Case 1 'Group Level 1
             With pt.PivotFields(sLvl1Code)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl1Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            x = x + 1
+            X = X + 1
             With pt.PivotFields(sLvl1Item)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl1Item)
                 '.Caption = sLvl1Name
@@ -56,20 +56,20 @@ Public Sub Create_PivotTable_ODBC_XT()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            x = x + 1
+            X = X + 1
         Case 2
             With pt.PivotFields(sLvl2Code)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl2Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            x = x + 1
+            X = X + 1
             With pt.PivotFields(sLvl2Item)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl2Item)
                 '.Caption = sLvl2Name
@@ -78,21 +78,21 @@ Public Sub Create_PivotTable_ODBC_XT()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            x = x + 1
+            X = X + 1
 'Group Level 3
         Case 3
             With pt.PivotFields(sLvl3Code)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl3Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            x = x + 1
+            X = X + 1
             With pt.PivotFields(sLvl3Item)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl3Item)
                 '.Caption = sLvl3Name
@@ -101,21 +101,21 @@ Public Sub Create_PivotTable_ODBC_XT()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            x = x + 1
+            X = X + 1
 'Group Level 4
         Case 4
             With pt.PivotFields(sLvl4Code)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl4Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            x = x + 1
+            X = X + 1
             With pt.PivotFields(sLvl4Item)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl4Item)
                 '.Caption = sLvl4Name
@@ -124,21 +124,21 @@ Public Sub Create_PivotTable_ODBC_XT()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            x = x + 1
+            X = X + 1
 'Group Level 5
         Case 5
             With pt.PivotFields(sLvl5Code)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl5Code)
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
-            x = x + 1
+            X = X + 1
             With pt.PivotFields(sLvl5Item)
                 .Orientation = xlRowField
-                .Position = x
+                .Position = X
             End With
             With pt.PivotFields(sLvl5Item)
                 '.Caption = sLvl5Name
@@ -147,7 +147,7 @@ Public Sub Create_PivotTable_ODBC_XT()
                 .LayoutCompactRow = False
                 .SubtotalName = "Subtotal: ?"
             End With
-            x = x + 1
+            X = X + 1
         End Select
     Next i
     
@@ -211,10 +211,10 @@ Public Sub Create_PivotTable_ODBC_XT()
     Call SetSheetHeadings
 'Page Formatting for Printing
     With pt.TableRange1
-        iGTRow = .Cells(.Cells.count).row
-        iCol = .Cells(.Cells.count).Column
+        iGTRow = .Cells(.Cells.Count).row
+        iCol = .Cells(.Cells.Count).Column
     End With
-    ActiveSheet.PageSetup.PrintArea = Range(Cells(1, 2), Cells(iGTRow, iCol)).address
+    ActiveSheet.PageSetup.PrintArea = Range(Cells(1, 2), Cells(iGTRow, iCol)).Address
     ActiveSheet.PageSetup.PrintTitleRows = "$1:$10"
 
     ows.Range("B12").HorizontalAlignment = xlLeft
@@ -276,7 +276,7 @@ Sub FormatXTab()
         .Size = 12
         .Bold = False
         .Underline = xlUnderlineStyleNone
-        .color = -16777216
+        .Color = -16777216
         .TintAndShade = 0
     End With
     
@@ -299,7 +299,7 @@ Sub FormatXTab()
         .Size = 12
         .Bold = False
         .Underline = xlUnderlineStyleNone
-        .color = -16777216
+        .Color = -16777216
         .TintAndShade = 0
     End With
     Selection.HorizontalAlignment = xlRight
@@ -322,7 +322,7 @@ Sub FormatXTab()
         .Size = 12
         .Bold = False
         .Underline = xlUnderlineStyleNone
-        .color = -16777216
+        .Color = -16777216
         .TintAndShade = 0
     End With
     Selection.HorizontalAlignment = xlRight
@@ -582,7 +582,7 @@ Sub FormatXLevel1()
         .Size = 12
         .Bold = True
         .Underline = xlUnderlineStyleNone
-        .color = -16777216
+        .Color = -16777216
         .TintAndShade = 0
     End With
     With Selection
@@ -671,7 +671,7 @@ Sub FormatXLevel2()
             .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = False
-            .color = -16777216
+            .Color = -16777216
             .TintAndShade = 0
         End With
     Else
@@ -679,7 +679,7 @@ Sub FormatXLevel2()
             .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = True
-            .color = -16777216
+            .Color = -16777216
             .TintAndShade = 0
         End With
     End If
@@ -713,7 +713,7 @@ Sub FormatXLevel2()
         .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
-        .color = -16777216
+        .Color = -16777216
         .TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl2Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -752,7 +752,7 @@ Sub FormatXLevel3()
             .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = False
-            .color = -16777216
+            .Color = -16777216
             .TintAndShade = 0
         End With
     Else
@@ -760,7 +760,7 @@ Sub FormatXLevel3()
             .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = True
-            .color = -16777216
+            .Color = -16777216
             .TintAndShade = 0
         End With
     End If
@@ -783,7 +783,7 @@ Sub FormatXLevel3()
         .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
-        .color = -16777216
+        .Color = -16777216
         .TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl3Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -816,7 +816,7 @@ Sub FormatXLevel4()
             .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = False
-            .color = -16777216
+            .Color = -16777216
             .TintAndShade = 0
         End With
     Else
@@ -824,7 +824,7 @@ Sub FormatXLevel4()
             .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = True
-            .color = -16777216
+            .Color = -16777216
             .TintAndShade = 0
         End With
     End If
@@ -842,7 +842,7 @@ Sub FormatXLevel4()
         .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
-        .color = -16777216
+        .Color = -16777216
         .TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl4Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -871,7 +871,7 @@ Sub FormatXLevel5()
             .name = "Franklin Gothic Book"
             .Size = 12
             .Bold = False
-            .color = -16777216
+            .Color = -16777216
             .TintAndShade = 0
         End With
     Else
@@ -879,7 +879,7 @@ Sub FormatXLevel5()
             .name = "Franklin Gothic Book"
             .Size = 10
             .Bold = True
-            .color = -16777216
+            .Color = -16777216
             .TintAndShade = 0
         End With
     End If
@@ -901,7 +901,7 @@ Sub FormatXLevel5()
         .name = "Franklin Gothic Book"
         .Size = 12
         .Bold = True
-        .color = -16777216
+        .Color = -16777216
         .TintAndShade = 0
     End With
     pt.PivotSelect "'" & sLvl5Item & "'[All;Total]", xlDataOnly + xlFirstRow, True
@@ -985,7 +985,7 @@ Dim shpName As String
         .RowHeight = 35.25
     End With
     With ows.PivotTables(1).TableRange1
-        iCol = .Cells(.Cells.count).Column
+        iCol = .Cells(.Cells.Count).Column
     End With
     With ows.Range(Cells(1, 2), Cells(1, iCol))
         .Interior.PatternColorIndex = xlAutomatic
@@ -998,7 +998,7 @@ Dim shpName As String
     
     ows.Range("A9").EntireRow.Hidden = True
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.Goto Sheets(sSht).Range("B1")
+    Application.GoTo Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(8, iCol))

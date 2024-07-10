@@ -129,8 +129,8 @@ End Sub
 Private Sub UserForm_Activate()
     Set ows = ActiveSheet
     txtMainHdr.Value = ows.Cells(1, 2).Value
-    txtMainHdr.BackColor = ows.Cells(1, 2).Interior.color
-    txtMainHdr.ForeColor = ows.Cells(1, 2).Font.color
+    txtMainHdr.BackColor = ows.Cells(1, 2).Interior.Color
+    txtMainHdr.ForeColor = ows.Cells(1, 2).Font.Color
     txtHeading1.Value = Range("rngHeading1").Value
 '    txtHeading2.Value = Range("rngHeading2").Value
     txtHeading3.Value = Range("rngHeading3").Value

@@ -139,7 +139,7 @@ Dim rng As Range
         .RowGrand = True
     End With
     Set rng = pt.DataBodyRange
-    rng.Cells(rng.Rows.count, rng.Columns.count).ShowDetail = True
+    rng.Cells(rng.Rows.Count, rng.Columns.Count).ShowDetail = True
 errHndlr:
     Exit Sub
 End Sub

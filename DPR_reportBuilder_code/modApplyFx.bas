@@ -2,7 +2,7 @@ Attribute VB_Name = "modApplyFx"
 Option Explicit
 
 Dim i As Integer
-Dim g, v, w, x, Y, z
+Dim g, v, w, X, Y, z
 Dim ows As Worksheet
 Dim col As Integer
 Dim rGT, c1, c2, c3, c4, c5
@@ -32,7 +32,7 @@ Sub ConvertFxL1() 'Convert Level 1 report to range with formulas
             If ows.Cells(i, 3).Value <> "" And InStr(ows.Cells(i, 3).Value, "Subtotal") = False Then
                 With ows.Range("C" & i)
                     Set rng1 = Range(ows.Range("C" & i), ows.Range("C" & i).End(xlDown))
-                    z = rng1.Rows.count - 2
+                    z = rng1.Rows.Count - 2
                     Cells(rng1.End(xlDown).row, col).FormulaR1C1 = "=SUM(R[-" & z & "]C:R[-1]C)" ' Level 1 Item Subtotal
                     iGT = iGT + 1
                     g = rngGT.row - rng1.End(xlDown).row
@@ -87,7 +87,7 @@ Sub ConvertFxL2() 'Convert Level 2 report to range with formulas
                     For Each c1 In rng1
                         If c1.Offset(0, 2).Value <> "" And InStr(c1.Offset(0, 2).Value, "Subtotal") = False Then
                             Set rng2 = Range(c1.Offset(0, 2), (c1.Offset(0, 2).End(xlDown)))
-                            z = rng2.Rows.count - 2
+                            z = rng2.Rows.Count - 2
                             Cells(rng2.End(xlDown).row, col).FormulaR1C1 = "=SUM(R[-" & z & "]C:R[-1]C)" ' Level 2 Item Subtotal
                             Y = rng1.End(xlDown).row - rng2.End(xlDown).row
                             iL1 = iL1 + 1
@@ -158,7 +158,7 @@ Sub ConvertFxL3() 'Convert Level 3 report to range with formulas
                         For Each c2 In rng2
                             If c2.Offset(0, 2).Value <> "" And InStr(c2.Offset(0, 2).Value, "Subtotal") = False Then
                                 Set rng3 = Range(c2.Offset(0, 2), (c2.Offset(0, 2).End(xlDown)))
-                                z = rng3.Rows.count - 2
+                                z = rng3.Rows.Count - 2
                                 Cells(rng3.End(xlDown).row, col).FormulaR1C1 = "=SUM(R[-" & z & "]C:R[-1]C)" ' Level 3 Item Subtotal
                                 Y = rng2.End(xlDown).row - rng3.End(xlDown).row
                                 iL2 = iL2 + 1
@@ -175,11 +175,11 @@ Sub ConvertFxL3() 'Convert Level 3 report to range with formulas
                         Cells(rng2.End(xlDown).row, col).FormulaR1C1 = sST2 & " )" 'Level 2 Subtotal
                         sST2 = "=SUM("
                         iL1 = iL1 + 1
-                        x = rng1.End(xlDown).row - rng2.End(xlDown).row
+                        X = rng1.End(xlDown).row - rng2.End(xlDown).row
                         If iL1 = 1 Then
-                            sST1 = sST1 & "R[-" & x & "]C"
+                            sST1 = sST1 & "R[-" & X & "]C"
                         Else
-                            sST1 = sST1 & ",R[-" & x & "]C"
+                            sST1 = sST1 & ",R[-" & X & "]C"
                         End If
                     End If
                 Next c1
@@ -246,7 +246,7 @@ Sub ConvertFxL4() 'Convert Level 4 report to range with formulas
                                     If c3.Offset(0, 2).Value <> "" And InStr(c3.Offset(0, 2).Value, "Subtotal") = False Then
                                         Set rng4 = Range(c3.Offset(0, 2), (c3.Offset(0, 2).End(xlDown)))
                                         iL3 = iL3 + 1
-                                        z = rng4.Rows.count - 2
+                                        z = rng4.Rows.Count - 2
                                         Cells(rng4.End(xlDown).row, col).FormulaR1C1 = "=SUM(R[-" & z & "]C:R[-1]C)" ' Level 4 Item Subtotal
                                         Y = rng3.End(xlDown).row - rng4.End(xlDown).row
                                         If iL3 = 1 Then
@@ -262,11 +262,11 @@ Sub ConvertFxL4() 'Convert Level 4 report to range with formulas
                                 Cells(rng3.End(xlDown).row, col).FormulaR1C1 = sST3 & " )" ' Level 3 Subtotal
                                 sST3 = "=SUM("
                                 iL2 = iL2 + 1
-                                x = rng2.End(xlDown).row - rng3.End(xlDown).row
+                                X = rng2.End(xlDown).row - rng3.End(xlDown).row
                                 If iL2 = 1 Then
-                                    sST2 = sST2 & "R[-" & x & "]C"
+                                    sST2 = sST2 & "R[-" & X & "]C"
                                 Else
-                                    sST2 = sST2 & ",R[-" & x & "]C"
+                                    sST2 = sST2 & ",R[-" & X & "]C"
                                 End If
                             End If
                         Next c2
@@ -349,7 +349,7 @@ Sub ConvertFxL5() 'Convert Level 5 report to range with formulas
                                         If c4.Offset(0, 2).Value <> "" And InStr(c4.Offset(0, 2).Value, "Subtotal") = False Then
                                             Set rng5 = Range(c4.Offset(0, 2), (c4.Offset(0, 2).End(xlDown)))
                                             iL4 = iL4 + 1
-                                            z = rng5.Rows.count - 2
+                                            z = rng5.Rows.Count - 2
                                             Cells(rng5.End(xlDown).row, col).FormulaR1C1 = "=SUM(R[-" & z & "]C:R[-1]C)" 'Level 5 (Item Level Subtotal)
                                             Y = rng4.End(xlDown).row - rng5.End(xlDown).row
                                             If iL4 = 1 Then
@@ -365,12 +365,12 @@ Sub ConvertFxL5() 'Convert Level 5 report to range with formulas
                                         Cells(rng4.End(xlDown).row, col).FormulaR1C1 = sST4 & " )" 'Level 4 Subtotal
                                         sST4 = "=SUM("
                                         iL3 = iL3 + 1
-                                        x = rng3.End(xlDown).row - rng4.End(xlDown).row
-                                        If x = 0 Then x = 1
+                                        X = rng3.End(xlDown).row - rng4.End(xlDown).row
+                                        If X = 0 Then X = 1
                                         If iL3 = 1 Then
-                                            sST3 = sST3 & "R[-" & x & "]C"
+                                            sST3 = sST3 & "R[-" & X & "]C"
                                         Else
-                                            sST3 = sST3 & ",R[-" & x & "]C"
+                                            sST3 = sST3 & ",R[-" & X & "]C"
                                         End If
                                     End If
                                 Next c3

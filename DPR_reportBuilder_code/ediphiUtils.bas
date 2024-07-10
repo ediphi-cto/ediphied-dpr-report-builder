@@ -193,7 +193,7 @@ Function reportErrors() As String
     Dim post As New UserEvents
     
     If errors Is Nothing Then Exit Function
-    If errors.count = 0 Then Exit Function
+    If errors.Count = 0 Then Exit Function
     
     For Each e In errors
         msg = msg + e + vbLf
@@ -324,7 +324,7 @@ Function dictsTo2DArray(dictCollection As Collection, Optional noHeaders As Bool
     Dim i As Integer, j As Integer
     Dim outputArray() As Variant
     
-    If dictCollection.count = 0 Then Exit Function
+    If dictCollection.Count = 0 Then Exit Function
     
     ' Gather all unique keys from each dictionary
     For Each dict In dictCollection
@@ -339,17 +339,17 @@ Function dictsTo2DArray(dictCollection As Collection, Optional noHeaders As Bool
     
     If noHeaders Then
         startInt = 0
-        endInt = dictCollection.count - 1
+        endInt = dictCollection.Count - 1
     Else
         startInt = 1
-        endInt = dictCollection.count
+        endInt = dictCollection.Count
     End If
     
     ' Redim the output array to fit all keys and dictionaries
-    If noHeaders Or dictCollection.count = 1 Then
-        ReDim outputArray(0 To endInt, 0 To allKeys.count - 1)
+    If noHeaders Or dictCollection.Count = 1 Then
+        ReDim outputArray(0 To endInt, 0 To allKeys.Count - 1)
     Else
-        ReDim outputArray(0 To dictCollection.count, 0 To allKeys.count - 1)
+        ReDim outputArray(0 To dictCollection.Count, 0 To allKeys.Count - 1)
     End If
     
     If Not noHeaders Then
@@ -364,7 +364,7 @@ Function dictsTo2DArray(dictCollection As Collection, Optional noHeaders As Bool
     ' Set the subsequent rows to be the values from each dictionary
     For i = startInt To endInt
         Set dict = dictCollection(i - startInt + 1) ' Adjusting index for collection
-        For j = 0 To allKeys.count - 1
+        For j = 0 To allKeys.Count - 1
             key = allKeys.Keys(j)
             If dict.Exists(key) Then
                 outputArray(i, j) = dict(key)

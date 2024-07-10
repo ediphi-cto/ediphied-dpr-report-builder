@@ -27,7 +27,7 @@ On Error GoTo e1
     Set lObj = Sheet0.ListObjects("tblTotals")
     dProjCosts = Sheet3.Range("SysEnd").Offset(0, 6).Value
     
-    If lObj.ListRows.count > 0 Then
+    If lObj.ListRows.Count > 0 Then
         dMarkup = Application.WorksheetFunction.SumIf(lObj.ListColumns(7).DataBodyRange, "Upper", lObj.ListColumns(6).DataBodyRange)
         If dMarkup = 0 Then
             dProjCosts = dProjCosts
@@ -45,13 +45,13 @@ On Error GoTo e1
         i = ows.Range("exTotal").row
     
     'Load Systems Summary ****BELOW**** Markups
-        For r = 1 To lObj.DataBodyRange.Rows.count
+        For r = 1 To lObj.DataBodyRange.Rows.Count
             If lObj.DataBodyRange(r, 7).Value = "Lower" Then
                 Cells(i, 1).EntireRow.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
                 With Cells(i, 2)
                     .Value = lObj.DataBodyRange(r, 4).Value
                     .Font.Size = 12
-                    .Font.color = -16777216
+                    .Font.Color = -16777216
                 End With
                 If lObj.DataBodyRange(r, 9).Value <> "" Then
                     With Cells(i, 4)
@@ -59,20 +59,20 @@ On Error GoTo e1
                         .FormulaR1C1 = lObj.DataBodyRange(r, 5) / 100
                         .NumberFormat = "0.00%"
                         .Font.Size = 12
-                        .Font.color = -16777216
+                        .Font.Color = -16777216
                     End With
                 End If
                 With Cells(i, 7)
                     .NumberFormat = Range("rngNewCur_0").NumberFormatLocal
                     .FormulaR1C1 = lObj.DataBodyRange(r, 6)
                     .Font.Size = 12
-                    .Font.color = -16777216
+                    .Font.Color = -16777216
                 End With
                 With Cells(i, 5)
                     .NumberFormat = Range("rngNewCur_2").NumberFormatLocal
                     .FormulaR1C1 = "=IFERROR(RC[2]/rngJobSize,0)"
                     .Font.Size = 12
-                    .Font.color = -16777216
+                    .Font.Color = -16777216
                 End With
                 i = i + 1
             End If
@@ -106,7 +106,7 @@ setCharts:
     Set rngSeries = Sheet3.Range(Sheet3.Range("SysStart").Offset(1, 1), Sheet3.Range("SysEnd").Offset(-1, 1))
     Set rngCategory = Sheet3.Range(Sheet3.Range("SysStart").Offset(1, 6), Sheet3.Range("SysEnd").Offset(-1, 6))
     ActiveSheet.ChartObjects("chrtExecSummary").Activate
-    ActiveChart.SetSourceData source:=Sheets("Systems Summary").Range(rngSeries.address & "," & rngCategory.address)
+    ActiveChart.SetSourceData source:=Sheets("Systems Summary").Range(rngSeries.Address & "," & rngCategory.Address)
 
     Set RngToCover = ActiveSheet.Range("$H$27:$K$55")
     Set ChtOb = ActiveChart.Parent

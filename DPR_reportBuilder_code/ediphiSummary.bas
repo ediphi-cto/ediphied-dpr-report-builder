@@ -13,7 +13,7 @@ Sub createSummary(groupByHeader As String)
     Dim printRan As Range
     Set printRan = summaryWS.[\print]
     Dim rowCt As Integer
-    rowCt = WorksheetFunction.Max(summaryRows.count - 2, 1)
+    rowCt = WorksheetFunction.Max(summaryRows.Count - 2, 1)
     printRan.Offset(1, 0).Resize(rowCt, 1).EntireRow.Insert
     Set printRan = printDictList2Range(dictColl:=summaryRows, startCell:=printRan, noHeaders:=True)
     
@@ -67,7 +67,7 @@ Function createSummaryDictColl(groupByHeader As String) As Collection
     Dim sortCodeRan As Range, sortNameRan As Range
     Dim summaryDict As New Dictionary
     Dim rowDict As Dictionary
-    Do Until totalRan.row > tbl.Range.Rows.count
+    Do Until totalRan.row > tbl.Range.Rows.Count
         Set sortCodeRan = Intersect(sortCodeCol.EntireColumn, totalRan.EntireRow)
         Set sortNameRan = Intersect(sortNameCol.EntireColumn, totalRan.EntireRow)
         If Not summaryDict.Exists(sortCodeRan.Value) Then

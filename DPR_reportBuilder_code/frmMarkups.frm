@@ -36,7 +36,7 @@ Dim C
             End If
         End With
     Next i
-    If lObj.ListRows.count > 0 Then
+    If lObj.ListRows.Count > 0 Then
         Call clearAllAddons
         Call ReApplyAddons
         Call ExecSummary
@@ -47,22 +47,22 @@ Dim C
 End Sub
 
 Private Sub ListBox1_Change()
-    x = ListBox1.ListIndex
-    If x = -1 Then Exit Sub
-    If ListBox1.Selected(x) = True Then
-        ListBox1.List(x, 6) = "Upper"
+    X = ListBox1.ListIndex
+    If X = -1 Then Exit Sub
+    If ListBox1.Selected(X) = True Then
+        ListBox1.List(X, 6) = "Upper"
     Else
-        ListBox1.List(x, 6) = "Lower"
+        ListBox1.List(X, 6) = "Lower"
     End If
 End Sub
 
 Private Sub UserForm_Activate()
     Set ows = Sheet0
     Set lObj = ows.ListObjects("tblTotals")
-    If lObj.ListRows.count = 0 Then Unload Me
+    If lObj.ListRows.Count = 0 Then Unload Me
     i = 0
     With ListBox1
-        For i = 1 To lObj.ListRows.count
+        For i = 1 To lObj.ListRows.Count
             .AddItem
             .List(i - 1, 0) = lObj.DataBodyRange(i, 1)
             .List(i - 1, 1) = lObj.DataBodyRange(i, 2)
