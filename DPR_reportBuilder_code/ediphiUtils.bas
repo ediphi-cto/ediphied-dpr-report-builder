@@ -4,7 +4,7 @@ Public Const EDIPHI_ADDIN_FILENAME As String = "ediphi_addin.xlam"
 Public thisReportBuilder As EdiphiReportBuilder
 Public errors As Collection
 Public Const TRY_UPDATING_MSG As String = ""
-
+Public stopEvents As Boolean
 
 Function DictionaryToJson(dict As Object) As String
     Dim key As Variant
@@ -122,16 +122,16 @@ Function getSortFieldColl() As Collection
     Dim sortFieldName As String, sortFieldCode As String
     
     For Each headerCell In tbl.HeaderRowRange.Cells
-        If InStr(headerCell.Value, "_code") > 0 Then
-            Set sortFieldDict = New Dictionary
-            sortFieldName = headerCell.Offset(0, 1).Value
-            sortFieldCode = sortFieldName & "_code"
-            With sortFieldDict
-                .Add "code", sortFieldCode
-                .Add "name", sortFieldName
-            End With
-            getSortFieldColl.Add sortFieldDict
-        End If
+        If InStr(headerCell.Value, "_code") > 0 Then getSortFieldColl.Add headerCell.Offset(0, 1).Value
+            'Set sortFieldDict = New Dictionary
+            'sortFieldName = headerCell.Offset(0, 1).value
+            'sortFieldCode = sortFieldName & "_code"
+            'With sortFieldDict
+            '    .Add "code", sortFieldCode
+            '    .Add "name", sortFieldName
+            'End With
+            'getSortFieldColl.Add sortFieldDict
+        'End If
     Next
 
 End Function
@@ -409,18 +409,18 @@ Sub updateLocally()
     
 End Sub
 
-Function deepCopy(source As Dictionary) As Dictionary
+Function deepCopy(Source As Dictionary) As Dictionary
     Dim key As Variant
     Dim newDict As Dictionary
     Set newDict = New Dictionary
     
-    For Each key In source.Keys
-        If TypeName(source(key)) = "Dictionary" Then
+    For Each key In Source.Keys
+        If TypeName(Source(key)) = "Dictionary" Then
             ' Recursive call to deepcopy if the item is a dictionary
-            newDict.Add key, deepCopy(source(key))
+            newDict.Add key, deepCopy(Source(key))
         Else
             ' Directly copy the value if it is not a dictionary
-            newDict.Add key, source(key)
+            newDict.Add key, Source(key)
         End If
     Next key
     

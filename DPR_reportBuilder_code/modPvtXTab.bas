@@ -36,6 +36,7 @@ Public Sub Create_PivotTable_ODBC_XT()
     For i = 1 To iLvl
     Select Case i
         Case 1 'Group Level 1
+            If Not bCkb1 Or sLvl1Item = "" Then sLvl1Item = sLvl1Name
             With pt.PivotFields(sLvl1Code)
                 .Orientation = xlRowField
                 .Position = X
@@ -58,6 +59,7 @@ Public Sub Create_PivotTable_ODBC_XT()
             End With
             X = X + 1
         Case 2
+            If Not bCkb2 Or sLvl2Item = "" Then sLvl2Item = sLvl2Name
             With pt.PivotFields(sLvl2Code)
                 .Orientation = xlRowField
                 .Position = X
@@ -81,6 +83,7 @@ Public Sub Create_PivotTable_ODBC_XT()
             X = X + 1
 'Group Level 3
         Case 3
+            If Not bCkb3 Or sLvl3Item = "" Then sLvl3Item = sLvl3Name
             With pt.PivotFields(sLvl3Code)
                 .Orientation = xlRowField
                 .Position = X
@@ -104,6 +107,7 @@ Public Sub Create_PivotTable_ODBC_XT()
             X = X + 1
 'Group Level 4
         Case 4
+            If Not bCkb4 Or sLvl4Item = "" Then sLvl4Item = sLvl4Name
             With pt.PivotFields(sLvl4Code)
                 .Orientation = xlRowField
                 .Position = X
@@ -127,6 +131,7 @@ Public Sub Create_PivotTable_ODBC_XT()
             X = X + 1
 'Group Level 5
         Case 5
+            If Not bCkb5 Or sLvl5Item = "" Then sLvl5Item = sLvl5Name
             With pt.PivotFields(sLvl5Code)
                 .Orientation = xlRowField
                 .Position = X
@@ -172,6 +177,7 @@ Public Sub Create_PivotTable_ODBC_XT()
     End With
 
 'Set Column Data
+    If sLvl0Item = "" Then sLvl0Item = sLvl0Name
     With pt.PivotFields(sLvl0Item)
         .Orientation = xlColumnField
         .Position = 1
@@ -238,16 +244,16 @@ Public Sub Create_PivotTable_ODBC_XT()
         .TintAndShade = 0
         .PatternTintAndShade = 0
     End With
-    iLvl = 0
+    'iLvl = 0
     Call XTabAddons
     pic = "DPRLogo.25.png"
     Call PageSetup
     Call ResetSheetScroll
-    sLvl1Item = ""
-    sLvl2Item = ""
-    sLvl3Item = ""
-    sLvl4Item = ""
-    sLvl5Item = ""
+    'sLvl1Item = ""
+    'sLvl2Item = ""
+    'sLvl3Item = ""
+    'sLvl4Item = ""
+    'sLvl5Item = ""
     bPvt = False
     Set ptCache = Nothing
     Set pt = Nothing
@@ -998,7 +1004,7 @@ Dim shpName As String
     
     ows.Range("A9").EntireRow.Hidden = True
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.GoTo Sheets(sSht).Range("B1")
+    Application.Goto Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(8, iCol))

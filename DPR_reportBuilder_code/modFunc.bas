@@ -161,13 +161,13 @@ Function getPtCount() As Integer
     Range("RprtID").Value = getPtCount
 End Function
 
-Function xmlPath() As String
-    If Sheet1.Range("rngDataBase").Value = "" Or bRefresh = True Then
-        xmlPath = "C:\Users\" & sUser & "\AppData\Local\Temp\DPRReporter\ReportTables.xml"
-    Else
-        xmlPath = Application.ThisWorkbook.Path & "\ReportData" & Range("rngDataBase").Value
-    End If
-End Function
+'Function xmlPath() As String
+'    If Sheet1.Range("rngDataBase").value = "" Or bRefresh = True Then
+'        xmlPath = "C:\Users\" & sUser & "\AppData\Local\Temp\DPRReporter\ReportTables.xml"
+'    Else
+'        xmlPath = Application.ThisWorkbook.Path & "\ReportData" & Range("rngDataBase").value
+'    End If
+'End Function
 
 'Function xmlPath() As String ' When using xml files with GUID's
 'sUser = CStr(Environ("USERNAME"))
@@ -201,19 +201,19 @@ Dim TestStr As String
     End If
 End Function
 
-Function xmlVarPath() As String
-    If Sheet1.Range("rngVarReport").Value = "" Or bRefresh = True Then
-        xmlVarPath = "C:\Users\" & sUser & "\AppData\Local\Temp\DPRReporter\VarReportTables.xml"
-    Else
-        xmlVarPath = Application.ThisWorkbook.Path & "\ReportData" & Range("rngVarReport").Value
-    End If
-
-'    xmlVarPath = "\\azr-corp-store\Estimating\WinEst\API\XML\" & Range("rngVarGUID").Value & ".xml"
-'    If FileExists(xmlVarPath) = False Then
-''        CreateTempXML
-''        GoTo Reload
+'Function xmlVarPath() As String
+'    If Sheet1.Range("rngVarReport").value = "" Or bRefresh = True Then
+'        xmlVarPath = "C:\Users\" & sUser & "\AppData\Local\Temp\DPRReporter\VarReportTables.xml"
+'    Else
+'        xmlVarPath = Application.ThisWorkbook.Path & "\ReportData" & Range("rngVarReport").value
 '    End If
-End Function
+'
+''    xmlVarPath = "\\azr-corp-store\Estimating\WinEst\API\XML\" & Range("rngVarGUID").Value & ".xml"
+''    If FileExists(xmlVarPath) = False Then
+'''        CreateTempXML
+'''        GoTo Reload
+''    End If
+'End Function
 
 Function GetWorksheetFromCodeName(CodeName As String) As Worksheet
     For Each ows In ThisWorkbook.Worksheets

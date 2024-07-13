@@ -2,9 +2,9 @@ VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frmReportLevel 
    Caption         =   "DPR Report Builder"
    ClientHeight    =   6252
-   ClientLeft      =   48
-   ClientTop       =   360
-   ClientWidth     =   9120
+   ClientLeft      =   24
+   ClientTop       =   264
+   ClientWidth     =   9168
    OleObjectBlob   =   "frmReportLevel.frx":0000
    ShowModal       =   0   'False
    StartUpPosition =   1  'CenterOwner
@@ -14,7 +14,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+Option Explicit
 Public reportsRequested As Collection
+
 '***************************
 '*****Multipage1 Page 1*****
 '***************************
@@ -23,6 +26,7 @@ Private Sub cmdOK_Click()
     On Error GoTo e1
 '    sCurrency = Range("rngCurrency").Text
     eventsOff
+    stopEvents = True
     If isFirstReport() Then
         sSht = "Detailed Backup Report"
         sRprt = "DETAILED BACKUP"
@@ -32,11 +36,11 @@ Private Sub cmdOK_Click()
     End If
     sGTLvl1 = cboBLvl1.List(cboBLvl1.ListIndex, 1)
     iLvl = numLevel.Value
-    ReportTrack
     createSummary sGTLvl1
     'ThisWorkbook.Worksheets("Cover").visible = xlHidden
     ExecSummary
     Create_PivotTable_ODBC_MO splitByUse:=chkSplitByUsePrimary.Value
+    ReportTrack
     ReApplyAddons
     
     bCkb1 = False
@@ -62,6 +66,7 @@ Private Sub cmdOK_Click()
 finally:
     eventsOn
     reportErrors
+    stopEvents = False
     Unload Me
     
 Exit Sub
@@ -98,7 +103,7 @@ Private Sub cboBLvl1_Click()
             Else
                 ckbBLvl1.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbBLvl1.Enabled = False
             Else
                 ckbBLvl1.Enabled = True
@@ -150,7 +155,7 @@ Private Sub cboBLvl2_Click()
             Else
                 ckbBLvl2.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbBLvl2.Enabled = False
             Else
                 ckbBLvl2.Enabled = True
@@ -200,7 +205,7 @@ Private Sub cboBLvl3_Click()
             Else
                 ckbBLvl3.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbBLvl3.Enabled = False
             Else
                 ckbBLvl3.Enabled = True
@@ -243,7 +248,7 @@ Private Sub cboBLvl4_Click()
             Else
                 ckbBLvl4.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbBLvl4.Enabled = False
             Else
                 ckbBLvl4.Enabled = True
@@ -280,7 +285,7 @@ Private Sub cboBLvl5_Change()
             Else
                 ckbBLvl5.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbBLvl5.Enabled = False
             Else
                 ckbBLvl5.Enabled = True
@@ -340,6 +345,7 @@ End Sub
 '*****Multipage1 Page 2*****
 '***************************
 Private Sub cmdOK1_Click()
+    stopEvents = True
     If thisReportBuilder Is Nothing Then
         On Error GoTo e1
     Else
@@ -357,8 +363,8 @@ Private Sub cmdOK1_Click()
     sRprt = sRprtName
     sGTLvl1 = cboLvl1.List(cboLvl1.ListIndex, 1)
     iLvl = numLevel.Value
-    ReportTrack
     Create_PivotTable_ODBC_MO splitByUse:=chkSplitByUseLevel.Value
+    ReportTrack
     
     bCkb1 = False
     bCkb2 = False
@@ -383,6 +389,7 @@ Private Sub cmdOK1_Click()
 finally:
     eventsOn
     reportErrors
+    stopEvents = False
     Unload Me
     
 Exit Sub
@@ -419,7 +426,7 @@ Private Sub cboLvl1_Click()
             Else
                 ckbLvl1.Value = False
             End If
-            If InStr(cboLvl1.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbLvl1.Enabled = False
             Else
                 ckbLvl1.Enabled = True
@@ -471,7 +478,7 @@ Private Sub cboLvl2_Click()
             Else
                 ckbLvl2.Value = False
             End If
-            If InStr(cboLvl2.List(.ListIndex, 4), "code") = 0 Then
+           If .List(.ListIndex, 3) = "" Then
                 ckbLvl2.Enabled = False
             Else
                 ckbLvl2.Enabled = True
@@ -521,7 +528,7 @@ Private Sub cboLvl3_Click()
             Else
                 ckbLvl3.Value = False
             End If
-            If InStr(cboLvl3.List(.ListIndex, 4), "code") = 0 Then
+           If .List(.ListIndex, 3) = "" Then
                 ckbLvl3.Enabled = False
             Else
                 ckbLvl3.Enabled = True
@@ -564,7 +571,7 @@ Private Sub cboLvl4_Click()
             Else
                 ckbLvl4.Value = False
             End If
-            If InStr(cboLvl4.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbLvl4.Enabled = False
             Else
                 ckbLvl4.Enabled = True
@@ -601,7 +608,7 @@ Private Sub cboLvl5_Change()
             Else
                 ckbLvl5.Value = False
             End If
-            If InStr(cboLvl5.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbLvl5.Enabled = False
             Else
                 ckbLvl5.Enabled = True
@@ -680,18 +687,16 @@ End Sub
 Private Sub cmdOK3_Click()
 On Error GoTo e1
 'sCurrency = Range("rngCurrency").Text
-
+    stopEvents = True
     sSht = "Control Estimate - " & getPtCount
     sRprt = sCRprtName
     sGTLvl1 = cboCLvl1.List(cboCLvl1.ListIndex, 1)
     iLvl = numLevel.Value
     
-    'MN TODO:
-    ReportTrack
-    
 'Build pivot report
     Call CollectDataIntoDictionary
     Call Create_PivotTable_ODBC_CntrlEst
+    ReportTrack
     
     bCkb1 = False
     bCkb2 = False
@@ -730,7 +735,8 @@ On Error GoTo e1
     
 finally:
     eventsOn
-
+    stopEvents = False
+    
 Exit Sub
 e1:
     logError "general failure creating control estimate"
@@ -765,7 +771,7 @@ Private Sub cboCLvl1_Click()
             Else
                 ckbCLvl1.Value = False
             End If
-            If InStr(cboCLvl1.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbCLvl1.Enabled = False
             Else
                 ckbCLvl1.Enabled = True
@@ -817,7 +823,7 @@ Private Sub cboCLvl2_Click()
             Else
                 ckbCLvl2.Value = False
             End If
-            If InStr(cboCLvl2.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbCLvl2.Enabled = False
             Else
                 ckbCLvl2.Enabled = True
@@ -867,7 +873,7 @@ Private Sub cboCLvl3_Click()
             Else
                 ckbCLvl3.Value = False
             End If
-            If InStr(cboCLvl3.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbCLvl3.Enabled = False
             Else
                 ckbCLvl3.Enabled = True
@@ -910,7 +916,7 @@ Private Sub cboCLvl4_Click()
             Else
                 ckbCLvl4.Value = False
             End If
-            If InStr(cboCLvl4.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbCLvl4.Enabled = False
             Else
                 ckbCLvl4.Enabled = True
@@ -947,7 +953,7 @@ Private Sub cboCLvl5_Change()
             Else
                 ckbCLvl5.Value = False
             End If
-            If InStr(cboCLvl5.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbCLvl5.Enabled = False
             Else
                 ckbCLvl5.Enabled = True
@@ -1016,16 +1022,16 @@ End Sub
 Private Sub cmdOK2_Click()
 On Error GoTo e1
 'sCurrency = Range("rngCurrency").Text
+    stopEvents = True
     sSht = "XTab Report - " & getPtCount
     sRprt = sXRprtName
-    sXTRow = sRowName
     sGTLvl1 = cboXLvl1.List(cboXLvl1.ListIndex, 1)
     iLvl = numXLevel.Value
-    ReportTrack
-    'MN TODO:
     
 'Build pivot report
     Create_PivotTable_ODBC_XT
+    ReportTrack
+    
     ckbXLvl1 = False
     ckbXLvl2 = False
     ckbXLvl3 = False
@@ -1050,6 +1056,7 @@ On Error GoTo e1
     
 finally:
     eventsOn
+    stopEvents = False
 
 Exit Sub
 e1:
@@ -1078,7 +1085,7 @@ Private Sub cboLvl0_Click()
             Else
                 ckbLvl0.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbLvl0.Enabled = False
             Else
                 ckbLvl0.Enabled = True
@@ -1128,7 +1135,7 @@ Private Sub cboXLvl1_Click()
             Else
                 ckbXLvl1.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbXLvl1.Enabled = False
             Else
                 ckbXLvl1.Enabled = True
@@ -1180,7 +1187,7 @@ Private Sub cboXLvl2_Click()
             Else
                 ckbXLvl2.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbXLvl2.Enabled = False
             Else
                 ckbXLvl2.Enabled = True
@@ -1230,7 +1237,7 @@ Private Sub cboXLvl3_Click()
             Else
                 ckbXLvl3.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbXLvl3.Enabled = False
             Else
                 ckbXLvl3.Enabled = True
@@ -1273,7 +1280,7 @@ Private Sub cboXLvl4_Click()
             Else
                 ckbXLvl4.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbXLvl4.Enabled = False
             Else
                 ckbXLvl4.Enabled = True
@@ -1310,7 +1317,7 @@ Private Sub cboXLvl5_Change()
             Else
                 ckbXLvl5.Value = False
             End If
-            If InStr(.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbXLvl5.Enabled = False
             Else
                 ckbXLvl5.Enabled = True
@@ -1385,9 +1392,7 @@ Private Sub cmdOK4_Click()
     sRprt = sRprtNameVar
     sGTLvl1 = cboLvl1.List(cboVLvl1.ListIndex, 1)
     iLvl = numLevel.Value
-    sTotal = "GrandTotal"
     bMarkups = True
-    'MN TODO:
     
     ReportTrack
     
@@ -1416,7 +1421,7 @@ Private Sub cboVLvl1_Click()
             Else
                 ckbVLvl1.Value = False
             End If
-            If InStr(cboVLvl1.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbVLvl1.Enabled = False
             Else
                 ckbVLvl1.Enabled = True
@@ -1455,7 +1460,7 @@ Private Sub cboVLvl2_Click()
             Else
                 ckbVLvl2.Value = False
             End If
-            If InStr(cboVLvl2.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbVLvl2.Enabled = False
             Else
                 ckbVLvl2.Enabled = True
@@ -1492,7 +1497,7 @@ Private Sub cboVLvl3_Click()
             Else
                 ckbVLvl3.Value = False
             End If
-            If InStr(cboVLvl3.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbVLvl3.Enabled = False
             Else
                 ckbVLvl3.Enabled = True
@@ -1529,7 +1534,7 @@ Private Sub cboVLvl4_Click()
             Else
                 ckbVLvl4.Value = False
             End If
-            If InStr(cboVLvl4.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbVLvl4.Enabled = False
             Else
                 ckbVLvl4.Enabled = True
@@ -1560,7 +1565,7 @@ Private Sub cboVLvl5_Change()
             Else
                 ckbVLvl5.Value = False
             End If
-            If InStr(cboVLvl5.List(.ListIndex, 4), "code") = 0 Then
+            If .List(.ListIndex, 3) = "" Then
                 ckbVLvl5.Enabled = False
             Else
                 ckbVLvl5.Enabled = True
@@ -1654,26 +1659,36 @@ Private Sub UserForm_Initialize()
     LoadCBO "cboBLvl1", "Page1"
     LoadCBO "cboLvl1", "Page2"
     LoadCBO "cboCLvl1", "Page3"
-    LoadCBO "cboLvl0", "Page4"
+    'LoadCBO "cboLvl0", "Page4"
+    With Me.cboLvl0
+        .Clear
+        .AddItem
+        .List(0, 1) = "Use Group"
+        .List(0, 3) = ""
+        .List(0, 4) = "Use Group_code"
+        .ListIndex = 0
+    End With
     
 End Sub
 
 Public Function LoadCBO(cntrl As String, pg As String)
     
-    Dim sortFieldDict As Dictionary
+    Dim sortFieldName
     Dim i As Integer
     i = 1
     With Controls(cntrl)
         .Clear
         .AddItem ""
-        For Each sortFieldDict In getSortFieldColl()
-                If CheckValue(pg, sortFieldDict("name")) = False Then
+        For Each sortFieldName In getSortFieldColl()
+                If CheckValue(pg, CStr(sortFieldName)) = False Then
                     .AddItem
-                    '.List(i, 0) = lObj.DataBodyRange.Cells(i, 5) 'sXpath1 'not needed
-                    .List(i, 1) = sortFieldDict("name")
-                    '.List(i, 2) = lObj.DataBodyRange.Cells(i, 4) 'sLvl1xNd 'not needed
-                    .List(i, 3) = sortFieldDict("name") & "_combined"
-                    .List(i, 4) = sortFieldDict("code")
+                    .List(i, 1) = sortFieldName
+                    If sortFieldName <> "Use Group" Then
+                        .List(i, 3) = "-" & sortFieldName 'for combined code - desc
+                    Else
+                        .List(i, 3) = ""
+                    End If
+                    .List(i, 4) = sortFieldName & "_code"
                     i = i + 1
                 End If
         Next
@@ -1765,7 +1780,5 @@ Private Sub UserForm_Terminate()
     'If Not thisReportBuilder.success Then closeMe
     
 End Sub
-
-
 
 

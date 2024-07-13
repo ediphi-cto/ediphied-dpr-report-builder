@@ -39,7 +39,7 @@ Function getEstimateJSON(estimate_id As String) As String
 
 Exit Function
 e1:
-    'TODO
+    'pass
     
 End Function
 
@@ -121,7 +121,7 @@ Function get_sort_codes(sort_field_id) As Dictionary
 
 Exit Function
 e1:
-    'TODO
+    'pass
 
 End Function
 
@@ -154,7 +154,7 @@ Function get_sort_codes_by_field_key(project_id As String, sort_field_name As St
 
 Exit Function
 e1:
-    'TODO
+    'pass
 
 End Function
 

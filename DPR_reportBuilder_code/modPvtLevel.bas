@@ -54,13 +54,12 @@ Public Sub Create_PivotTable_ODBC_MO(splitByUse As Boolean)
     For i = 1 To iLvl
     Select Case i
         Case 1 'Group Level 1
-            If bCkb1 = False Then sLvl1Item = sLvl1Name
+            If Not bCkb1 Or sLvl1Item = "" Then sLvl1Item = sLvl1Name
             With pt.PivotFields(sLvl1Code)
                 .Orientation = xlRowField
                 .Position = X
             End With
             With pt.PivotFields(sLvl1Code)
-                'MN TODO: this assumes a fixed column width, but we have use groups of varying count
                 .Subtotals = Array(False, False, False, False, False, False, False, False, False, False, False, False)
                 .LayoutForm = xlTabular
             End With
@@ -78,7 +77,7 @@ Public Sub Create_PivotTable_ODBC_MO(splitByUse As Boolean)
             End With
             X = X + 1
         Case 2
-            If bCkb2 = False Then sLvl2Item = sLvl2Name
+            If Not bCkb2 Or sLvl2Item = "" Then sLvl2Item = sLvl2Name
             With pt.PivotFields(sLvl2Code)
                 .Orientation = xlRowField
                 .Position = X
@@ -103,7 +102,7 @@ Public Sub Create_PivotTable_ODBC_MO(splitByUse As Boolean)
             X = X + 1
 'Group Level 3
         Case 3
-            If bCkb3 = False Then sLvl3Item = sLvl3Name
+            If Not bCkb3 Or sLvl3Item = "" Then sLvl3Item = sLvl3Name
             With pt.PivotFields(sLvl3Code)
                 .Orientation = xlRowField
                 .Position = X
@@ -127,7 +126,7 @@ Public Sub Create_PivotTable_ODBC_MO(splitByUse As Boolean)
             X = X + 1
 'Group Level 4
         Case 4
-            If bCkb4 = False Then sLvl4Item = sLvl4Name
+            If Not bCkb4 Or sLvl4Item = "" Then sLvl4Item = sLvl4Name
             With pt.PivotFields(sLvl4Code)
                 .Orientation = xlRowField
                 .Position = X
@@ -151,7 +150,7 @@ Public Sub Create_PivotTable_ODBC_MO(splitByUse As Boolean)
             X = X + 1
 'Group Level 5
         Case 5
-            If bCkb5 = False Then sLvl5Item = sLvl5Name
+            If Not bCkb5 Or sLvl5Item = "" Then sLvl5Item = sLvl5Name
             With pt.PivotFields(sLvl5Code)
                 .Orientation = xlRowField
                 .Position = X
@@ -681,7 +680,7 @@ Dim sLeft As Single
     ows.Columns(iCol).ColumnWidth = 20
     
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.GoTo Sheets(sSht).Range("B1")
+    Application.Goto Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(6, iCol))

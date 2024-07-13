@@ -408,7 +408,7 @@ Public Sub Create_PivotTable_ODBC_MO_VAR()
     Call SetVarBorders
     ows.Range("A1").Select
     Application.ScreenUpdating = True
-    iLvl = 0
+    'iLvl = 0
     pic = "DPRLogo.25.png"
     Call SheetFormatting
     Call PageSetup
@@ -984,7 +984,7 @@ Dim sLeft As Single
     
 
     Sheets("EstData").Shapes("grpHeadingVar").Copy
-    Application.GoTo Sheets(sSht).Range("B1")
+    Application.Goto Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeadingVar")
     Set cl = Range(Cells(1, 2), Cells(6, iCol))

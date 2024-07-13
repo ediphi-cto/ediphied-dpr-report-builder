@@ -13,7 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
+Option Explicit
 
 Dim bPreview As Boolean
 Dim nFlag As Boolean
@@ -131,15 +131,18 @@ Private Sub optDPRHardin_Click()
 End Sub
 
 Sub loadLogo()
-'MN TODO: need to load these resources another way?
-On Error Resume Next
+On Error GoTo e1
     Dim sImage As Shape
     For Each ows In ActiveWorkbook.Worksheets
         If ows.name <> "EstData" And ows.name <> "tables" Then
-           'MN to RON: these logos are causing long load time, off for now until the new logos are figured out
-           'ows.PageSetup.LeftFooterPicture.fileName = sPth & pic
+           ows.PageSetup.LeftFooterPicture.fileName = sPth & pic
         End If
     Next ows
+
+Exit Sub
+e1:
+    'pass, if the directory fails to load, stop trying
+
 End Sub
 
 Private Sub UserForm_Activate()

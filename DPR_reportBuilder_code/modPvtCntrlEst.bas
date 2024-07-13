@@ -1,4 +1,5 @@
 Attribute VB_Name = "modPvtCntrlEst"
+Option Explicit
 
 Dim sCat10 As String
 Dim sCat20 As String
@@ -42,18 +43,23 @@ Sub CollectDataIntoDictionary()
     For i = 1 To iLvl
         Select Case i
             Case 1
+                If Not bCkb1 Or sLvl1Item = "" Then sLvl1Item = sLvl1Name
                 iLvl1Code = GetColumnNumber(sLvl1Code)
                 iLvl1Item = GetColumnNumber(sLvl1Item)
             Case 2
+                If Not bCkb2 Or sLvl2Item = "" Then sLvl2Item = sLvl2Name
                 iLvl2Code = GetColumnNumber(sLvl2Code)
                 iLvl2Item = GetColumnNumber(sLvl2Item)
             Case 3
+                If Not bCkb3 Or sLvl3Item = "" Then sLvl3Item = sLvl3Name
                 iLvl3Code = GetColumnNumber(sLvl3Code)
                 iLvl3Item = GetColumnNumber(sLvl3Item)
             Case 4
+                If Not bCkb4 Or sLvl4Item = "" Then sLvl4Item = sLvl4Name
                 iLvl4Code = GetColumnNumber(sLvl4Code)
                 iLvl4Item = GetColumnNumber(sLvl4Item)
             Case 5
+                If Not bCkb5 Or sLvl5Item = "" Then sLvl5Item = sLvl5Name
                 iLvl5Code = GetColumnNumber(sLvl5Code)
                 iLvl5Item = GetColumnNumber(sLvl5Item)
         End Select
@@ -121,28 +127,28 @@ Sub CollectDataIntoDictionary()
                                 val(CDbl(sCat53)), val(CDbl(sCat60)), val(CDbl(sCat61)), val(CDbl(sCat62)), _
                                 val(CDbl(sCat70)), val(CDbl(row.Range.Cells(1, 66).Value)))
         Else
-            q = dict.Item(oTxt)
-            q(14) = q(14) + val(CDbl(row.Range.Cells(1, 5).Value))        'Takeoff Qty
-            q(16) = q(16) + val(CDbl(row.Range.Cells(1, 67).Value))       'LaborHours
-            q(17) = q(17) + val(CDbl(sCat10))
-            q(18) = q(18) + val(CDbl(sCat20))
-            q(19) = q(19) + val(CDbl(sCat21))
-            q(20) = q(20) + val(CDbl(sCat22))
-            q(21) = q(21) + val(CDbl(sCat30))
-            q(22) = q(22) + val(CDbl(sCat35))
-            q(23) = q(23) + val(CDbl(sCat40))
-            q(24) = q(24) + val(CDbl(sCat45))
-            q(25) = q(25) + val(CDbl(sCat49))
-            q(26) = q(26) + val(CDbl(sCat50))
-            q(27) = q(27) + val(CDbl(sCat51))
-            q(28) = q(28) + val(CDbl(sCat52))
-            q(29) = q(29) + val(CDbl(sCat53))
-            q(30) = q(30) + val(CDbl(sCat60))
-            q(31) = q(31) + val(CDbl(sCat61))
-            q(32) = q(32) + val(CDbl(sCat62))
-            q(33) = q(33) + val(CDbl(sCat70))
-            q(34) = q(34) + val(CDbl(row.Range.Cells(1, 66).Value))     'Grand Total
-            dict.Item(oTxt) = q
+'            q = dict.Item(otxt)
+'            q(14) = q(14) + val(CDbl(row.Range.Cells(1, 5).value))        'Takeoff Qty
+'            q(16) = q(16) + val(CDbl(row.Range.Cells(1, 67).value))       'LaborHours
+'            q(17) = q(17) + val(CDbl(sCat10))
+'            q(18) = q(18) + val(CDbl(sCat20))
+'            q(19) = q(19) + val(CDbl(sCat21))
+'            q(20) = q(20) + val(CDbl(sCat22))
+'            q(21) = q(21) + val(CDbl(sCat30))
+'            q(22) = q(22) + val(CDbl(sCat35))
+'            q(23) = q(23) + val(CDbl(sCat40))
+'            q(24) = q(24) + val(CDbl(sCat45))
+'            q(25) = q(25) + val(CDbl(sCat49))
+'            q(26) = q(26) + val(CDbl(sCat50))
+'            q(27) = q(27) + val(CDbl(sCat51))
+'            q(28) = q(28) + val(CDbl(sCat52))
+'            q(29) = q(29) + val(CDbl(sCat53))
+'            q(30) = q(30) + val(CDbl(sCat60))
+'            q(31) = q(31) + val(CDbl(sCat61))
+'            q(32) = q(32) + val(CDbl(sCat62))
+'            q(33) = q(33) + val(CDbl(sCat70))
+'            q(34) = q(34) + val(CDbl(row.Range.Cells(1, 66).value))     'Grand Total
+'            dict.Item(otxt) = q
         End If
         Call clear_sCat
     Next row
@@ -655,7 +661,7 @@ Public Sub Create_PivotTable_ODBC_CntrlEst()
     
     If bCode = True Then Call FormatCntrlEst
     ows.Range("A1").Select
-    iLvl = 0
+    'iLvl = 0
     pic = "DPRLogo.25.png"
     Call PageSetup
     Call ResetSheetScroll
@@ -1026,7 +1032,7 @@ Dim sLeft As Single
     ows.Columns(iCol).ColumnWidth = 20
     
     Sheets("EstData").Shapes("grpHeading").Copy
-    Application.GoTo Sheets(sSht).Range("B1")
+    Application.Goto Sheets(sSht).Range("B1")
     ActiveSheet.Paste
     Set myShape = ows.Shapes("grpHeading")
     Set cl = Range(Cells(1, 2), Cells(6, iCol))

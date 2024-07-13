@@ -548,6 +548,7 @@ Function bAddon() As Boolean
 End Function
 
 Private Sub UserForm_Initialize()
+    stopEvents = True
     Me.StartUpPosition = 0
     Me.Top = Application.Top + 115
     Me.Left = Application.Left + 25
@@ -612,3 +613,7 @@ Function Col_Update(colIndex As Integer)
         End With
     End If
 End Function
+
+Private Sub UserForm_Terminate()
+    stopEvents = False
+End Sub

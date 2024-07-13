@@ -1,6 +1,6 @@
 Attribute VB_Name = "modLaborHr"
 Public dLRate As Double
-Public sCode As String
+Public SCode As String
 'Sub LaborHrProjection() 'Load Labor Hour Projection sheet
 'Dim oTxt        As String
 'Dim q           As Variant

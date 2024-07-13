@@ -19,6 +19,7 @@ Public debugMode As Boolean
 Public success As Boolean
 Public estimateJson As Dictionary
 Public projectJson As Dictionary
+Public useAreasDict As Dictionary
 
 Private Sub triggerWS_Change(ByVal Target As Range)
     
@@ -78,6 +79,7 @@ Sub migrateDataFrom(csvFileName As String)
     
     With Me
         .fetchEstimateJson
+        Set .useAreasDict = Me.createUseAreaDict()
         .transformDataForPivotTable
         .setMetaData
     End With
@@ -171,7 +173,7 @@ Function findNeededColumns() As Dictionary
             Me.sortFieldColl.Add sortFieldDict
             neededCols.Add sortFieldCode, ran.Column
             neededCols.Add sortFieldName, ran.Offset(0, 1).Column
-            neededCols.Add sortFieldName & "_combined", ran.Column
+            If sortFieldName <> "Use Group" Then neededCols.Add "-" & sortFieldName, ran.Column
         End If
         Set ran = ran.Offset(0, 1)
     Loop
@@ -196,8 +198,10 @@ Function pivotDataRows(neededCols As Dictionary, splitByUse As Boolean) As Colle
     Do Until ran.Value = 0
         Set rowDict = New Dictionary
         For Each k In neededCols.Keys
+            'add a row property, aka column for each needed column
             colOffset = neededCols(k) - 1
-            If InStr(k, "_combined") > 0 Then
+            If Left(k, 1) = "-" Then
+                'if prefixed with "-" then its meant to add the code before the desc
                 rowDict.Add k, ran.Offset(0, colOffset).Value & " - " & ran.Offset(0, colOffset + 1).Value
             Else
                 rowDict.Add k, ran.Offset(0, colOffset).Value
@@ -410,21 +414,20 @@ Function isBaseBid(dict As Dictionary) As Boolean
 
 End Function
 
-Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As Collection 'MN TO: return as collection
+Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As Collection
     On Error GoTo e1
     Dim allocations As Dictionary
     Dim i As Integer, hasMultiple As Boolean
     Dim coll As New Collection
     Dim k
-    Dim useAreasDict As Dictionary
-    
+    Dim thisUseArea As Double
     
     Set allocations = ParseJson(dict("use_groups"))
     dict.Remove "use_groups"
 
     If allocations.Count = 0 Then GoTo e1
     
-    If splitByUse And allocations.Count > 1 Then
+    If splitByUse Then
     
         Dim newDict As Dictionary
         For Each k In allocations.Keys
@@ -434,8 +437,9 @@ Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As C
             newDict("TakeoffQty") = cDbl_safe(dict("TakeoffQty")) * cDbl_safe(allocations(k) / 100)
             newDict.Add "Use Group_code", k
             newDict.Add "Use Group", k
-            newDict.Add "Use Group_area", getAreaByUseName(k)
-            newDict.Add "Use Group_combined", k
+            If useAreasDict.Exists(k) Then thisUseArea = useAreasDict(k)
+            newDict.Add "Use Group_area", thisUseArea
+            'newDict.Add "-" & "Use Group", k
             coll.Add newDict
         Next
         
@@ -449,14 +453,14 @@ Function calculateUseGroupValues(dict As Dictionary, splitByUse As Boolean) As C
             If i = 1 Then
                 dict.Add "Use Group_code", k
                 dict.Add "Use Group", k
-                dict.Add "Use Group_combined", k
+                'dict.Add "-" & "Use Group", k
             End If
         Next
         
         If i > 1 Then
             dict("Use Group_code") = "zzz"
             dict("Use Group") = "Multiple"
-            dict("Use Group_combined") = "Multiple"
+            'dict("-" & "Use Group") = "Multiple"
         End If
         coll.Add dict
         
@@ -469,33 +473,44 @@ Exit Function
 e1:
     dict.Add "Use Group_code", "zzzz"
     dict.Add "Use Group", "None"
-    dict.Add "Use Group_combined", "None"
+    'dict.Add "-" & "Use Group", "None"
     Set coll = New Collection
     coll.Add dict
     Resume finally
     
 End Function
 
-Function getAreaByUseName(useName) As Double
+Function createUseAreaDict() As Dictionary
     If Me.debugMode Then On Error GoTo 0 Else On Error GoTo e1
     Dim useGroup As Dictionary
     Dim useGroups As Collection
+    Dim useName As String
+    Dim ans As New Dictionary
     Set useGroups = Me.estimateJson("estimate")("stats")("useGroups")
-    
-    For Each useGroup In useGroups
-        If useGroup("label") = useName Then
-            getAreaByUseName = cDbl_safe(useGroup("gsf"))
-            Exit Function
-        ElseIf useGroup("use_group") = useName Then
-            getAreaByUseName = cDbl_safe(useGroup("gsf"))
-            Exit Function
-        End If
-    Next
 
+    If Me.debugMode Then On Error GoTo 0 Else On Error GoTo e2
+    For Each useGroup In useGroups
+        If IsNull(useGroup("label")) Then
+            useName = ""
+        Else
+            useName = useGroup("label")
+        End If
+        If useName = "" Then useName = useGroup("use_group")
+        If Not ans.Exists(useName) Then ans.Add useName, cDbl_safe(useGroup("gsf"))
+nextUse:
+    Next
+    
+    If Me.debugMode Then On Error GoTo 0 Else On Error GoTo e1
+    Set createUseAreaDict = ans
+    
 Exit Function
 e1:
     'pass
     
+Exit Function
+e2:
+    Resume nextUse
+
 End Function
 
 Property Get EstimateName() As String
